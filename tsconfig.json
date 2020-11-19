@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "outDir": "./dist"
+  },
+  "include": [
+    "*.ts",
+    "app/**/*.ts",
+  ]
+}

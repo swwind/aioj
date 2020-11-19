@@ -1,0 +1,6 @@
+{
+  "mongo": {
+    "url": "mongodb://localhost:27017",
+    "dbname": "attack204_ak_world_final"
+  }
+}
