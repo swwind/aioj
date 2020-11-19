@@ -1,5 +1,5 @@
-import { expect } from "chai";
 import axios, { Method } from 'axios';
+import crypto from 'crypto';
 
 const PREFIX = 'http://localhost:8080';
 
@@ -18,14 +18,16 @@ export const jsonRequest = (method: Method) => async (url: string, data?: Object
   });
   return response;
 }
-export const post = jsonRequest('post');
-export const get = jsonRequest('get');
-export const put = jsonRequest('put');
+export const POST = jsonRequest('post');
+export const GET = jsonRequest('get');
+export const PUT = jsonRequest('put');
 export const DELETE = jsonRequest('delete');
+
+export const randomBytes = (n: number) => crypto.randomBytes(n).toString('hex');
 
 export const generateFakeAccount = () => {
   return {
-    username: 'Attack_' + Math.random().toString(36).slice(2),
-    password: Math.random().toString(36).slice(2),
+    username: 'Attack_' + randomBytes(16),
+    password: randomBytes(16),
   }
 }

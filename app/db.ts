@@ -21,6 +21,7 @@ export type UserData = {
 
 export type RegionData = {
   region: string;
+  title: string;
   description: string;
 
   maxpid: number; // for counting
@@ -41,6 +42,7 @@ export type CommentData = {
   author: string;
   edited: boolean;
   content: string;
+  date: number;
 
   pid: number;
   region: string;

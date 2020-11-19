@@ -34,7 +34,6 @@ router.post('/register', async (ctx) => {
     return;
   }
 
-  console.log(ctx.request.body);
   if (!ctx.verifyBody(['username', 'password'])) {
     ctx.end(400, PARAMS_MISSING);
     return;

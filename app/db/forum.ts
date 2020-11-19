@@ -2,7 +2,7 @@ import { CommentData, comments, PostData, posts, RegionData, regions } from "../
 import { COMMENT_NOT_EXISTS, POST_NOT_EXISTS, REGION_ALREADY_EXISTS, REGION_NOT_EXISTS } from "../errors.js";
 import { Result } from "../utils.js";
 
-export async function createRegion(region: string, description: string): Promise<Result<void, string>> {
+export async function createRegion(region: string, title: string, description: string): Promise<Result<void, string>> {
 
   const res = await regions.findOne({
     region,
@@ -11,6 +11,7 @@ export async function createRegion(region: string, description: string): Promise
 
   await regions.insertOne({
     region,
+    title,
     description,
     maxpid: 0,
   });
@@ -18,9 +19,9 @@ export async function createRegion(region: string, description: string): Promise
   return Result.ok();
 }
 
-export async function createPost(region: string, title: string, author: string, content: string): Promise<Result<void, string>> {
+export async function createPost(region: string, title: string, author: string, content: string): Promise<Result<number, string>> {
   const res = await regions.findOne({
-    name: region,
+    region,
   });
   if (!res) {
     return Result.error(REGION_NOT_EXISTS);
@@ -29,11 +30,13 @@ export async function createPost(region: string, title: string, author: string, 
   const pid = res.maxpid + 1;
   await regions.updateOne(res, { $set: { maxpid: pid } });
 
+  const date = Date.now();
+
   await posts.insertOne({
     pid,
     title,
     author,
-    date: Date.now(),
+    date,
     region,
     maxcid: 1,
   });
@@ -43,14 +46,16 @@ export async function createPost(region: string, title: string, author: string, 
     author,
     edited: false,
     content,
+    date,
     pid,
     region,
   });
 
-  return Result.ok();
+  return Result.ok(pid);
 }
 
-export async function createComment(region: string, pid: number, author: string, content: string): Promise<Result<void, string>> {
+export async function createComment(region: string, pid: number, author: string, content: string): Promise<Result<number, string>> {
+
   const res = await posts.findOne({
     region,
     pid,
@@ -65,18 +70,19 @@ export async function createComment(region: string, pid: number, author: string,
     author,
     edited: false,
     content,
+    date: Date.now(),
     pid,
     region,
   });
 
-  return Result.ok();
+  return Result.ok(cid);
 }
 
-export async function modifyRegion(region: string, description: string): Promise<Result<void, string>> {
+export async function modifyRegion(region: string, title: string, description: string): Promise<Result<void, string>> {
   const res = await regions.findOne({ region });
   if (!res) return Result.error(REGION_NOT_EXISTS);
 
-  await regions.updateOne(res, { $set: { description } });
+  await regions.updateOne(res, { $set: { title, description } });
 
   return Result.ok();
 }
