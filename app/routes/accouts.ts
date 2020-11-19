@@ -1,6 +1,6 @@
 import Router from "koa-router";
 import { issueCookie, revoke } from "../auth.js";
-import { registerUser, verifyPassword } from "../db.js";
+import { registerUser, verifyPassword } from "../db/accouts.js";
 import { LOGIN_REQUIRE, LOGOUT_REQUIRE, PARAMS_MISSING } from "../errors.js";
 import { State, Tools } from "../types.js";
 

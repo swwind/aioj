@@ -1,6 +1,7 @@
 export type State = {
   authorized: boolean;
   username: string;
+  admin: boolean;
 };
 
 export type Tools = {

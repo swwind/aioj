@@ -10,3 +10,8 @@ export const SERVER_ERROR = 'server_error';
 export const PARAMS_MISSING = 'params_missing';
 export const FRIEND_ALREADY_EXISTS = 'friend_already_exists';
 export const FRIEND_NOT_EXISTS = 'friend_not_exists';
+
+export const REGION_ALREADY_EXISTS = 'region_already_exists';
+export const REGION_NOT_EXISTS = 'region_not_exists';
+export const POST_NOT_EXISTS = 'post_not_exists';
+export const COMMENT_NOT_EXISTS = 'comment_not_exists';

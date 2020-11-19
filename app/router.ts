@@ -1,13 +1,16 @@
 import Router from "koa-router";
 import { verify } from "./auth.js";
+import { isAdmin } from "./db/accouts.js";
 import accouts from "./routes/accouts.js";
 import friends from "./routes/friends.js";
+import forum from "./routes/forum.js";
 import { State, Tools } from "./types.js";
 
 const router = new Router<State, Tools>();
 
 router.use('/', async (ctx, next) => {
   ctx.state.authorized = false;
+  ctx.state.admin = false;
   ctx.end = (status: number, data?: Object | string) => {
     ctx.response.status = status;
     ctx.response.headers['Content-Type'] = 'application/json';
@@ -31,6 +34,10 @@ router.use('/', async (ctx, next) => {
     if (username) {
       ctx.state.authorized = true;
       ctx.state.username = username;
+      const result = await isAdmin(username);
+      if (result.ok) {
+        ctx.state.admin = result.result();
+      }
     }
   }
   await next();
@@ -41,6 +48,8 @@ router.use('/api',
   accouts.allowedMethods(),
   friends.routes(),
   friends.allowedMethods(),
+  forum.routes(),
+  forum.allowedMethods(),
 );
 
 export default router;
