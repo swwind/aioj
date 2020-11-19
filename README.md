@@ -24,18 +24,18 @@
 [ ] POST /api/submit/:pid                   Submit your code as a bot
 [ ] POST /api/challenge/:pid                Start a challenge with a set of bots
 
-[-] POST /api/r/:region                     Create a new region
-[-] POST /api/r/:region/post                Create a new post in region
-[-] POST /api/r/:region/:pid/comment        Create a comment to a post
-[-] PUT /api/r/:region                      Modify a region
-[-] PUT /api/r/:region/:pid                 Modify a post
-[-] PUT /api/r/:region/:pid/:cid            Modify a comment
-[-] DELETE /api/r/:region                   Delete a region
-[-] DELETE /api/r/:region/:pid              Delete a post
-[-] DELETE /api/r/:region/:pid/:cid         Delete a comment
-[-] GET /api/regions                        Get regions list
-[-] GET /api/r/:region                      Get posts list in a region
-[-] GET /api/r/:region/:pid                 Get post details (including comments)
+[x] POST /api/r/:region                     Create a new region
+[x] POST /api/r/:region/post                Create a new post in region
+[x] POST /api/r/:region/:pid/comment        Create a comment to a post
+[x] PUT /api/r/:region                      Modify a region
+[x] PUT /api/r/:region/:pid                 Modify a post
+[x] PUT /api/r/:region/:pid/:cid            Modify a comment
+[x] DELETE /api/r/:region                   Delete a region
+[x] DELETE /api/r/:region/:pid              Delete a post
+[x] DELETE /api/r/:region/:pid/:cid         Delete a comment
+[x] GET /api/regions                        Get regions list
+[x] GET /api/r/:region                      Get posts list in a region
+[x] GET /api/r/:region/:pid                 Get post details (including comments)
 
 P.S. about regions : every problems have its own region name like `_p1001` (for problem 1001), and it will not be returned in regions list.
 ```
