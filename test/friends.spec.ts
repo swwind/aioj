@@ -1,14 +1,15 @@
 import { expect } from "chai";
 import { DELETE, generateFakeAccount, get, post, put } from "./utils";
 
-const user1 = generateFakeAccount();
-const user2 = generateFakeAccount();
-const user3 = generateFakeAccount();
-let cookie1: string;
-let cookie2: string;
-let cookie3: string;
-
 describe('friends', () => {
+
+  const user1 = generateFakeAccount();
+  const user2 = generateFakeAccount();
+  const user3 = generateFakeAccount();
+  let cookie1: string;
+  let cookie2: string;
+  let cookie3: string;
+
   it('register fake accounts', async () => {
     const res1 = await post('/api/register', user1);
     const res2 = await post('/api/register', user2);
@@ -36,32 +37,44 @@ describe('friends', () => {
     const res4 = await get('/api/friends', null, { Cookie: cookie2 });
     expect(res4.status).eq(200);
     expect(res4.data).deep.eq({ status: 200, friends: [user1.username] });
-
-    const res5 = await put(`/api/friends/${user1.username}`, null, { Cookie: cookie2 });
-    expect(res5.status).eq(400);
-    expect(res5.data).deep.eq({ status: 400, error: 'friend_already_exists' });
-
-    const res6 = await put(`/api/friends/${user3.username}`, null, { Cookie: cookie1 });
-    expect(res6.status).eq(400);
-    expect(res6.data).deep.eq({ status: 400, error: 'user_not_exists' });
   });
 
-  it('delete friends', async () => {
+  it('add duplicated friend', async () => {
+    const res1 = await put(`/api/friends/${user1.username}`, null, { Cookie: cookie2 });
+    expect(res1.status).eq(400);
+    expect(res1.data).deep.eq({ status: 400, error: 'friend_already_exists' });
+  });
+
+  it('add non-exist friend', async () => {
+    const res1 = await put(`/api/friends/${user3.username}`, null, { Cookie: cookie1 });
+    expect(res1.status).eq(400);
+    expect(res1.data).deep.eq({ status: 400, error: 'user_not_exists' });
+  });
+
+  it('delete non-exist friend', async () => {
     const res1 = await DELETE(`/api/friends/${user3.username}`, null, { Cookie: cookie2 });
     expect(res1.status).eq(400);
     expect(res1.data).deep.eq({ status: 400, error: 'user_not_exists' });
+  });
 
-    const res2 = await DELETE(`/api/friends/${user1.username}`, null, { Cookie: cookie2 });
+  it('delete friend', async () => {
+    const res1 = await DELETE(`/api/friends/${user1.username}`, null, { Cookie: cookie2 });
+    expect(res1.status).eq(200);
+    expect(res1.data).deep.eq({ status: 200 });
+
+    const res2 = await get('/api/friends', null, { Cookie: cookie1 });
     expect(res2.status).eq(200);
-    expect(res2.data).deep.eq({ status: 200 });
+    expect(res2.data).deep.eq({ status: 200, friends: [] });
 
-    const res3 = await get('/api/friends', null, { Cookie: cookie1 });
+    const res3 = await get('/api/friends', null, { Cookie: cookie2 });
     expect(res3.status).eq(200);
     expect(res3.data).deep.eq({ status: 200, friends: [] });
+  });
 
-    const res4 = await get('/api/friends', null, { Cookie: cookie2 });
-    expect(res4.status).eq(200);
-    expect(res4.data).deep.eq({ status: 200, friends: [] });
+  it('delete non-friend friend', async () => {
+    const res1 = await DELETE(`/api/friends/${user1.username}`, null, { Cookie: cookie2 });
+    expect(res1.status).eq(400);
+    expect(res1.data).deep.eq({ status: 400, error: 'friend_not_exists' });
   });
 
   it('complex friendship', async () => {
@@ -88,5 +101,13 @@ describe('friends', () => {
     const res6 = await get(`/api/friends`, null, { Cookie: cookie2 });
     expect(res6.status).eq(200);
     expect(res6.data).deep.eq({ status: 200, friends: [ user3.username ] });
+
+    const res7 = await DELETE(`/api/friends/${user2.username}`, null, { Cookie: cookie3 });
+    expect(res7.status).eq(200);
+    expect(res7.data).deep.eq({ status: 200 });
+
+    const res8 = await get(`/api/friends`, null, { Cookie: cookie2 });
+    expect(res8.status).eq(200);
+    expect(res8.data).deep.eq({ status: 200, friends: [] });
   });
 });
