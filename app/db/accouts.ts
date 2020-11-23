@@ -1,5 +1,5 @@
 import { users } from "../db.js";
-import { PASSWORD_WRONG, SERVER_ERROR, USER_EXISTS, USER_NOT_EXISTS } from "../errors.js";
+import { LOGIN_REQUIRE, PASSWORD_WRONG, SERVER_ERROR, USER_EXISTS, USER_NOT_EXISTS } from "../errors.js";
 import { Result } from "../utils.js";
 
 export async function registerUser(username: string, password: string): Promise<Result<void, string>> {
@@ -49,4 +49,10 @@ export async function isAdmin(username: string): Promise<Result<boolean, string>
   }
 
   return Result.ok(result.admin);
+}
+
+export async function modifyUserDetail(username: string, description: string, email: string): Promise<Result<void, string>> {
+  const result = await users.findOneAndUpdate({ username }, { $set: { description, email } });
+  if (!result.ok) return Result.error(USER_NOT_EXISTS);
+  return Result.ok();
 }

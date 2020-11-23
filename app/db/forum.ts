@@ -79,29 +79,20 @@ export async function createComment(region: string, pid: number, author: string,
 }
 
 export async function modifyRegion(region: string, title: string, description: string): Promise<Result<void, string>> {
-  const res = await regions.findOne({ region });
-  if (!res) return Result.error(REGION_NOT_EXISTS);
-
-  await regions.updateOne(res, { $set: { title, description } });
-
+  const result = await regions.findOneAndUpdate({ region }, { $set: { title, description } });
+  if (!result.ok) return Result.error(REGION_NOT_EXISTS);
   return Result.ok();
 }
 
 export async function modifyPost(region: string, pid: number, title: string): Promise<Result<void, string>> {
-  const res = await posts.findOne({ region, pid });
-  if (!res) return Result.error(POST_NOT_EXISTS);
-
-  await posts.updateOne(res, { $set: { title } });
-
+  const result = await posts.findOneAndUpdate({ region, pid }, { $set: { title } });
+  if (!result.ok) return Result.error(POST_NOT_EXISTS);
   return Result.ok();
 }
 
 export async function modifyComment(region: string, pid: number, cid: number, content: string): Promise<Result<void, string>> {
-  const res = await comments.findOne({ region, pid, cid });
-  if (!res) return Result.error(COMMENT_NOT_EXISTS);
-
-  await comments.updateOne(res, { $set: { content, edited: true } });
-
+  const result = await comments.findOneAndUpdate({ region, pid, cid }, { $set: { content, edited: true } });
+  if (!result.ok) return Result.error(COMMENT_NOT_EXISTS);
   return Result.ok();
 }
 
