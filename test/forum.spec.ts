@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { DELETE, generateFakeAccount, GET, POST, randomBytes } from "./utils";
+import { DELETE, generateFakeAccount, GET, parseCookie, POST, randomBytes } from "./utils";
 
 describe('forum', () => {
   const root = {
@@ -13,14 +13,14 @@ describe('forum', () => {
   it('register root (if not) and user', async () => {
     const res1 = await POST('/api/register', root);
     if (res1.status === 200) {
-      cookie1 = res1.headers['set-cookie'][0].split(';')[0];
+      cookie1 = parseCookie(res1.headers);
     } else {
       const res2 = await POST('/api/login', root);
       expect(res2.status).eq(200);
-      cookie1 = res2.headers['set-cookie'][0].split(';')[0];
+      cookie1 = parseCookie(res2.headers);
     }
     const res3 = await POST('/api/register', user1);
-    cookie2 = res3.headers['set-cookie'][0].split(';')[0];
+    cookie2 = parseCookie(res3.headers);
   });
 
   const region = randomBytes(16);
@@ -44,9 +44,14 @@ describe('forum', () => {
 
   it('get regions list', async () => {
     const res = await GET('/api/regions');
-    expect(res.data.list[0].region).eq(region);
-    expect(res.data.list[0].title).eq(title);
-    expect(res.data.list[0].description).eq(description);
+    expect(res.data).deep.eq({
+      status: 200,
+      list: [{
+        region,
+        title,
+        description,
+      }]
+    })
   });
 
   let pid1: number, pid2: number;

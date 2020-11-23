@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { DELETE, generateFakeAccount, GET, POST, PUT } from "./utils";
+import { DELETE, generateFakeAccount, GET, parseCookie, POST, PUT } from "./utils";
 
 describe('friends', () => {
 
@@ -17,8 +17,8 @@ describe('friends', () => {
     expect(res1.status).eq(200);
     expect(res2.status).eq(200);
 
-    cookie1 = res1.headers['set-cookie'][0].split(';')[0];
-    cookie2 = res2.headers['set-cookie'][0].split(';')[0];
+    cookie1 = parseCookie(res1.headers);
+    cookie2 = parseCookie(res2.headers);
   });
 
   it('add friend', async () => {
@@ -80,7 +80,7 @@ describe('friends', () => {
   it('complex friendship', async () => {
     const res1 = await POST('/api/register', user3);
     expect(res1.status).eq(200);
-    cookie3 = res1.headers['set-cookie'][0].split(';')[0];
+    cookie3 = parseCookie(res1.headers);
 
     const res2 = await PUT(`/api/friends/${user1.username}`, null, { Cookie: cookie2 });
     expect(res2.status).eq(200);

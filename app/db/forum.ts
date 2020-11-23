@@ -1,4 +1,4 @@
-import { CommentData, comments, PostData, posts, RegionData, regions } from "../db.js";
+import { CommentDetail, comments, PostDetail, posts, RegionDetail, regions, extractCommentDetail, extractPostDetail, extractRegionDetail } from "../db.js";
 import { COMMENT_NOT_EXISTS, POST_NOT_EXISTS, REGION_ALREADY_EXISTS, REGION_NOT_EXISTS } from "../errors.js";
 import { Result } from "../utils.js";
 
@@ -126,26 +126,26 @@ export async function deleteComment(region: string, pid: number, cid: number): P
   return Result.ok();
 }
 
-export async function getPostDetail(region: string, pid: number): Promise<Result<PostData, string>> {
+export async function getPostDetail(region: string, pid: number): Promise<Result<PostDetail, string>> {
   const res = await posts.findOne({ region, pid });
   if (!res) return Result.error(POST_NOT_EXISTS);
-  return Result.ok(res);
+  return Result.ok(extractPostDetail(res));
 }
 
-export async function getCommentDetail(region: string, pid: number, cid: number): Promise<Result<CommentData, string>> {
+export async function getCommentDetail(region: string, pid: number, cid: number): Promise<Result<CommentDetail, string>> {
   const res = await comments.findOne({ region, pid, cid });
   if (!res) return Result.error(COMMENT_NOT_EXISTS);
-  return Result.ok(res);
+  return Result.ok(extractCommentDetail(res));
 }
 
-export async function getPostComments(region: string, pid: number): Promise<CommentData[]> {
-  return await comments.find({ region, pid }).toArray();
+export async function getPostComments(region: string, pid: number): Promise<CommentDetail[]> {
+  return (await comments.find({ region, pid }).toArray()).map(extractCommentDetail);
 }
 
-export async function getPostsList(region: string): Promise<PostData[]> {
-  return await posts.find({ region }).toArray();
+export async function getPostsList(region: string): Promise<PostDetail[]> {
+  return (await posts.find({ region }).toArray()).map(extractPostDetail);
 }
 
-export async function getRegionsList(): Promise<RegionData[]> {
-  return await regions.find({ }).toArray();
+export async function getRegionsList(): Promise<RegionDetail[]> {
+  return (await regions.find({ }).toArray()).map(extractRegionDetail);
 }

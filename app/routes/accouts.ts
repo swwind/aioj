@@ -8,19 +8,16 @@ const router = new Router<State, Tools>();
 
 router.post('/login', async (ctx) => {
   if (ctx.state.authorized) {
-    ctx.end(400, LOGOUT_REQUIRE);
-    return;
+    return ctx.end(400, LOGOUT_REQUIRE);
   }
 
   if (!ctx.verifyBody(['username', 'password'])) {
-    ctx.end(400, PARAMS_MISSING);
-    return;
+    return ctx.end(400, PARAMS_MISSING);
   }
 
   const verifyRes = await verifyPassword(ctx.request.body.username, ctx.request.body.password);
   if (!verifyRes.ok) {
-    ctx.end(400, verifyRes.error());
-    return;
+    return ctx.end(400, verifyRes.error());
   }
 
   const cookie = issueCookie(ctx.request.body.username);
@@ -30,19 +27,16 @@ router.post('/login', async (ctx) => {
 
 router.post('/register', async (ctx) => {
   if (ctx.state.authorized) {
-    ctx.end(400, LOGOUT_REQUIRE);
-    return;
+    return ctx.end(400, LOGOUT_REQUIRE);
   }
 
   if (!ctx.verifyBody(['username', 'password'])) {
-    ctx.end(400, PARAMS_MISSING);
-    return;
+    return ctx.end(400, PARAMS_MISSING);
   }
 
   const registerRes = await registerUser(ctx.request.body.username, ctx.request.body.password);
   if (!registerRes.ok) {
-    ctx.end(400, registerRes.error());
-    return;
+    return ctx.end(400, registerRes.error());
   }
 
   const cookie = issueCookie(ctx.request.body.username);
@@ -52,8 +46,7 @@ router.post('/register', async (ctx) => {
 
 router.get('/whoami', async (ctx) => {
   if (!ctx.state.authorized) {
-    ctx.end(401, LOGIN_REQUIRE);
-    return;
+    return ctx.end(401, LOGIN_REQUIRE);
   }
 
   ctx.end(200, { username: ctx.state.username });
@@ -61,8 +54,7 @@ router.get('/whoami', async (ctx) => {
 
 router.post('/logout', async (ctx) => {
   if (!ctx.state.authorized) {
-    ctx.end(401, LOGIN_REQUIRE);
-    return;
+    return ctx.end(401, LOGIN_REQUIRE);
   }
 
   revoke(ctx.cookies.get('auth'));

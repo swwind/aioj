@@ -7,17 +7,23 @@ const router = new Router<State, Tools>();
 
 router.get('/friends', async (ctx) => {
   if (!ctx.state.authorized) {
-    ctx.end(401, LOGIN_REQUIRE);
-    return;
+    return ctx.end(401, LOGIN_REQUIRE);
   }
 
-  const askRes = await getFriendsList(ctx.state.username);
-  if (!askRes.ok) {
-    ctx.end(400, askRes.error());
-    return;
+  const result = await getFriendsList(ctx.state.username);
+  if (!result.ok) {
+    return ctx.end(400, result.error());
   }
 
-  ctx.end(200, { friends: askRes.result() });
+  ctx.end(200, { friends: result.result() });
+});
+
+router.get('/friends/:username', async (ctx) => {
+  const result = await getFriendsList(ctx.params.username);
+  if (!result.ok) {
+    return ctx.end(400, result.error());
+  }
+  ctx.end(200, { friends: result.result() });
 });
 
 router.put('/friends/:username', async (ctx) => {

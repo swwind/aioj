@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { generateFakeAccount, GET, POST } from "./utils";
+import { generateFakeAccount, GET, parseCookie, POST } from "./utils";
 
 describe('accounts', () => {
   const user1 = generateFakeAccount();
@@ -13,7 +13,7 @@ describe('accounts', () => {
     expect(res1.data).deep.eq({ status: 200 });
 
     expect(res1.headers['set-cookie'][0].startsWith('auth='));
-    cookie1 = res1.headers['set-cookie'][0].split(';')[0];
+    cookie1 = parseCookie(res1.headers);
 
     const res2 = await GET('/api/whoami', null, { Cookie: cookie1 });
     expect(res2.status).eq(200);
@@ -50,7 +50,7 @@ describe('accounts', () => {
     expect(res1.data).deep.eq({ status: 200 });
 
     expect(res1.headers['set-cookie'][0].startsWith('auth='));
-    cookie2 = res1.headers['set-cookie'][0].split(';')[0];
+    cookie2 = parseCookie(res1.headers);
 
     const res2 = await GET('/api/whoami', null, { Cookie: cookie2 });
     expect(res2.status).eq(200);

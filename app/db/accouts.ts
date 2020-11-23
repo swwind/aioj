@@ -1,11 +1,9 @@
 import { users } from "../db.js";
-import { LOGIN_REQUIRE, PASSWORD_WRONG, SERVER_ERROR, USER_EXISTS, USER_NOT_EXISTS } from "../errors.js";
+import { PASSWORD_WRONG, SERVER_ERROR, USER_EXISTS, USER_NOT_EXISTS } from "../errors.js";
 import { Result } from "../utils.js";
 
 export async function registerUser(username: string, password: string): Promise<Result<void, string>> {
-  const existsUsers = await users.findOne({
-    username,
-  });
+  const existsUsers = await users.findOne({ username });
   if (existsUsers) {
     return Result.error(USER_EXISTS);
   }
@@ -26,9 +24,7 @@ export async function registerUser(username: string, password: string): Promise<
 }
 
 export async function verifyPassword(username: string, password: string): Promise<Result<void, string>> {
-  const result = await users.findOne({
-    username,
-  });
+  const result = await users.findOne({ username });
 
   if (!result) {
     return Result.error(USER_NOT_EXISTS);
@@ -41,18 +37,10 @@ export async function verifyPassword(username: string, password: string): Promis
 }
 
 export async function isAdmin(username: string): Promise<Result<boolean, string>> {
-  const result = await users.findOne({
-    username,
-  });
+  const result = await users.findOne({ username });
   if (!result) {
     return Result.error(USER_NOT_EXISTS);
   }
 
   return Result.ok(result.admin);
-}
-
-export async function modifyUserDetail(username: string, description: string, email: string): Promise<Result<void, string>> {
-  const result = await users.findOneAndUpdate({ username }, { $set: { description, email } });
-  if (!result.ok) return Result.error(USER_NOT_EXISTS);
-  return Result.ok();
 }

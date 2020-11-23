@@ -2,6 +2,15 @@
 
 ```
 Request prefix: /api
+
+[ ] -> not implemented
+[-] -> implemented without unit tests (unstable)
+[x] -> implemented with unit tests (stable)
+
+POST/GET/DELETE /xxx/xx -> http request method and url
+
+- name: string; -> request body  (json prefer)
++ name: string; -> response body (json encoded)
 ```
 
 ```
@@ -13,8 +22,15 @@ Request prefix: /api
     - username: string;
     - password: string;
 [x] GET    /whoami                      Get username
-[ ] GET    /u/:username                 Get user's detail
-[ ] PUT    /u/:username                 Modify user's detail
+    + username: string;
+[x] GET    /u/:username                 Get user's detail
+    + username: string;
+    + description: string;
+    + email: string;
+    + admin: boolean;
+[x] PUT    /u/:username                 Modify user's detail
+    - description: string;
+    - email: string;
 
 [ ] GET    /problems                    Get the full problem lists
 [ ] GET    /p/:pid                      Get the problem details
@@ -22,7 +38,10 @@ Request prefix: /api
 [ ] PUT    /p/:pid                      Modify a problem
 [ ] DELETE /p/:pid                      Delete a problem
 
-[x] GET    /friends                     Get full friends list
+[x] GET    /friends                     Get my friends list
+    + friends: string[];
+[-] GET    /friends/:username           Get someone's friend list
+    + friends: string[];
 [x] PUT    /friends/:username           Add a new friend
 [x] DELETE /friends/:username           Delete a friend
 
@@ -51,8 +70,28 @@ Request prefix: /api
 [x] DELETE /r/:region/:pid              Delete a post
 [x] DELETE /r/:region/:pid/:cid         Delete a comment
 [x] GET    /regions                     Get regions list
+    + list: [] of
+        + region: string;
+        + title: string;
+        + description: string;
 [x] GET    /r/:region                   Get posts list in a region
+    + list: [] of
+        + pid: number;
+        + title: string;
+        + author: string;
+        + date: number;
 [x] GET    /r/:region/:pid              Get post details (including comments)
+    + list: [] of
+        + pid: number;
+        + title: string;
+        + author: string;
+        + date: number;
+        + comments: [] of
+            + cid: number;
+            + author: string;
+            + edited: boolean;
+            + content: string;
+            + date: number;
 
 P.S. about regions : every problems have its own region name like `_p1001` (for problem 1001), and it will not be returned in regions list.
 ```

@@ -4,6 +4,7 @@ import { isAdmin } from "./db/accouts.js";
 import accouts from "./routes/accouts.js";
 import friends from "./routes/friends.js";
 import forum from "./routes/forum.js";
+import users from "./routes/users.js";
 import { State, Tools } from "./types.js";
 
 const router = new Router<State, Tools>();
@@ -50,6 +51,8 @@ router.use('/api',
   friends.allowedMethods(),
   forum.routes(),
   forum.allowedMethods(),
+  users.routes(),
+  users.allowedMethods(),
 );
 
 export default router;

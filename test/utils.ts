@@ -31,3 +31,7 @@ export const generateFakeAccount = () => {
     password: randomBytes(16),
   }
 }
+
+export const parseCookie = (headers: Headers) => {
+  return headers['set-cookie'][0].split(';')[0];
+}

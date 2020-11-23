@@ -3,9 +3,7 @@ import { FRIEND_ALREADY_EXISTS, FRIEND_NOT_EXISTS, SERVER_ERROR, USER_NOT_EXISTS
 import { neq, Result } from "../utils.js";
 
 export async function getFriendsList(username: string): Promise<Result<string[], string>> {
-  const result = await users.findOne({
-    username,
-  });
+  const result = await users.findOne({ username });
 
   if (!result) {
     return Result.error(USER_NOT_EXISTS);
