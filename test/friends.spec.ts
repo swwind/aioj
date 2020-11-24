@@ -51,6 +51,11 @@ describe('friends', () => {
     expect(res1.data).deep.eq({ status: 400, error: 'user_not_exists' });
   });
 
+  it('get other\'s friend', async () => {
+    const res = await GET(`/api/friends/${user2.username}`);
+    expect(res.data).deep.eq({ status: 200, friends: [user1.username] });
+  });
+
   it('delete non-exist friend', async () => {
     const res1 = await DELETE(`/api/friends/${user3.username}`, null, { Cookie: cookie2 });
     expect(res1.status).eq(400);

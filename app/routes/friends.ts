@@ -5,6 +5,14 @@ import { State, Tools } from "../types.js";
 
 const router = new Router<State, Tools>();
 
+router.get('/friends/:username', async (ctx) => {
+  const result = await getFriendsList(ctx.params.username);
+  if (!result.ok) {
+    return ctx.end(400, result.error());
+  }
+  ctx.end(200, { friends: result.result() });
+});
+
 router.get('/friends', async (ctx) => {
   if (!ctx.state.authorized) {
     return ctx.end(401, LOGIN_REQUIRE);
@@ -15,14 +23,6 @@ router.get('/friends', async (ctx) => {
     return ctx.end(400, result.error());
   }
 
-  ctx.end(200, { friends: result.result() });
-});
-
-router.get('/friends/:username', async (ctx) => {
-  const result = await getFriendsList(ctx.params.username);
-  if (!result.ok) {
-    return ctx.end(400, result.error());
-  }
   ctx.end(200, { friends: result.result() });
 });
 

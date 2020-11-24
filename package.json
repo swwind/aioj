@@ -6,9 +6,10 @@
   "main": "dist/index.js",
   "private": true,
   "scripts": {
-    "start": "yarn build && node --experimental-json-modules .",
+    "start": "node --experimental-json-modules .",
     "build": "tsc",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha"
+    "test": "./test.sh",
+    "mocha": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha"
   },
   "author": "",
   "license": "MIT",

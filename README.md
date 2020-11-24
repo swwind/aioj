@@ -42,7 +42,7 @@ POST/GET/DELETE /xxx/xx -> http request method and url
 
 [x] GET    /friends                     Get my friends list
     + friends: string[];
-[-] GET    /friends/:username           Get someone's friend list
+[x] GET    /friends/:username           Get someone's friend list
     + friends: string[];
 [x] PUT    /friends/:username           Add a new friend
 [x] DELETE /friends/:username           Delete a friend
@@ -97,7 +97,7 @@ POST/GET/DELETE /xxx/xx -> http request method and url
 
 [x] POST   /upload                      Upload a file
     - filename: string;
-    - file: Buffer/Blob;
+    - file: Buffer;
 [x] GET    /files/:fid                  Fetch the uploaded file
     + ... (206 partical content support)
 [x] GET    /files/i/:fid                Get file's information
