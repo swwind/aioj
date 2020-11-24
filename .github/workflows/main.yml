@@ -33,9 +33,13 @@ jobs:
     
       - name: Yarn CLI
         uses: CultureHQ/actions-yarn@v1.0.1
+        
+      - name: Install node modules
+        run: yarn install
       
       - name: Run tests
         run: |
+          node --version
           yarn start &
           PSERVER=$!
           sleep 5
