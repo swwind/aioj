@@ -13,6 +13,38 @@ POST/GET/DELETE /xxx/xx -> http request method and url
 + name: string; -> response body (json encoded)
 ```
 
+Example request:
+
+```
+HTTP/1.1 POST /api/login
+Content-Type: application/json
+{
+  "username": "attack204",
+  "password": "attack204_ak_world_final"
+}
+```
+
+Example success response:
+
+```
+200 OK
+Content-Type: application/json
+{
+  "status": 200
+}
+```
+
+Example error response:
+
+```
+403 Forbidden
+Content-Type: application/json
+{
+  "status": 403,
+  "error": "permission_denied"
+}
+```
+
 ## API
 
 ```
