@@ -1,5 +1,5 @@
 import Router from "koa-router";
-import { deleteFile, getFileData, saveFile } from "../db/files.js";
+import { deleteFile, getFileData, getFileDetail, getFileDetailsByUsername, saveFile } from "../db/files.js";
 import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors.js";
 import { State, Tools } from "../types.js";
 import { promises as fs } from 'fs';
@@ -49,6 +49,29 @@ router.get('/files/:fid', async (ctx) => {
   ctx.set('Content-Range', `bytes ${range[0]}-${range[1]}/${range[2]}`);
   const buffer = await fs.readFile(file.filepath);
   ctx.response.body = buffer.slice(range[0], range[1] + 1);
+});
+
+router.get('/files/i/:fid', async (ctx) => {
+  const result = await getFileDetail(ctx.params.fid);
+  if (!result.ok) {
+    return ctx.end(404, result.error());
+  }
+  ctx.end(200, result.result());
+});
+router.get('/files/u/:username', async (ctx) => {
+  if (!ctx.state.authorized) {
+    return ctx.end(401, LOGIN_REQUIRE);
+  }
+
+  if (!ctx.state.admin && ctx.state.username !== ctx.params.username) {
+    return ctx.end(403, PERMISSION_DENIED);
+  }
+
+  const result = await getFileDetailsByUsername(ctx.params.username);
+  if (!result.ok) {
+    return ctx.end(400, result.error());
+  }
+  ctx.end(200, { list: result.result() });
 });
 
 router.delete('/files/:fid', async (ctx) => {

@@ -37,6 +37,10 @@ export async function getFileDetail(fid: string): Promise<Result<FileDetail, str
   if (!result) return Result.error(FILE_NOT_FOUND);
   return Result.ok(extractFileDetail(result));
 }
+export async function getFileDetailsByUsername(username: string): Promise<Result<FileDetail[], string>> {
+  const result = await files.find({ uploader: username }).toArray();
+  return Result.ok(result.map(extractFileDetail));
+}
 
 export async function deleteFile(fid: string): Promise<Result<void, string>> {
   const result = await files.findOne({ fid });

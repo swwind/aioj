@@ -99,6 +99,18 @@ POST/GET/DELETE /xxx/xx -> http request method and url
     - filename: string;
     - file: Buffer/Blob;
 [-] GET    /files/:fid                  Fetch the uploaded file
+    + ... (206 partical content support)
+[ ] GET    /files/i/:fid                Get file's information
+    + fid: string;
+    + filename: string;
+    + author: string;
+    + size: number;
+[ ] GET    /files/u/:username           Get user's upload
+    + list: [] of
+        + fid: string;
+        + filename: string;
+        + author: string;
+        + size: number;
 [-] DELETE /files/:fid                  Delete a file
 
 P.S. about regions : every problems have its own region name like `_p1001` (for problem 1001), and it will not be returned in regions list.
