@@ -5,10 +5,22 @@ const client = new mongodb.MongoClient(config.mongo.url);
 await client.connect();
 const db = client.db(config.mongo.dbname);
 
+export const configs = db.collection<ConfigData>('config');
 export const users = db.collection<UserData>('user');
 export const regions = db.collection<RegionData>('region');
 export const posts = db.collection<PostData>('post');
 export const comments = db.collection<CommentData>('comment');
+export const problems = db.collection<ProblemData>('problem');
+export const files = db.collection<FileData>('file');
+
+// initialize db
+if (!await configs.findOne({ })) {
+  configs.insertOne({ maxpid: 1000 });
+}
+
+export type ConfigData = {
+  maxpid: number; // max problem id
+}
 
 export type UserDetail = {
   username: string;
@@ -57,35 +69,65 @@ export type CommentData = {
   region: string;
 } & CommentDetail;
 
-export function extractUserDetail(userdata: UserData): UserDetail {
+export type ProblemDetail = {
+  pid: number;
+  title: string;
+  author: string;
+  content: string;
+}
+
+export type ProblemData = {
+  judger: string;
+} & ProblemDetail;
+
+export type FileDetail = {
+  uploader: string;
+  size: number;
+  filename: string;
+  fid: string;
+}
+
+export type FileData = {
+  filepath: string;
+} & FileDetail;
+
+export function extractUserDetail(ud: UserData): UserDetail {
   return {
-    username: userdata.username,
-    description: userdata.description,
-    email: userdata.email,
-    admin: userdata.admin,
+    username: ud.username,
+    description: ud.description,
+    email: ud.email,
+    admin: ud.admin,
   }
 }
-export function extractRegionDetail(regiondata: RegionData): RegionDetail {
+export function extractRegionDetail(rd: RegionData): RegionDetail {
   return {
-    region: regiondata.region,
-    title: regiondata.title,
-    description: regiondata.description,
+    region: rd.region,
+    title: rd.title,
+    description: rd.description,
   }
 }
-export function extractPostDetail(postdata: PostData): PostDetail {
+export function extractPostDetail(pd: PostData): PostDetail {
   return {
-    pid: postdata.pid,
-    title: postdata.title,
-    author: postdata.author,
-    date: postdata.date,
+    pid: pd.pid,
+    title: pd.title,
+    author: pd.author,
+    date: pd.date,
   }
 }
-export function extractCommentDetail(commentdata: CommentData): CommentDetail {
+export function extractCommentDetail(cd: CommentData): CommentDetail {
   return {
-    cid: commentdata.cid,
-    author: commentdata.author,
-    edited: commentdata.edited,
-    content: commentdata.content,
-    date: commentdata.date,
+    cid: cd.cid,
+    author: cd.author,
+    edited: cd.edited,
+    content: cd.content,
+    date: cd.date,
+  }
+}
+export function extractFileDetail(fd: FileData): FileDetail {
+  return {
+    uploader: fd.uploader,
+    size: fd.size,
+    filename: fd.filename,
+    fid: fd.fid,
   }
 }

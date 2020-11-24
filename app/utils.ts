@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 export class Result<T, R> {
   ok: boolean;
   data: T | R;
@@ -24,3 +26,6 @@ export class Result<T, R> {
 }
 
 export const neq = <T> (x: T) => (y: T) => x !== y;
+export const generateRandomBytes = (n: number) => {
+  return crypto.randomBytes(n).toString('hex');
+}

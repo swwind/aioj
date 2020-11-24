@@ -13,6 +13,8 @@ POST/GET/DELETE /xxx/xx -> http request method and url
 + name: string; -> response body (json encoded)
 ```
 
+## API
+
 ```
 [x] POST   /login                       Log in
     - username: string;
@@ -92,6 +94,12 @@ POST/GET/DELETE /xxx/xx -> http request method and url
             + edited: boolean;
             + content: string;
             + date: number;
+
+[-] POST   /upload                      Upload a file
+    - filename: string;
+    - file: Buffer/Blob;
+[-] GET    /files/:fid                  Fetch the uploaded file
+[-] DELETE /files/:fid                  Delete a file
 
 P.S. about regions : every problems have its own region name like `_p1001` (for problem 1001), and it will not be returned in regions list.
 ```
