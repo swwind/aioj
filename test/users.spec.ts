@@ -12,7 +12,7 @@ describe('users', () => {
   };
   let rootc: string;
 
-  it('register root and 1', async () => {
+  it('register root and user', async () => {
     const res1 = await POST('/api/register', root);
     if (res1.status === 200) {
       rootc = parseCookie(res1.headers);

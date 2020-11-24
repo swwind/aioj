@@ -1,11 +1,13 @@
 import Router from "koa-router";
 import { verify } from "./auth.js";
 import { isAdmin } from "./db/accouts.js";
+import { State, Tools } from "./types.js";
+
 import accouts from "./routes/accouts.js";
 import friends from "./routes/friends.js";
 import forum from "./routes/forum.js";
 import users from "./routes/users.js";
-import { State, Tools } from "./types.js";
+import files from "./routes/files.js";
 
 const router = new Router<State, Tools>();
 
@@ -53,6 +55,8 @@ router.use('/api',
   forum.allowedMethods(),
   users.routes(),
   users.allowedMethods(),
+  files.routes(),
+  files.allowedMethods(),
 );
 
 export default router;

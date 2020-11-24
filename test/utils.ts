@@ -3,17 +3,19 @@ import crypto from 'crypto';
 
 const PREFIX = 'http://localhost:8080';
 
+export const request = axios.create({
+  baseURL: PREFIX,
+  validateStatus() { return true }
+});
+
 export const jsonRequest = (method: Method) => async (url: string, data?: Object, headers?: Object) => {
-  const response = await axios.request({
-    url: PREFIX + url,
+  const response = await request({
+    url,
     method,
     data: data ? JSON.stringify(data) : "",
     headers: {
       ...(data && { 'Content-Type': 'application/json' }),
       ...headers,
-    },
-    validateStatus() {
-      return true;
     }
   });
   return response;

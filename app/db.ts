@@ -85,6 +85,7 @@ export type FileDetail = {
   size: number;
   filename: string;
   fid: string;
+  date: number;
 }
 
 export type FileData = {
@@ -129,5 +130,6 @@ export function extractFileDetail(fd: FileData): FileDetail {
     size: fd.size,
     filename: fd.filename,
     fid: fd.fid,
+    date: fd.date,
   }
 }

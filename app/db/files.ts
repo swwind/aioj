@@ -21,6 +21,7 @@ export async function saveFile(username: string, filename: string, buffer: Buffe
     size: buffer.length,
     filename,
     filepath,
+    date: Date.now(),
   });
   await fs.writeFile(filepath, buffer);
 
