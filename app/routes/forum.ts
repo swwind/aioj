@@ -1,7 +1,7 @@
 import Router from "koa-router";
-import { createComment, createPost, createRegion, deleteComment, deletePost, deleteRegion, getCommentDetail, getPostComments, getPostDetail, getPostsList, getRegionsList, modifyComment, modifyPost, modifyRegion } from "../db/forum.js";
-import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors.js";
-import { State, Tools } from "../types.js";
+import { createComment, createPost, createRegion, deleteComment, deletePost, deleteRegion, getCommentDetail, getPostComments, getPostDetail, getPostsList, getRegionsList, modifyComment, modifyPost, modifyRegion } from "../db/forum";
+import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors";
+import { State, Tools } from "../types";
 
 const router = new Router<State, Tools>();
 

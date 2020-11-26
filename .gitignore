@@ -1,5 +1,7 @@
-node_modules/
-yarn.lock
-dist/
-uploads/
+/node_modules
+/yarn.lock
+/dist
+/uploads
+/build
+/static
 *.log

@@ -1,7 +1,7 @@
-import { extractFileDetail, FileData, FileDetail, files } from "../db.js";
-import { generateRandomBytes, Result } from "../utils.js";
+import { extractFileDetail, FileData, FileDetail, files } from "../db";
+import { generateRandomBytes, Result } from "../utils";
 import { promises as fs } from 'fs';
-import { FILE_NOT_FOUND } from "../errors.js";
+import { FILE_NOT_FOUND } from "../errors";
 
 async function getNewFileId() {
   let fid = generateRandomBytes(16);

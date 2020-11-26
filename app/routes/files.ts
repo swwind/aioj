@@ -1,7 +1,7 @@
 import Router from "koa-router";
-import { deleteFile, getFileData, getFileDetail, getFileDetailsByUsername, saveFile } from "../db/files.js";
-import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors.js";
-import { State, Tools } from "../types.js";
+import { deleteFile, getFileData, getFileDetail, getFileDetailsByUsername, saveFile } from "../db/files";
+import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors";
+import { State, Tools } from "../types";
 import { promises as fs } from 'fs';
 import { lookup } from "mime-types";
 

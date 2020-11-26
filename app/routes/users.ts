@@ -1,7 +1,7 @@
 import Router from "koa-router";
-import { getUserDetail, modifyUserDetail } from "../db/users.js";
-import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors.js";
-import { State, Tools } from "../types.js";
+import { getUserDetail, modifyUserDetail } from "../db/users";
+import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors";
+import { State, Tools } from "../types";
 
 const router = new Router<State, Tools>();
 

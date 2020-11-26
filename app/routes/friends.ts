@@ -1,7 +1,7 @@
 import Router from "koa-router";
-import { addNewFriend, deleteOldFriend, getFriendsList } from "../db/friends.js";
-import { LOGIN_REQUIRE } from "../errors.js";
-import { State, Tools } from "../types.js";
+import { addNewFriend, deleteOldFriend, getFriendsList } from "../db/friends";
+import { LOGIN_REQUIRE } from "../errors";
+import { State, Tools } from "../types";
 
 const router = new Router<State, Tools>();
 

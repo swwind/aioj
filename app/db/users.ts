@@ -1,6 +1,6 @@
-import { UserDetail, users, extractUserDetail } from "../db.js";
-import { USER_NOT_EXISTS } from "../errors.js";
-import { Result } from "../utils.js";
+import { UserDetail, users, extractUserDetail } from "../db";
+import { USER_NOT_EXISTS } from "../errors";
+import { Result } from "../utils";
 
 export async function modifyUserDetail(username: string, description: string, email: string): Promise<Result<void, string>> {
   const result = await users.findOneAndUpdate({ username }, { $set: { description, email } });

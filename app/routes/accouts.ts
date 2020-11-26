@@ -1,8 +1,8 @@
 import Router from "koa-router";
-import { issueCookie, revoke } from "../auth.js";
-import { registerUser, verifyPassword } from "../db/accouts.js";
-import { LOGIN_REQUIRE, LOGOUT_REQUIRE, PARAMS_MISSING } from "../errors.js";
-import { State, Tools } from "../types.js";
+import { issueCookie, revoke } from "../auth";
+import { registerUser, verifyPassword } from "../db/accouts";
+import { LOGIN_REQUIRE, LOGOUT_REQUIRE, PARAMS_MISSING } from "../errors";
+import { State, Tools } from "../types";
 
 const router = new Router<State, Tools>();
 
@@ -57,7 +57,7 @@ router.post('/logout', async (ctx) => {
     return ctx.end(401, LOGIN_REQUIRE);
   }
 
-  revoke(ctx.cookies.get('auth'));
+  revoke(ctx.cookies.get('auth') as string);
   ctx.end(200);
 });
 

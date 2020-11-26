@@ -1,14 +1,23 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "esnext",
+    "target": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "target": "ESNext",
-    "outDir": "./dist"
+    "strict": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "sourceMap": true,
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
   },
   "include": [
-    "*.ts",
     "app/**/*.ts",
+    "src/**/*.ts",
+    "index.ts",
   ]
 }

@@ -1,13 +1,14 @@
 import Router from "koa-router";
-import { verify } from "./auth.js";
-import { isAdmin } from "./db/accouts.js";
-import { State, Tools } from "./types.js";
+import { verify } from "./auth";
+import { isAdmin } from "./db/accouts";
+import { State, Tools } from "./types";
 
-import accouts from "./routes/accouts.js";
-import friends from "./routes/friends.js";
-import forum from "./routes/forum.js";
-import users from "./routes/users.js";
-import files from "./routes/files.js";
+import accouts from "./routes/accouts";
+import friends from "./routes/friends";
+import forum from "./routes/forum";
+import users from "./routes/users";
+import files from "./routes/files";
+import ssr from "./ssr";
 
 const router = new Router<State, Tools>();
 
@@ -58,5 +59,14 @@ router.use('/api',
   files.routes(),
   files.allowedMethods(),
 );
+
+router.get('(.*)', async (ctx) => {
+  const { code, html } = await ssr({
+    url: ctx.url,
+  });
+  ctx.response.status = code;
+  ctx.set('Content-Type', 'text/html');
+  ctx.response.body = html;
+});
 
 export default router;

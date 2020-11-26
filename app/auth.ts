@@ -25,7 +25,7 @@ export function revoke(cookie: string) {
 
 export function verify(cookie: string): string | false {
   if (auths.has(cookie)) {
-    return auths.get(cookie);
+    return auths.get(cookie) ?? false;
   }
   return false;
 }

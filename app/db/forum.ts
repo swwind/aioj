@@ -1,6 +1,6 @@
-import { CommentDetail, comments, PostDetail, posts, RegionDetail, regions, extractCommentDetail, extractPostDetail, extractRegionDetail } from "../db.js";
-import { COMMENT_NOT_EXISTS, POST_NOT_EXISTS, REGION_ALREADY_EXISTS, REGION_NOT_EXISTS } from "../errors.js";
-import { Result } from "../utils.js";
+import { CommentDetail, comments, PostDetail, posts, RegionDetail, regions, extractCommentDetail, extractPostDetail, extractRegionDetail } from "../db";
+import { COMMENT_NOT_EXISTS, POST_NOT_EXISTS, REGION_ALREADY_EXISTS, REGION_NOT_EXISTS } from "../errors";
+import { Result } from "../utils";
 
 export async function createRegion(region: string, title: string, description: string): Promise<Result<void, string>> {
 
