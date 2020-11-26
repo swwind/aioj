@@ -1,7 +1,7 @@
-import mongodb from 'mongodb';
+import { MongoClient } from 'mongodb';
 import config from '../config.json';
 
-const client = new mongodb.MongoClient(config.mongo.url);
+const client = new MongoClient(config.mongo.url, { useUnifiedTopology: true });
 await client.connect();
 const db = client.db(config.mongo.dbname);
 
