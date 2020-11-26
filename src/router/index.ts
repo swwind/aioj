@@ -9,8 +9,8 @@ const routes: Array<RouteRecordRaw> = [
     component: Home,
     meta: {
       title: 'AIFuckingSystem - An open AI online judging system',
-      description: 'AIFuckingSystem is an open AI online judging system, try to figure out your AI is much better than others!'
-    }
+      description: 'AIFuckingSystem is an open AI online judging system, try to figure out your AI is much better than others!',
+    },
   }, {
     path: '/about',
     name: 'About',
@@ -19,19 +19,33 @@ const routes: Array<RouteRecordRaw> = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue'),
     meta: {
-      title: 'About - AIFuckingSystem'
-    }
+      title: 'About - AIFuckingSystem',
+    },
+  }, {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "login" */ '@/components/Login.vue'),
+    meta: {
+      title: 'Login - AIFuckingSystem',
+    },
+  }, {
+    path: '/register',
+    name: 'Register',
+    component: () => import(/* webpackChunkName: "login" */ '@/components/Register.vue'),
+    meta: {
+      title: 'Register - AIFuckingSystem',
+    },
   }, {
     path: '/404',
     name: 'NotFound',
     component: NotFound,
     meta: {
-      title: 'Not Found - AIFuckingSystem'
-    }
+      title: 'Not Found - AIFuckingSystem',
+    },
   }, {
     path: '/:a(.*)',
-    redirect: '/404'
-  }
+    redirect: '/404',
+  },
 ];
 
 export default routes;

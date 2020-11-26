@@ -1,12 +1,8 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
   "main": "build/main.js",
-  "private": true,
   "scripts": {
-    "start": "node --experimental-json-modules .",
-    "dev": "webpack --config config/webpack.server.cjs --progress --mode=development --watch",
+    "start": "node .",
+    "dev": "webpack --config config/webpack.server.cjs --progress --mode=development --watch & webpack --config config/webpack.client.cjs --progress --mode=development --watch && kill $!",
     "build": "yarn clean && yarn build:client && yarn build:server",
     "build:server": "webpack --config config/webpack.server.cjs --progress --mode=production",
     "build:client": "webpack --config config/webpack.client.cjs --progress --mode=production",
@@ -16,14 +12,15 @@
     "clean": "rm -rf dist build",
     "mocha": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha"
   },
-  "author": "",
-  "license": "MIT",
   "dependencies": {
+    "@types/md5": "^2.2.1",
     "@vue/server-renderer": "^3.0.2",
+    "element-plus": "^1.0.1-alpha.21",
     "koa": "^2.13.0",
     "koa-body": "^4.2.0",
     "koa-router": "^10.0.0",
     "koa-static": "^5.0.0",
+    "md5": "^2.3.0",
     "mime-types": "^2.1.27",
     "mongodb": "^3.6.3",
     "typescript": "^4.0.5",

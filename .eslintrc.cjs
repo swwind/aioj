@@ -16,7 +16,9 @@ module.exports = {
     'no-debugger': 'warn',
     'semi': ['error', 'always'],
     '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
     'quotes': ['error', 'single'],
-    'comma-dangle': ['error', 'always-multiline']
+    'comma-dangle': ['error', 'always-multiline'],
   }
 }

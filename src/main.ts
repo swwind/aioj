@@ -1,4 +1,6 @@
 import { createVueApp } from '.';
 
-const { app } = createVueApp(false);
-app.mount('#app', true);
+const { app, router } = createVueApp(false);
+router.push(location.pathname + location.search).then(() => {
+  app.mount('#app', true);
+});
