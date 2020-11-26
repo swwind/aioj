@@ -44,7 +44,9 @@ const routes: Array<RouteRecordRaw> = [
     },
   }, {
     path: '/:a(.*)',
-    redirect: '/404',
+    redirect: {
+      name: 'NotFound'
+    },
   },
 ];
 

@@ -26,9 +26,10 @@ export default async (context: SSRContext) => {
   const { app, router } = createVueApp(true);
   await router.push(context.url);
   await router.isReady();
+  const html = await renderToString(app, context);
 
   return {
     code: router.currentRoute.value.fullPath === '/404' ? 404 : 200,
-    html: gentemp(router.currentRoute.value.meta, await renderToString(app, context)),
+    html: gentemp(router.currentRoute.value.meta, html),
   };
 }

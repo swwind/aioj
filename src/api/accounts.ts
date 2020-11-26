@@ -1,6 +1,6 @@
 import axios from 'axios';
 import md5 from 'md5';
-import { makePOSTRequest } from './utils';
+import { makeGETRequest, makePOSTRequest } from './utils';
 
 axios.defaults.baseURL = '/api';
 
@@ -20,4 +20,7 @@ export async function registerAttempt (username: string, password: string) {
     username,
     password: passwordHash(password),
   });
+}
+export async function whoami () {
+  return await makeGETRequest('/whoami');
 }

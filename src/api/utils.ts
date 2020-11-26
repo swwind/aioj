@@ -12,13 +12,13 @@ export type APIResponse = {
   [key: string]: any;
 }
 
-export const makeJSONRequest = (method: Method) => async (url: string, data: object, headers?: object): Promise<APIResponse> => {
+export const makeJSONRequest = (method: Method) => async (url: string, data?: object, headers?: object): Promise<APIResponse> => {
   const res = await request.request({
     url,
     method,
-    data: JSON.stringify(data),
+    data: data ? JSON.stringify(data) : '',
     headers: {
-      'Content-Type': 'application/json',
+      ...(data && { 'Content-Type': 'application/json' }),
       ...headers,
     },
   });
