@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 yarn start&
 ID=$!
 sleep 1
