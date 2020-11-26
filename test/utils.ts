@@ -8,7 +8,7 @@ export const request = axios.create({
   validateStatus() { return true }
 });
 
-export const jsonRequest = (method: Method) => async (url: string, data?: Object, headers?: Object) => {
+export const jsonRequest = (method: Method) => async (url: string, data?: Object | null, headers?: Object) => {
   const response = await request({
     url,
     method,
@@ -34,6 +34,6 @@ export const generateFakeAccount = () => {
   }
 }
 
-export const parseCookie = (headers: Headers) => {
+export const parseCookie = (headers: any): string => {
   return headers['set-cookie'][0].split(';')[0];
 }

@@ -27,5 +27,8 @@ jobs:
           yarn install
           node --version
 
+      - name: Build
+        run: yarn build
+
       - name: Run tests
         run: yarn test

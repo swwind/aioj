@@ -1,6 +1,5 @@
 #!/bin/bash
 
-yarn build
 yarn start&
 ID=$!
 sleep 1
