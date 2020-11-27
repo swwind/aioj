@@ -1,4 +1,13 @@
-# backend
+# AI Fucking System
+
+## Deploy
+
+```bash
+sudo systemctl start mongodb.service
+yarn build && node .
+```
+
+## API
 
 ```
 Request prefix: /api

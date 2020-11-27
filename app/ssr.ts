@@ -1,3 +1,7 @@
+// FIXME: 这个 SSR 还有很多问题
+// 目前先不解决这个
+// 因为我找不到 @vue/server-renderer 的文档
+
 import { renderToString } from '@vue/server-renderer';
 import { createVueApp } from '../src';
 import { promises as fs } from 'fs';
