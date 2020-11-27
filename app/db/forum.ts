@@ -146,6 +146,12 @@ export async function getPostsList(region: string): Promise<PostDetail[]> {
   return (await posts.find({ region }).toArray()).map(extractPostDetail);
 }
 
+export async function getRegionDetail(region: string): Promise<Result<RegionDetail, string>> {
+  const res = await regions.findOne({ region });
+  if (!res) return Result.error(REGION_NOT_EXISTS);
+  return Result.ok(res);
+}
+
 export async function getRegionsList(): Promise<RegionDetail[]> {
   return (await regions.find({ }).toArray()).map(extractRegionDetail);
 }

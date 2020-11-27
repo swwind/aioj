@@ -1,10 +1,21 @@
 <template>
   <el-form class="login">
     <el-form-item prop="username">
-      <el-input type="text" v-model="username" autocomplete="off" placeholder="Username"></el-input>
+      <el-input
+        type="text"
+        v-model="username"
+        autocomplete="off"
+        prefix-icon="el-icon-user"
+        placeholder="Username" />
     </el-form-item>
     <el-form-item prop="password">
-      <el-input type="password" v-model="password" autocomplete="off" placeholder="Password" @keydown="handleKeydown($event.key)"></el-input>
+      <el-input
+        type="password"
+        v-model="password"
+        autocomplete="off"
+        prefix-icon="el-icon-lock"
+        placeholder="Password"
+        @keydown="handleKeydown($event.key)" />
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="handleLogin">Login</el-button>
@@ -19,14 +30,14 @@
 
 <script lang="ts">
 import { loginAttempt } from '../api/accounts';
-import { defineComponent, Ref, ref, watch } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { mapState, Store, useStore } from 'vuex';
 import { State } from '@/store';
 import * as MutationTypes from '@/store/mutation-types';
 
 export default defineComponent({
-  setup () {
+  setup() {
     const username = ref('');
     const password = ref('');
 
@@ -60,7 +71,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(['accounts'])
+    ...mapState(['accounts']),
   },
 });
 </script>

@@ -32,7 +32,7 @@ import * as MutationTypes from '@/store/mutation-types';
 import { mapState } from 'vuex';
 
 export default defineComponent({
-  setup () {
+  setup() {
     const router = useRouter();
 
     const menus = [{
@@ -52,7 +52,7 @@ export default defineComponent({
 
     const jumpTo = (url: string) => {
       router.push(url + '?redirect=' + encodeURIComponent(router.currentRoute.value.path));
-    }
+    };
 
     return {
       handleMenuSelect,
@@ -69,9 +69,9 @@ export default defineComponent({
   async mounted() {
     const result = await whoami();
     if (result.status === 200) {
-      this.$store.commit(MutationTypes.LOGIN, result.username)
+      this.$store.commit(MutationTypes.LOGIN, result.username);
     }
-  }
+  },
 });
 </script>
 
@@ -81,6 +81,15 @@ body, html {
   margin: 0;
   height: 100%;
   width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: #2c3e50;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 #app {

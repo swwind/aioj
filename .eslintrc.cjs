@@ -20,5 +20,6 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'quotes': ['error', 'single'],
     'comma-dangle': ['error', 'always-multiline'],
+    'space-before-function-paren': ['error', { "anonymous": "always", "named": "never", "asyncArrow": "always" }]
   }
 }

@@ -1,9 +1,9 @@
-import { Mutation } from "vuex"
-import * as MutationTypes from "../mutation-types"
+import { Mutation } from 'vuex';
+import * as MutationTypes from '../mutation-types';
 
 const state = {
   username: '',
-}
+};
 
 const mutations: { [key: string]: Mutation<typeof state> } = {
   [MutationTypes.LOGIN](state, payload: string) {
@@ -11,8 +11,8 @@ const mutations: { [key: string]: Mutation<typeof state> } = {
   },
   [MutationTypes.LOGOUT](state) {
     state.username = '';
-  }
-}
+  },
+};
 
 export default {
   state,

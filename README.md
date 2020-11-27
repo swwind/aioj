@@ -118,23 +118,29 @@ Content-Type: application/json
         + title: string;
         + description: string;
 [x] GET    /r/:region                   Get posts list in a region
+    + region: string;
+    + title: string;
+    + description: string;
     + list: [] of
         + pid: number;
         + title: string;
         + author: string;
         + date: number;
 [x] GET    /r/:region/:pid              Get post details (including comments)
-    + list: [] of
-        + pid: number;
-        + title: string;
+    + pid: number;
+    + title: string;
+    + author: string;
+    + date: number;
+    + comments: [] of
+        + cid: number;
         + author: string;
+        + edited: boolean;
+        + content: string;
         + date: number;
-        + comments: [] of
-            + cid: number;
-            + author: string;
-            + edited: boolean;
-            + content: string;
-            + date: number;
+    + region:
+        + region: string;
+        + title: string;
+        + description: string;
 
 [x] POST   /upload                      Upload a file
     - filename: string;

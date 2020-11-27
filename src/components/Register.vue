@@ -40,11 +40,10 @@
 import { registerAttempt } from '../api/accounts';
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { mapState, Store, useStore } from 'vuex';
-import { State } from '@/store';
+import { mapState } from 'vuex';
 
 export default defineComponent({
-  setup () {
+  setup() {
     const username = ref('');
     const password = ref('');
     const reptpass = ref('');
@@ -52,7 +51,6 @@ export default defineComponent({
     const router = useRouter();
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
-    const store = useStore() as Store<State>;
     const errorMessage = ref('');
 
     const handleRegister = async () => {

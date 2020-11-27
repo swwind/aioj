@@ -9,11 +9,11 @@ import { defineComponent } from 'vue';
 import { mapState } from 'vuex';
 
 export default defineComponent({
-  setup () {
+  setup() {
     // TODO
   },
   computed: {
     ...mapState(['accounts']),
-  }
+  },
 });
 </script>

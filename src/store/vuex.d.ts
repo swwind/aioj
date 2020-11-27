@@ -1,6 +1,6 @@
-// vuex.d.ts
+/* eslint-disable */
 import { ComponentCustomProperties } from 'vue';
-import { Store } from 'vuex'
+import { Store } from 'vuex';
 import { State } from './modules';
 import { Notification } from 'element-plus';
 

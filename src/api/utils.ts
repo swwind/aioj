@@ -4,14 +4,14 @@ import config from '../../config.json';
 
 const getBaseURL = () => {
   return config.port === 443
-    ? `https://localhost/api`
+    ? 'https://localhost/api'
     : `http://localhost:${config.port}/api`;
-}
+};
 
 export const request = axios.create({
   baseURL: typeof global.window === 'undefined'
     ? getBaseURL() : '/api',
-  validateStatus () { return true; },
+  validateStatus() { return true; },
 });
 
 export type APIResponse = {

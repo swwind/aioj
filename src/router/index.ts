@@ -24,10 +24,20 @@ const routes: Array<RouteRecordRaw> = [
   }, {
     path: '/r',
     name: 'Forum',
-    component: () => import(/* webpackChunkName: "login" */ '@/components/Regions.vue'),
+    component: () => import(/* webpackChunkName: "forum" */ '@/components/Regions.vue'),
     meta: {
       title: 'Forum - AIFuckingSystem',
     },
+  }, {
+    path: '/r/:region',
+    name: 'Region',
+    component: () => import(/* webpackChunkName: "region" */ '@/components/RegionView.vue'),
+    meta: {
+      title: 'Forum - AIFuckingSystem',
+    },
+    props: (route) => ({
+      region: route.params.region,
+    }),
   }, {
     path: '/login',
     name: 'Login',
@@ -52,7 +62,7 @@ const routes: Array<RouteRecordRaw> = [
   }, {
     path: '/:a(.*)',
     redirect: {
-      name: 'NotFound'
+      name: 'NotFound',
     },
   },
 ];
