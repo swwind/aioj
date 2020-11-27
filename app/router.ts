@@ -42,6 +42,8 @@ router.use('/', async (ctx, next) => {
       if (result.ok) {
         ctx.state.admin = result.result();
       }
+    } else {
+      ctx.cookies.set('auth', '', { expires: new Date(0) });
     }
   }
   await next();

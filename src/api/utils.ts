@@ -1,18 +1,25 @@
 import { INTERNAL_SERVER_ERROR } from 'app/errors';
 import axios, { Method } from 'axios';
+import config from '../../config.json';
+
+const getBaseURL = () => {
+  return config.port === 443
+    ? `https://localhost/api`
+    : `http://localhost:${config.port}/api`;
+}
 
 export const request = axios.create({
-  baseURL: '/api',
+  baseURL: typeof global.window === 'undefined'
+    ? getBaseURL() : '/api',
   validateStatus () { return true; },
 });
 
 export type APIResponse = {
   status: number;
   error: string;
-  [key: string]: any;
 }
 
-export const makeJSONRequest = (method: Method) => async (url: string, data?: object, headers?: object): Promise<APIResponse> => {
+export const makeJSONRequest = (method: Method) => async <T = {}> (url: string, data?: object, headers?: object): Promise<APIResponse & T> => {
   const res = await request.request({
     url,
     method,
@@ -28,7 +35,7 @@ export const makeJSONRequest = (method: Method) => async (url: string, data?: ob
   return {
     status: res.status,
     error: INTERNAL_SERVER_ERROR,
-  };
+  } as any;
 };
 
 export const makeGETRequest = makeJSONRequest('GET');

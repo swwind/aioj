@@ -29,7 +29,9 @@
       <el-button type="primary" @click="handleRegister">Register</el-button>
       <router-link to="/login" class="login">Login</router-link>
     </el-form-item>
-    <el-alert type="warning" v-if="warnMessage" v-text="warnMessage" />
+    <el-alert type="warning" v-if="accounts.username">
+      Please logout first, {{ accounts.username }}.
+    </el-alert>
     <el-alert type="error" v-if="errorMessage" v-text="errorMessage" />
   </el-form>
 </template>
@@ -51,14 +53,7 @@ export default defineComponent({
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
     const store = useStore() as Store<State>;
-    const warnMessage = ref('');
     const errorMessage = ref('');
-    const handleUsernameChange = (username: string) => {
-      if (username) {
-        warnMessage.value = `Please logout first, ${store.state.accounts.username}.`;
-      }
-    }
-    handleUsernameChange(store.state.accounts.username);
 
     const handleRegister = async () => {
       if (password.value !== reptpass.value) {
@@ -84,19 +79,12 @@ export default defineComponent({
       reptpass,
       handleRegister,
       handleKeydown,
-      warnMessage,
       errorMessage,
-      handleUsernameChange,
     };
   },
   computed: {
     ...mapState(['accounts']),
   },
-  watch: {
-    ['accounts.username'](newname: string) {
-      this.handleUsernameChange(newname);
-    }
-  }
 });
 </script>
 

@@ -22,5 +22,5 @@ export async function registerAttempt (username: string, password: string) {
   });
 }
 export async function whoami () {
-  return await makeGETRequest('/whoami');
+  return await makeGETRequest<{ username: string }>('/whoami');
 }

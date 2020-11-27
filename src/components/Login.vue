@@ -10,7 +10,9 @@
       <el-button type="primary" @click="handleLogin">Login</el-button>
       <router-link to="/register" class="register">Register</router-link>
     </el-form-item>
-    <el-alert type="warning" v-if="warnMessage" v-text="warnMessage" />
+    <el-alert type="warning" v-if="accounts.username">
+      Please logout first, {{ accounts.username }}.
+    </el-alert>
     <el-alert type="error" v-if="errorMessage" v-text="errorMessage" />
   </el-form>
 </template>
@@ -32,14 +34,7 @@ export default defineComponent({
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
     const store = useStore() as Store<State>;
-    const warnMessage = ref('');
     const errorMessage = ref('');
-    const handleUsernameChange = (username: string) => {
-      if (username) {
-        warnMessage.value = `Please logout first, ${store.state.accounts.username}.`;
-      }
-    }
-    handleUsernameChange(store.state.accounts.username);
 
     const handleLogin = async () => {
       const result = await loginAttempt(username.value, password.value);
@@ -61,20 +56,12 @@ export default defineComponent({
       password,
       handleLogin,
       handleKeydown,
-      warnMessage,
       errorMessage,
-      handleUsernameChange,
     };
   },
   computed: {
     ...mapState(['accounts'])
   },
-  watch: {
-    // XXX: vuex store ref as state is weird
-    ['accounts.username'](newname: string) {
-      this.handleUsernameChange(newname);
-    }
-  }
 });
 </script>
 

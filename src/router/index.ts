@@ -22,6 +22,13 @@ const routes: Array<RouteRecordRaw> = [
       title: 'About - AIFuckingSystem',
     },
   }, {
+    path: '/r',
+    name: 'Forum',
+    component: () => import(/* webpackChunkName: "login" */ '@/components/Regions.vue'),
+    meta: {
+      title: 'Forum - AIFuckingSystem',
+    },
+  }, {
     path: '/login',
     name: 'Login',
     component: () => import(/* webpackChunkName: "login" */ '@/components/Login.vue'),

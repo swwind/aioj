@@ -7,9 +7,12 @@
           :index="menuItem.url"
           v-text="menuItem.name" />
       </el-menu>
-      <div class="buttonset">
+      <div class="buttonset" v-if="!accounts.username">
         <el-button @click="jumpTo('/login')">Login</el-button>
         <el-button @click="jumpTo('/register')" type="primary">Register</el-button>
+      </div>
+      <div class="userpanel" v-else>
+        {{ accounts.username }}
       </div>
     </div>
   </el-header>
@@ -26,6 +29,7 @@ import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { whoami } from './api/accounts';
 import * as MutationTypes from '@/store/mutation-types';
+import { mapState } from 'vuex';
 
 export default defineComponent({
   setup () {
@@ -37,6 +41,9 @@ export default defineComponent({
     }, {
       name: 'About',
       url: '/about',
+    }, {
+      name: 'Forum',
+      url: '/r',
     }];
     const activeMenu = router.currentRoute.value.path;
     const handleMenuSelect = (select: string) => {
@@ -54,6 +61,11 @@ export default defineComponent({
       jumpTo,
     };
   },
+
+  computed: {
+    ...mapState(['accounts']),
+  },
+
   async mounted() {
     const result = await whoami();
     if (result.status === 200) {
@@ -99,9 +111,17 @@ body, html {
   }
 }
 
+.buttonset, .userpanel {
+  border-bottom: solid 1px #e6e6e6;
+}
+
 .buttonset {
   padding-top: 11px;
-  border-bottom: solid 1px #e6e6e6;
+}
+
+.userpanel {
+  line-height: 60px;
+  padding: 0 20px;
 }
 
 .footer {
