@@ -19,12 +19,11 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="handleLogin">Login</el-button>
-      <router-link to="/register" class="register">Register</router-link>
+      <router-link :to="`/register${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="register">Register</router-link>
     </el-form-item>
     <el-alert type="warning" v-if="accounts.username">
       Please logout first, {{ accounts.username }}.
     </el-alert>
-    <el-alert type="error" v-if="errorMessage" v-text="errorMessage" />
   </el-form>
 </template>
 
@@ -45,12 +44,11 @@ export default defineComponent({
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
     const store = useStore() as Store<State>;
-    const errorMessage = ref('');
 
     const handleLogin = async () => {
       const result = await loginAttempt(username.value, password.value);
       if (result.status === 200) {
-        store.commit(MutationTypes.LOGIN, username.value);
+        store.commit(MutationTypes.LOGIN, result);
         router.push(redirect);
       } else {
         alert('failed login: ' + result.error);
@@ -67,7 +65,7 @@ export default defineComponent({
       password,
       handleLogin,
       handleKeydown,
-      errorMessage,
+      redirect,
     };
   },
   computed: {

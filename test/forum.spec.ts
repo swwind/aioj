@@ -44,14 +44,12 @@ describe('forum', () => {
 
   it('get regions list', async () => {
     const res = await GET('/api/regions');
-    expect(res.data).deep.eq({
-      status: 200,
-      list: [{
-        region,
-        title,
-        description,
-      }]
-    })
+    expect(res.status).eq(200);
+    expect(res.data.list).deep.contains({
+      region,
+      title,
+      description,
+    });
   });
 
   let pid1: number, pid2: number;

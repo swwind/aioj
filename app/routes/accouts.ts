@@ -1,3 +1,4 @@
+import { getUserDetail } from "app/db/users";
 import Router from "koa-router";
 import { issueCookie, revoke } from "../auth";
 import { registerUser, verifyPassword } from "../db/accouts";
@@ -20,9 +21,14 @@ router.post('/login', async (ctx) => {
     return ctx.end(400, verifyRes.error());
   }
 
+  const result = await getUserDetail(ctx.request.body.username);
+  if (!result.ok) {
+    return ctx.end(400, result.error());
+  }
+
   const cookie = issueCookie(ctx.request.body.username);
   ctx.cookies.set('auth', cookie);
-  ctx.end(200);
+  ctx.end(200, result.result());
 });
 
 router.post('/register', async (ctx) => {
@@ -39,17 +45,14 @@ router.post('/register', async (ctx) => {
     return ctx.end(400, registerRes.error());
   }
 
-  const cookie = issueCookie(ctx.request.body.username);
-  ctx.cookies.set('auth', cookie);
-  ctx.end(200);
-});
-
-router.get('/whoami', async (ctx) => {
-  if (!ctx.state.authorized) {
-    return ctx.end(401, LOGIN_REQUIRE);
+  const result = await getUserDetail(ctx.request.body.username);
+  if (!result.ok) {
+    return ctx.end(400, result.error());
   }
 
-  ctx.end(200, { username: ctx.state.username });
+  const cookie = issueCookie(ctx.request.body.username);
+  ctx.cookies.set('auth', cookie);
+  ctx.end(200, result.result());
 });
 
 router.post('/logout', async (ctx) => {

@@ -25,7 +25,7 @@ router.use('/', async (ctx, next) => {
   }
   ctx.verifyBody = (keys: string[]) => {
     for (const key of keys) {
-      if (typeof ctx.request.body[key] === 'undefined') {
+      if (!ctx.request.body[key]) {
         return false;
       }
     }

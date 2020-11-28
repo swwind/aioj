@@ -4,15 +4,18 @@
       <el-menu @select="handleMenuSelect" mode="horizontal" :default-active="activeMenu" class="nav">
         <el-menu-item v-for="menuItem of menus"
           :key="menuItem.url"
-          :index="menuItem.url"
-          v-text="menuItem.name" />
+          :index="menuItem.url">
+          {{ translate(i18n.lang, menuItem.name) }}
+        </el-menu-item>
       </el-menu>
       <div class="buttonset" v-if="!accounts.username">
-        <el-button @click="jumpTo('/login')">Login</el-button>
-        <el-button @click="jumpTo('/register')" type="primary">Register</el-button>
+        <el-button @click="jumpTo('/login')">{{ translate(i18n.lang, 'login') }}</el-button>
+        <el-button @click="jumpTo('/register')" type="primary">{{ translate(i18n.lang, 'register') }}</el-button>
       </div>
       <div class="userpanel" v-else>
-        {{ accounts.username }}
+        <router-link :to="`/u/${accounts.username}`" :class="{ admin: accounts.admin }">
+          {{ accounts.username }}
+        </router-link>
       </div>
     </div>
   </el-header>
@@ -20,7 +23,19 @@
     <router-view/>
   </el-main>
   <el-footer class="footer">
-    <p>Copyright (c) 2020<br/>Made with ❤</p>
+    <p>
+      Copyright (c) 2020<br/>
+      Made with ❤
+      <span
+        v-for="lang of langs"
+        @click="useLang(lang.name)"
+        :key="lang.name"
+        class="clickable"
+        :class="{ disabled: lang.name === i18n.lang }"
+        :href="lang.name !== i18n.lang ? '#' : ''">
+        {{ lang.show }}
+      </span>
+    </p>
   </el-footer>
 </template>
 
@@ -29,20 +44,23 @@ import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { whoami } from './api/accounts';
 import * as MutationTypes from '@/store/mutation-types';
-import { mapState } from 'vuex';
+import { mapState, useStore } from 'vuex';
+import { getRedirect } from './utils';
+import { translate } from '@/i18n/translate';
 
 export default defineComponent({
   setup() {
     const router = useRouter();
+    const store = useStore();
 
     const menus = [{
-      name: 'Home',
+      name: 'home',
       url: '/',
     }, {
-      name: 'About',
+      name: 'about',
       url: '/about',
     }, {
-      name: 'Forum',
+      name: 'forum',
       url: '/r',
     }];
     const activeMenu = router.currentRoute.value.path;
@@ -51,7 +69,18 @@ export default defineComponent({
     };
 
     const jumpTo = (url: string) => {
-      router.push(url + '?redirect=' + encodeURIComponent(router.currentRoute.value.path));
+      router.push(`${url}${getRedirect(router.currentRoute)}`);
+    };
+
+    const langs = [{
+      name: 'zh_cn',
+      show: '中文',
+    }, {
+      name: 'en_us',
+      show: 'English',
+    }];
+    const useLang = (lang: string) => {
+      store.commit(MutationTypes.UPDATE_LANGUAGE, lang);
     };
 
     return {
@@ -59,17 +88,20 @@ export default defineComponent({
       menus,
       activeMenu,
       jumpTo,
+      translate,
+      langs,
+      useLang,
     };
   },
 
   computed: {
-    ...mapState(['accounts']),
+    ...mapState(['accounts', 'i18n']),
   },
 
   async mounted() {
     const result = await whoami();
     if (result.status === 200) {
-      this.$store.commit(MutationTypes.LOGIN, result.username);
+      this.$store.commit(MutationTypes.LOGIN, result);
     }
   },
 });
@@ -83,12 +115,19 @@ body, html {
   width: 100%;
 }
 
-a {
+a, .clickable {
   text-decoration: none;
   color: #2c3e50;
+  cursor: pointer;
 
   &:hover {
     text-decoration: underline;
+  }
+
+  &.disabled {
+    cursor: default;
+    font-weight: bold;
+    text-decoration: none;
   }
 }
 
@@ -136,5 +175,14 @@ a {
 .footer {
   text-align: center;
   font-size: .8rem;
+
+  .clickable {
+    margin: 0 5px;
+  }
+}
+
+.admin {
+  color: purple;
+  font-weight: bold;
 }
 </style>

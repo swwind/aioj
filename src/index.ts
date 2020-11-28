@@ -1,4 +1,4 @@
-import { createApp, createSSRApp, h } from 'vue';
+import { createApp, createSSRApp } from 'vue';
 import App from '@/App.vue';
 import routes from './router';
 import store from './store';
@@ -7,7 +7,7 @@ import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 
 export function createVueApp(ssr: boolean) {
   const app = ssr
-    ? createSSRApp({ render: () => h(App) })
+    ? createSSRApp(App)
     : createApp(App);
   const router = createRouter({
     history: ssr

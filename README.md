@@ -60,12 +60,23 @@ Content-Type: application/json
 [x] POST   /login                       Log in
     - username: string;
     - password: string;
+    + username: string;
+    + description: string;
+    + email: string;
+    + admin: boolean;
 [x] POST   /logout                      Log out
 [x] POST   /register                    Sign up
     - username: string;
     - password: string;
-[x] GET    /whoami                      Get username
     + username: string;
+    + description: string;
+    + email: string;
+    + admin: boolean;
+[x] GET    /whoami                      Get the current user's detail
+    + username: string;
+    + description: string;
+    + email: string;
+    + admin: boolean;
 [x] GET    /u/:username                 Get user's detail
     + username: string;
     + description: string;

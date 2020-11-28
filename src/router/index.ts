@@ -33,10 +33,20 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Region',
     component: () => import(/* webpackChunkName: "region" */ '@/components/RegionView.vue'),
     meta: {
-      title: 'Forum - AIFuckingSystem',
+      title: 'Region ??? - AIFuckingSystem',
     },
     props: (route) => ({
       region: route.params.region,
+    }),
+  }, {
+    path: '/u/:username',
+    name: 'UserView',
+    component: () => import(/* webpackChunkName: "region" */ '@/components/UserView.vue'),
+    meta: {
+      title: 'User ??? - AIFuckingSystem',
+    },
+    props: (route) => ({
+      username: route.params.username,
     }),
   }, {
     path: '/login',

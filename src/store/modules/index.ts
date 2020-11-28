@@ -1,12 +1,12 @@
 import accounts, { State as AccountState } from './accounts';
-import forums, { State as ForumState } from './forums';
+import i18n, { State as I18nState } from './i18n';
 
 export default {
   accounts,
-  forums,
+  i18n,
 };
 
 export type State = {
   accounts: AccountState,
-  forums: ForumState,
+  i18n: I18nState,
 };

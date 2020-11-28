@@ -23,10 +23,12 @@ describe('users', () => {
     }
 
     const res3 = await POST('/api/register', user1);
-    expect(res3.data).deep.eq({ status: 200 });
+    expect(res3.status).eq(200);
+    // expect(res3.data).deep.eq({ status: 200 });
     cookie1 = parseCookie(res3.headers);
     const res4 = await POST('/api/register', user2);
-    expect(res4.data).deep.eq({ status: 200 });
+    expect(res4.status).eq(200);
+    // expect(res4.data).deep.eq({ status: 200 });
     cookie2 = parseCookie(res4.headers);
   });
 

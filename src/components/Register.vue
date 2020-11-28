@@ -27,12 +27,11 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="handleRegister">Register</el-button>
-      <router-link to="/login" class="login">Login</router-link>
+      <router-link :to="`/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="login">Login</router-link>
     </el-form-item>
     <el-alert type="warning" v-if="accounts.username">
       Please logout first, {{ accounts.username }}.
     </el-alert>
-    <el-alert type="error" v-if="errorMessage" v-text="errorMessage" />
   </el-form>
 </template>
 
@@ -40,7 +39,9 @@
 import { registerAttempt } from '../api/accounts';
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { mapState } from 'vuex';
+import * as MutationTypes from '../store/mutation-types';
+import { mapState, useStore } from 'vuex';
+import { Notification as notify } from 'element-plus';
 
 export default defineComponent({
   setup() {
@@ -49,17 +50,17 @@ export default defineComponent({
     const reptpass = ref('');
 
     const router = useRouter();
+    const store = useStore();
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
-
-    const errorMessage = ref('');
 
     const handleRegister = async () => {
       if (password.value !== reptpass.value) {
-        alert('password mismatch!');
+        notify.warning('password mismatch!');
         return;
       }
       const result = await registerAttempt(username.value, password.value);
       if (result.status === 200) {
+        store.commit(MutationTypes.LOGIN, result);
         router.push(redirect);
       } else {
         alert('failed login: ' + result.error);
@@ -77,7 +78,7 @@ export default defineComponent({
       reptpass,
       handleRegister,
       handleKeydown,
-      errorMessage,
+      redirect,
     };
   },
   computed: {

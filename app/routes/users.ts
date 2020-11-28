@@ -36,4 +36,17 @@ router.get('/u/:username', async (ctx) => {
   ctx.end(200, result.result());
 });
 
+router.get('/whoami', async (ctx) => {
+  if (!ctx.state.authorized) {
+    return ctx.end(401, LOGIN_REQUIRE);
+  }
+
+  const result = await getUserDetail(ctx.state.username);
+  if (!result.ok) {
+    return ctx.end(400, result.error());
+  }
+
+  ctx.end(200, result.result());
+});
+
 export default router;
