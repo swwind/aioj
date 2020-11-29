@@ -1,7 +1,6 @@
 <template>
   <h1>{{ title }}</h1>
   <p>{{ desc }}</p>
-  <el-alert type="error" v-if="errorMessage" v-text="errorMessage" />
   <div class="posts-list">
     <el-alert type="warning" v-if="!postlist.length">No posts yet</el-alert>
     <div class="post-item" v-for="post of postlist" :key="post.pid">
@@ -15,8 +14,9 @@
 <script lang="ts">
 import { getPostsList } from '@/api/forum';
 import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { PostDetail } from 'app/db';
+import { handleNetworkRequestError } from '@/utils';
+import { mapState } from 'vuex';
 
 export default defineComponent({
   props: {
@@ -26,25 +26,19 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const router = useRouter();
-
-    const errorMessage = ref('');
-
-    const handleGoto = (pid: string) => {
-      router.push(`/r/${props.region}/${pid}`);
-    };
 
     const title = ref('');
     const desc = ref('');
     const postlist = ref([] as PostDetail[]);
 
     return {
-      errorMessage,
-      handleGoto,
       title,
       desc,
       postlist,
     };
+  },
+  computed: {
+    ...mapState(['i18n']),
   },
   async mounted() {
     const result = await getPostsList(this.region);
@@ -53,10 +47,7 @@ export default defineComponent({
       this.desc = result.description;
       this.postlist = result.list;
     } else {
-      this.$notify.error({
-        title: 'Network Error',
-        message: 'Failed to fetch posts list',
-      });
+      handleNetworkRequestError(this.i18n.lang, result);
     }
   },
 });

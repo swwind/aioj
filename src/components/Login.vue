@@ -34,6 +34,7 @@ import { useRouter } from 'vue-router';
 import { mapState, Store, useStore } from 'vuex';
 import { State } from '@/store';
 import * as MutationTypes from '@/store/mutation-types';
+import { handleNetworkRequestError } from '@/utils';
 
 export default defineComponent({
   setup() {
@@ -51,7 +52,7 @@ export default defineComponent({
         store.commit(MutationTypes.LOGIN, result);
         router.push(redirect);
       } else {
-        alert('failed login: ' + result.error);
+        handleNetworkRequestError(store.state.i18n.lang, result);
       }
     };
     const handleKeydown = (key: string) => {

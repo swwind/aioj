@@ -7,6 +7,11 @@ sudo systemctl start mongodb.service
 yarn build && node .
 ```
 
+## Known Issues
+
+- [ ] SSR not work
+- [ ] /r/region/pid#cid not work
+
 ## API
 
 ```

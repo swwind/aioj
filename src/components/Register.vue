@@ -40,8 +40,9 @@ import { registerAttempt } from '../api/accounts';
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import * as MutationTypes from '../store/mutation-types';
-import { mapState, useStore } from 'vuex';
-import { Notification as notify } from 'element-plus';
+import { mapState, Store, useStore } from 'vuex';
+import { State } from '@/store';
+import { handleNetworkRequestError } from '@/utils';
 
 export default defineComponent({
   setup() {
@@ -50,12 +51,12 @@ export default defineComponent({
     const reptpass = ref('');
 
     const router = useRouter();
-    const store = useStore();
+    const store = useStore() as Store<State>;
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
     const handleRegister = async () => {
       if (password.value !== reptpass.value) {
-        notify.warning('password mismatch!');
+        alert('password mismatch!');
         return;
       }
       const result = await registerAttempt(username.value, password.value);
@@ -63,7 +64,7 @@ export default defineComponent({
         store.commit(MutationTypes.LOGIN, result);
         router.push(redirect);
       } else {
-        alert('failed login: ' + result.error);
+        handleNetworkRequestError(store.state.i18n.lang, result);
       }
     };
     const handleKeydown = (key: string) => {

@@ -7,6 +7,10 @@ const en_us: InternationalizationLanguage = {
   login: 'Login',
   register: 'Register',
   logout: 'Logout',
+  reply: 'Reply',
+  error: 'Error',
+  success: 'Success',
+  reply_success: 'Successfully replied to the post',
 
   password_wrong: 'Password incorrect',
   login_require: 'Please login first',

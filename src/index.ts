@@ -2,7 +2,7 @@ import { createApp, createSSRApp } from 'vue';
 import App from '@/App.vue';
 import routes from './router';
 import store from './store';
-import ElementUI from 'element-plus';
+import ElementPlus from 'element-plus';
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router';
 
 export function createVueApp(ssr: boolean) {
@@ -15,8 +15,14 @@ export function createVueApp(ssr: boolean) {
       : createWebHistory(),
     routes,
   });
-  app.use(ElementUI);
+  app.use(ElementPlus);
   app.use(store);
   app.use(router);
+
+  router.beforeResolve((route) => {
+    if (route.meta.title && typeof global.document !== 'undefined') {
+      document.title = route.meta.title;
+    }
+  });
   return { app, router };
 }

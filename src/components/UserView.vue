@@ -7,7 +7,9 @@
 <script lang="ts">
 import { getUserDetail } from '@/api/accounts';
 import { defineComponent, ref } from 'vue';
-import { Notification as notify } from 'element-plus';
+import { handleNetworkRequestError } from '@/utils';
+import { Store, useStore } from 'vuex';
+import { State } from '@/store';
 
 export default defineComponent({
   props: {
@@ -21,6 +23,8 @@ export default defineComponent({
     const email = ref('');
     const admin = ref(false);
 
+    const store = useStore() as Store<State>;
+
     const resolveUserDetail = async (username: string) => {
       const result = await getUserDetail(username);
       if (result.status === 200) {
@@ -28,10 +32,7 @@ export default defineComponent({
         email.value = result.email;
         admin.value = result.admin;
       } else {
-        notify.error({
-          title: 'Network Error',
-          message: result.error,
-        });
+        handleNetworkRequestError(store.state.i18n.lang, result);
       }
     };
 

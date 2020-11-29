@@ -1,6 +1,5 @@
 <template>
   <h1>Regions</h1>
-  <el-alert type="error" v-if="errorMessage" v-text="errorMessage" />
   <div class="region-list">
     <el-alert type="warning" v-if="!regionlist.length">No regions yet</el-alert>
     <div class="region-item" v-for="region of regionlist" :key="region.region">
@@ -13,35 +12,27 @@
 <script lang="ts">
 import { getRegions } from '@/api/forum';
 import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { RegionDetail } from 'app/db';
+import { handleNetworkRequestError } from '@/utils';
+import { mapState } from 'vuex';
 
 export default defineComponent({
   setup() {
-    const router = useRouter();
-
-    const errorMessage = ref('');
     const regionlist = ref([] as RegionDetail[]);
 
-    const handleGoto = (region: string) => {
-      router.push(`/r/${region}`);
-    };
-
     return {
-      errorMessage,
-      handleGoto,
       regionlist,
     };
+  },
+  computed: {
+    ...mapState(['i18n']),
   },
   async mounted() {
     const result = await getRegions();
     if (result.status === 200) {
       this.regionlist = result.list;
     } else {
-      this.$notify.error({
-        title: 'Network Error',
-        message: 'Failed to fetch regions list',
-      });
+      handleNetworkRequestError(this.i18n.lang, result);
     }
   },
 });

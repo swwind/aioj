@@ -7,6 +7,10 @@ const zh_cn: InternationalizationLanguage = {
   login: '登录',
   register: '注册',
   logout: '注销',
+  reply: '回复',
+  error: '错误',
+  success: '成功',
+  reply_success: '回复帖子成功',
 
   password_wrong: '密码错误',
   login_require: '请先登录',
