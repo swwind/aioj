@@ -21,7 +21,6 @@
 import { getPostDetail, sendReply } from '@/api/forum';
 import { State } from '@/store';
 import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { CommentDetail, PostDetail } from 'app/db';
 import { mapState, Store, useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
@@ -58,7 +57,7 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store.state.i18n.lang, result);
       }
-    }
+    };
 
     return {
       post,

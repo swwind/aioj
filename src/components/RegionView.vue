@@ -25,8 +25,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
-
+  setup() {
     const title = ref('');
     const desc = ref('');
     const postlist = ref([] as PostDetail[]);
