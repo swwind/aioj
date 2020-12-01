@@ -11,6 +11,10 @@ const zh_cn: InternationalizationLanguage = {
   error: '错误',
   success: '成功',
   reply_success: '回复帖子成功',
+  admin: '管理员',
+  username: '用户名',
+  password: '密码',
+  repeat_password: '重复密码',
 
   password_wrong: '密码错误',
   login_require: '请先登录',

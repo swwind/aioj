@@ -15,7 +15,7 @@
   "dependencies": {
     "@types/md5": "^2.2.1",
     "@vue/server-renderer": "^3.0.2",
-    "element-plus": "^1.0.1-alpha.21",
+    "element-plus": "^1.0.1-beta.0",
     "koa": "^2.13.0",
     "koa-body": "^4.2.0",
     "koa-router": "^10.0.0",

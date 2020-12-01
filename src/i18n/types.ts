@@ -11,4 +11,8 @@ export type InternationalizationLanguage = {
   error: string;
   success: string;
   reply_success: string;
+  admin: string;
+  username: string;
+  password: string;
+  repeat_password: string;
 } & { [key in typeof ErrorMessages[keyof typeof ErrorMessages]]: string };

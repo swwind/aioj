@@ -6,7 +6,7 @@
         v-model="username"
         autocomplete="off"
         prefix-icon="el-icon-user"
-        placeholder="Username" />
+        :placeholder="translate(i18n.lang, 'username')" />
     </el-form-item>
     <el-form-item prop="password">
       <el-input
@@ -14,7 +14,7 @@
         v-model="password"
         autocomplete="off"
         prefix-icon="el-icon-lock"
-        placeholder="Password" />
+        :placeholder="translate(i18n.lang, 'password')" />
     </el-form-item>
     <el-form-item prop="reptpass">
       <el-input
@@ -22,12 +22,12 @@
         v-model="reptpass"
         autocomplete="off"
         prefix-icon="el-icon-lock"
-        placeholder="Repeat Password"
+        :placeholder="translate(i18n.lang, 'repeat_password')"
         @keydown="handleKeydown($event.key)" />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="handleRegister">Register</el-button>
-      <router-link :to="`/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="login">Login</router-link>
+      <el-button type="primary" @click="handleRegister">{{ translate(i18n.lang, 'register') }}</el-button>
+      <router-link :to="`/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="login">{{ translate(i18n.lang, 'login') }}</router-link>
     </el-form-item>
     <el-alert type="warning" v-if="accounts.username">
       Please logout first, {{ accounts.username }}.
@@ -43,6 +43,7 @@ import * as MutationTypes from '../store/mutation-types';
 import { mapState, Store, useStore } from 'vuex';
 import { State } from '@/store';
 import { handleNetworkRequestError } from '@/utils';
+import { translate } from '@/i18n/translate';
 
 export default defineComponent({
   setup() {
@@ -80,10 +81,11 @@ export default defineComponent({
       handleRegister,
       handleKeydown,
       redirect,
+      translate,
     };
   },
   computed: {
-    ...mapState(['accounts']),
+    ...mapState(['accounts', 'i18n']),
   },
 });
 </script>

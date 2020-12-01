@@ -1,6 +1,13 @@
 import { RouteRecordRaw } from 'vue-router';
 import Home from '@/views/Home.vue';
 import NotFound from '@/views/NotFound.vue';
+import About from '@/views/About.vue';
+import Regions from '@/components/Regions.vue';
+import RegionView from '@/components/RegionView.vue';
+import PostView from '@/components/PostView.vue';
+import UserView from '@/components/UserView.vue';
+import Login from '@/components/Login.vue';
+import Register from '@/components/Register.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -14,21 +21,21 @@ const routes: Array<RouteRecordRaw> = [
   }, {
     path: '/about',
     name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue'),
+    component: About,
     meta: {
       title: 'About - AIOJ',
     },
   }, {
     path: '/r',
     name: 'Forum',
-    component: () => import(/* webpackChunkName: "forum" */ '@/components/Regions.vue'),
+    component: Regions,
     meta: {
       title: 'Forum - AIOJ',
     },
   }, {
     path: '/r/:region',
     name: 'Region',
-    component: () => import(/* webpackChunkName: "region" */ '@/components/RegionView.vue'),
+    component: RegionView,
     meta: {
       title: 'Region - AIOJ',
     },
@@ -38,7 +45,7 @@ const routes: Array<RouteRecordRaw> = [
   }, {
     path: '/r/:region/:pid',
     name: 'Post',
-    component: () => import(/* webpackChunkName: "post" */ '@/components/PostView.vue'),
+    component: PostView,
     meta: {
       title: 'Region Post - AIOJ',
     },
@@ -49,7 +56,7 @@ const routes: Array<RouteRecordRaw> = [
   }, {
     path: '/u/:username',
     name: 'UserView',
-    component: () => import(/* webpackChunkName: "userinfo" */ '@/components/UserView.vue'),
+    component: UserView,
     props: (route) => ({
       username: route.params.username,
     }),
@@ -59,28 +66,23 @@ const routes: Array<RouteRecordRaw> = [
   }, {
     path: '/login',
     name: 'Login',
-    component: () => import(/* webpackChunkName: "login" */ '@/components/Login.vue'),
+    component: Login,
     meta: {
       title: 'Login - AIOJ',
     },
   }, {
     path: '/register',
     name: 'Register',
-    component: () => import(/* webpackChunkName: "register" */ '@/components/Register.vue'),
+    component: Register,
     meta: {
       title: 'Register - AIOJ',
     },
   }, {
-    path: '/404',
+    path: '/:a(.*)',
     name: 'NotFound',
     component: NotFound,
     meta: {
       title: 'Not Found - AIOJ',
-    },
-  }, {
-    path: '/:a(.*)',
-    redirect: {
-      name: 'NotFound',
     },
   },
 ];

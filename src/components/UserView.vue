@@ -1,5 +1,6 @@
 <template>
-  <h1 :class="{ admin: admin }">{{ username }}</h1>
+  <h1>{{ username }}</h1>
+  <span v-if="admin">{{ translate(i18n.lang, 'admin') }}</span>
   <p>{{ desc }}</p>
   <p>{{ email }}</p>
 </template>
@@ -8,8 +9,9 @@
 import { getUserDetail } from '@/api/accounts';
 import { defineComponent, ref } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
-import { Store, useStore } from 'vuex';
+import { mapState, Store, useStore } from 'vuex';
 import { State } from '@/store';
+import { translate } from '@/i18n/translate';
 
 export default defineComponent({
   props: {
@@ -43,6 +45,7 @@ export default defineComponent({
       email,
       admin,
       resolveUserDetail,
+      translate,
     };
   },
   watch: {
@@ -50,15 +53,14 @@ export default defineComponent({
       this.resolveUserDetail(newval);
     },
   },
+  computed: {
+    ...mapState(['i18n']),
+  },
 });
 
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-
-.admin {
-  color: purple;
-}
 
 </style>

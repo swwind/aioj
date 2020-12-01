@@ -11,6 +11,10 @@ const en_us: InternationalizationLanguage = {
   error: 'Error',
   success: 'Success',
   reply_success: 'Successfully replied to the post',
+  admin: 'Admin',
+  username: 'Username',
+  password: 'Password',
+  repeat_password: 'Repeat Password',
 
   password_wrong: 'Password incorrect',
   login_require: 'Please login first',

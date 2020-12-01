@@ -28,12 +28,12 @@ const gentemp = (meta: RouteMeta, render: string) => {
 
 export default async (context: SSRContext) => {
   const { app, router } = createVueApp(true);
-  await router.push(context.url);
+  router.push(context.url);
   await router.isReady();
   const html = await renderToString(app, context);
 
   return {
-    code: router.currentRoute.value.fullPath === '/404' ? 404 : 200,
+    code: router.currentRoute.value.name === 'NotFound' ? 404 : 200,
     html: gentemp(router.currentRoute.value.meta, html),
   };
 }
