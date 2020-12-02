@@ -29,51 +29,47 @@
 
 <script lang="ts">
 import { loginAttempt } from '../api/accounts';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
-import { mapState, Store, useStore } from 'vuex';
-import { State } from '@/store';
-import * as MutationTypes from '@/store/mutation-types';
+import { useStore } from 'vuex';
+import { MutationTypes, StoreState } from '@/store';
 import { handleNetworkRequestError } from '@/utils';
 import { translate } from '@/i18n/translate';
 
-export default defineComponent({
-  setup() {
-    const username = ref('');
-    const password = ref('');
+export default defineComponent(() => {
+  const username = ref('');
+  const password = ref('');
 
-    const router = useRouter();
-    const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
+  const router = useRouter();
+  const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
-    const store = useStore() as Store<State>;
+  const store = useStore<StoreState>();
 
-    const handleLogin = async () => {
-      const result = await loginAttempt(username.value, password.value);
-      if (result.status === 200) {
-        store.commit(MutationTypes.LOGIN, result);
-        router.push(redirect);
-      } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
-      }
-    };
-    const handleKeydown = (key: string) => {
-      if (key === 'Enter') {
-        handleLogin();
-      }
-    };
+  const handleLogin = async () => {
+    const result = await loginAttempt(username.value, password.value);
+    if (result.status === 200) {
+      store.commit(MutationTypes.LOGIN, result.user);
+      router.push(redirect);
+    } else {
+      handleNetworkRequestError(store.state.i18n.lang, result);
+    }
+  };
+  const handleKeydown = (key: string) => {
+    if (key === 'Enter') {
+      handleLogin();
+    }
+  };
 
-    return {
-      username,
-      password,
-      handleLogin,
-      handleKeydown,
-      redirect,
-      translate,
-    };
-  },
-  computed: {
-    ...mapState(['accounts', 'i18n']),
-  },
+  return {
+    username,
+    password,
+    handleLogin,
+    handleKeydown,
+    redirect,
+    translate,
+
+    ...toRefs(store.state),
+  };
 });
 </script>
 

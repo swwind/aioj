@@ -12,7 +12,7 @@ export type SSRContext = {
 }
 
 const template = await fs.readFile('dist/index.html', 'utf-8');
-const gentemp = (meta: RouteMeta, render: string) => {
+const gentemp = (meta: RouteMeta, render: string, state: string) => {
   const metastr = Object.keys(meta).map((key) => {
     if (key === 'title') {
       return `<title>${meta[key]}</title>`;
@@ -23,17 +23,26 @@ const gentemp = (meta: RouteMeta, render: string) => {
 
   return '<!-- attack204 AK world final -->' + template
     .replace('<meta charset="utf-8">', '<meta charset="utf-8">' + metastr)
-    .replace('<div id="app"></div>', `<div id="app">${render}</div>`);
+    .replace('<div id="app"></div>', `<div id="app">${render}</div>`)
+    .replace('</head>', `<script>window.__INITIAL_STATE__=${state};</script></head>`)
 };
 
 export default async (context: SSRContext) => {
-  const { app, router } = createVueApp(true);
+  const { app, router, store } = createVueApp(true);
   router.push(context.url);
   await router.isReady();
+  for (const comp of router.currentRoute.value.matched) {
+    const component: any = comp.components;
+    console.log(component);
+    if (component.asyncData) {
+      await component.asyncData();
+    }
+  }
   const html = await renderToString(app);
+  const state = JSON.stringify(store.state);
 
   return {
     code: router.currentRoute.value.name === 'NotFound' ? 404 : 200,
-    html: gentemp(router.currentRoute.value.meta, html),
+    html: gentemp(router.currentRoute.value.meta, html, state),
   };
 };

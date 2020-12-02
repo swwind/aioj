@@ -28,7 +28,7 @@ router.post('/login', async (ctx) => {
 
   const cookie = issueCookie(ctx.request.body.username);
   ctx.cookies.set('auth', cookie);
-  ctx.end(200, result.result());
+  ctx.end(200, { user: result.result() });
 });
 
 router.post('/register', async (ctx) => {
@@ -52,7 +52,7 @@ router.post('/register', async (ctx) => {
 
   const cookie = issueCookie(ctx.request.body.username);
   ctx.cookies.set('auth', cookie);
-  ctx.end(200, result.result());
+  ctx.end(200, { user: result.result() });
 });
 
 router.post('/logout', async (ctx) => {

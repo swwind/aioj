@@ -56,7 +56,7 @@ router.get('/files/i/:fid', async (ctx) => {
   if (!result.ok) {
     return ctx.end(404, result.error());
   }
-  ctx.end(200, result.result());
+  ctx.end(200, { file: result.result() });
 });
 router.get('/files/u/:username', async (ctx) => {
   if (!ctx.state.authorized) {
@@ -71,7 +71,7 @@ router.get('/files/u/:username', async (ctx) => {
   if (!result.ok) {
     return ctx.end(400, result.error());
   }
-  ctx.end(200, { list: result.result() });
+  ctx.end(200, { files: result.result() });
 });
 
 router.delete('/files/:fid', async (ctx) => {

@@ -2,7 +2,8 @@
   "main": "build/main.js",
   "scripts": {
     "start": "node .",
-    "dev": "webpack --config config/webpack.server.cjs --progress --mode=development --watch & webpack --config config/webpack.client.cjs --progress --mode=development --watch && kill $!",
+    "serve": "yarn webpack:4 && vue-cli-service serve",
+    "dev": "yarn webpack:5 && webpack --config webpack/server.js --progress --mode=development --watch",
     "build": "yarn clean && yarn build:client && yarn build:ssr && yarn build:server",
     "webpack:4": "yarn remove webpack && yarn add webpack@webpack-4",
     "webpack:5": "yarn remove webpack && yarn add webpack@latest",

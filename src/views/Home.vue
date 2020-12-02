@@ -5,15 +5,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapState } from 'vuex';
+import { StoreState } from '@/store';
+import { defineComponent, toRefs } from 'vue';
+import { useStore } from 'vuex';
 
-export default defineComponent({
-  setup() {
-    // TODO
-  },
-  computed: {
-    ...mapState(['accounts']),
-  },
+export default defineComponent(() => {
+  const store = useStore<StoreState>();
+
+  return {
+    ...toRefs(store.state),
+  };
 });
 </script>

@@ -40,70 +40,70 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { whoami } from './api/accounts';
-import * as MutationTypes from '@/store/mutation-types';
-import { mapState, useStore } from 'vuex';
+import { useStore } from 'vuex';
 import { getRedirect } from './utils';
 import { translate } from '@/i18n/translate';
+import { StoreState, MutationTypes } from './store';
+import { defineComponent, toRefs } from 'vue';
 
-export default defineComponent({
-  setup() {
-    const router = useRouter();
-    const store = useStore();
+export default defineComponent(() => {
+  const router = useRouter();
+  const store = useStore<StoreState>();
 
-    const menus = [{
-      name: 'home',
-      url: '/',
-    }, {
-      name: 'about',
-      url: '/about',
-    }, {
-      name: 'forum',
-      url: '/r',
-    }];
-    const activeMenu = router.currentRoute.value.path;
-    const handleMenuSelect = (select: string) => {
-      router.push(select);
-    };
+  const menus = [{
+    name: 'home',
+    url: '/',
+  }, {
+    name: 'about',
+    url: '/about',
+  }, {
+    name: 'forum',
+    url: '/r',
+  }];
+  const activeMenu = router.currentRoute.value.path;
+  const handleMenuSelect = (select: string) => {
+    router.push(select);
+  };
 
-    const jumpTo = (url: string) => {
-      router.push(`${url}${getRedirect(router.currentRoute)}`);
-    };
+  const jumpTo = (url: string) => {
+    router.push(`${url}${getRedirect(router.currentRoute)}`);
+  };
 
-    const langs = [{
-      name: 'zh_cn',
-      show: '中文',
-    }, {
-      name: 'en_us',
-      show: 'English',
-    }];
-    const useLang = (lang: string) => {
-      store.commit(MutationTypes.UPDATE_LANGUAGE, lang);
-    };
+  const langs = [{
+    name: 'zh_cn',
+    show: '中文',
+  }, {
+    name: 'en_us',
+    show: 'English',
+  }];
+  const useLang = (lang: string) => {
+    store.commit(MutationTypes.UPDATE_LANGUAGE, lang);
+  };
 
-    return {
-      handleMenuSelect,
-      menus,
-      activeMenu,
-      jumpTo,
-      translate,
-      langs,
-      useLang,
-    };
-  },
-
-  computed: {
-    ...mapState(['accounts', 'i18n']),
-  },
-
-  async mounted() {
+  const asyncData = async () => {
     const result = await whoami();
     if (result.status === 200) {
-      this.$store.commit(MutationTypes.LOGIN, result);
+      store.commit(MutationTypes.LOGIN, result.user);
+    } else {
+      // ignore it
     }
-  },
+  };
+
+  return {
+    handleMenuSelect,
+    menus,
+    activeMenu,
+    jumpTo,
+    translate,
+    langs,
+    useLang,
+
+    ...toRefs(store.state),
+
+    asyncData,
+  };
 });
 </script>
 
@@ -159,6 +159,10 @@ a, .clickable {
   }
 }
 
+</style>
+
+<style lang="less" scoped>
+
 .buttonset, .userpanel {
   border-bottom: solid 1px #e6e6e6;
 }
@@ -181,8 +185,4 @@ a, .clickable {
   }
 }
 
-.admin {
-  color: purple;
-  font-weight: bold;
-}
 </style>

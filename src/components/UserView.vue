@@ -1,61 +1,43 @@
 <template>
-  <h1>{{ username }}</h1>
-  <span v-if="admin">{{ translate(i18n.lang, 'admin') }}</span>
-  <p>{{ desc }}</p>
-  <p>{{ email }}</p>
+  <h1>{{ data.user.username }}</h1>
+  <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
+  <p>{{ data.user.email }}</p>
+  <p>{{ data.user.desc }}</p>
 </template>
 
 <script lang="ts">
 import { getUserDetail } from '@/api/accounts';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, toRefs, watch } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
-import { mapState, Store, useStore } from 'vuex';
-import { State } from '@/store';
+import { useStore } from 'vuex';
+import { MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
 
-export default defineComponent({
-  props: {
-    username: {
-      type: String,
-      required: true,
-    },
-  },
-  setup(props) {
-    const desc = ref('');
-    const email = ref('');
-    const admin = ref(false);
+type Props = {
+  username: string;
+}
 
-    const store = useStore() as Store<State>;
+export default defineComponent((props: Props) => {
+  const { username } = toRefs(props);
 
-    const resolveUserDetail = async (username: string) => {
-      const result = await getUserDetail(username);
-      if (result.status === 200) {
-        desc.value = result.description;
-        email.value = result.email;
-        admin.value = result.admin;
-      } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
-      }
-    };
+  const store = useStore<StoreState>();
 
-    resolveUserDetail(props.username);
+  const asyncData = async () => {
+    const result = await getUserDetail(username.value);
+    if (result.status === 200) {
+      store.commit(MutationTypes.FETCH_USER_DETAIL, result.user);
+    } else {
+      handleNetworkRequestError(store.state.i18n.lang, result);
+    }
+  };
 
-    return {
-      desc,
-      email,
-      admin,
-      resolveUserDetail,
-      translate,
-    };
-  },
-  watch: {
-    username(newval) {
-      this.resolveUserDetail(newval);
-    },
-  },
-  computed: {
-    ...mapState(['i18n']),
-  },
+  watch(username, asyncData);
+
+  return {
+    translate,
+
+    ...toRefs(store.state),
+  };
 });
 
 </script>

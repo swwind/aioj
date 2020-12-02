@@ -33,12 +33,12 @@ exports.chainWebpack = (webpackConfig) => {
 
   } else {
 
-    webpackConfig.externals = {
+    webpackConfig.externals({
       'vue': 'Vue',
       'vuex': 'Vuex',
       'vue-router': 'VueRouter',
       'element-plus': 'ElementPlus',
-    };
+    });
 
   }
 
