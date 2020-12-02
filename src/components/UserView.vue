@@ -7,37 +7,38 @@
 
 <script lang="ts">
 import { getUserDetail } from '@/api/accounts';
-import { defineComponent, toRefs, watch } from 'vue';
+import { defineComponent, Ref, toRefs, watch } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
-import { useStore } from 'vuex';
+import { Store, useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
+import { RouteLocationNormalizedLoaded } from 'vue-router';
 
 type Props = {
   username: string;
 }
 
-export default defineComponent((props: Props) => {
-  const { username } = toRefs(props);
+const asyncData = async (store: Store<StoreState>, route: Ref<RouteLocationNormalizedLoaded>) => {
+  console.log('I am fucking comming');
+  const result = await getUserDetail(String(route.value.params.username));
+  if (result.status === 200) {
+    console.log('fucking 200!!!');
+    store.commit(MutationTypes.FETCH_USER_DETAIL, result.user);
+  } else {
+    handleNetworkRequestError(store.state.i18n.lang, result);
+  }
+}
 
-  const store = useStore<StoreState>();
+export default defineComponent({
+  setup(props: Props) {
+    const store = useStore<StoreState>();
 
-  const asyncData = async () => {
-    const result = await getUserDetail(username.value);
-    if (result.status === 200) {
-      store.commit(MutationTypes.FETCH_USER_DETAIL, result.user);
-    } else {
-      handleNetworkRequestError(store.state.i18n.lang, result);
-    }
-  };
-
-  watch(username, asyncData);
-
-  return {
-    translate,
-
-    ...toRefs(store.state),
-  };
+    return {
+      translate,
+      ...toRefs(store.state),
+    };
+  },
+  asyncData,
 });
 
 </script>

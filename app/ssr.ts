@@ -6,6 +6,7 @@ import { renderToString } from '@vue/server-renderer';
 import { createVueApp } from '../build/ssr/js/app.js';
 import { promises as fs } from 'fs';
 import { RouteMeta } from 'vue-router';
+import component from '*.vue';
 
 export type SSRContext = {
   url: string;
@@ -31,11 +32,11 @@ export default async (context: SSRContext) => {
   const { app, router, store } = createVueApp(true);
   router.push(context.url);
   await router.isReady();
-  for (const comp of router.currentRoute.value.matched) {
-    const component: any = comp.components;
-    console.log(component);
-    if (component.asyncData) {
-      await component.asyncData();
+  for (const routes of router.currentRoute.value.matched) {
+    for (const comp of Object.values(routes.components) as any[]) {
+      if (comp.asyncData) {
+        await comp.asyncData(store, router.currentRoute);
+      }
     }
   }
   const html = await renderToString(app);

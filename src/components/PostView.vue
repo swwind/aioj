@@ -20,57 +20,60 @@
 <script lang="ts">
 import { getPostDetail, sendReply } from '@/api/forum';
 import { StoreState } from '@/store';
-import { defineComponent, ref, toRefs } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, Ref, ref, toRefs } from 'vue';
+import { Store, useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
 import { handleNetworkRequestError } from '@/utils';
 import { ElNotification as notify } from 'element-plus';
 import * as MutationTypes from '@/store/mutation-types';
+import { RouteLocationNormalizedLoaded } from 'vue-router';
 
 type Props = {
   region: string;
   pid: string;
 }
 
-export default defineComponent((props: Props) => {
-  const reply = ref('');
-  const { region, pid } = toRefs(props);
+const asyncData = async (store: Store<StoreState>, route: Ref<RouteLocationNormalizedLoaded>) => {
+  const result = await getPostDetail(String(route.value.params.region), String(route.value.params.pid));
+  if (result.status === 200) {
+    store.commit(MutationTypes.FETCH_POST_DETAIL, result.post);
+    store.commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
+    store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
+  } else {
+    handleNetworkRequestError(store.state.i18n.lang, result);
+  }
+}
 
-  const store = useStore<StoreState>();
+export default defineComponent({
+  setup(props: Props) {
+    const reply = ref('');
+    const { region, pid } = toRefs(props);
 
-  const handleReply = async () => {
-    const result = await sendReply(props.region, props.pid, reply.value);
-    if (result.status === 200) {
-      reply.value = '';
-      notify({
-        type: 'success',
-        title: translate(store.state.i18n.lang, 'success'),
-        message: translate(store.state.i18n.lang, 'reply_success'),
-      });
-    } else {
-      handleNetworkRequestError(store.state.i18n.lang, result);
-    }
-  };
+    const store = useStore<StoreState>();
 
-  const asyncData = async () => {
-    const result = await getPostDetail(region.value, pid.value);
-    if (result.status === 200) {
-      store.commit(MutationTypes.FETCH_POST_DETAIL, result.post);
-      store.commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
-      store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
-    } else {
-      handleNetworkRequestError(store.state.i18n.lang, result);
-    }
-  };
+    const handleReply = async () => {
+      const result = await sendReply(region.value, pid.value, reply.value);
+      if (result.status === 200) {
+        reply.value = '';
+        notify({
+          type: 'success',
+          title: translate(store.state.i18n.lang, 'success'),
+          message: translate(store.state.i18n.lang, 'reply_success'),
+        });
+      } else {
+        handleNetworkRequestError(store.state.i18n.lang, result);
+      }
+    };
 
-  return {
-    translate,
-    reply,
-    handleReply,
+    return {
+      translate,
+      reply,
+      handleReply,
 
-    ...toRefs(store.state),
-    asyncData,
-  };
+      ...toRefs(store.state),
+    };
+  },
+  asyncData,
 });
 
 </script>

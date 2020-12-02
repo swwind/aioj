@@ -13,25 +13,27 @@
 import { getRegions } from '@/api/forum';
 import { defineComponent, toRefs } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
-import { useStore } from 'vuex';
+import { Store, useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
 
-export default defineComponent(() => {
-  const store = useStore<StoreState>();
+const asyncData = async (store: Store<StoreState>) => {
+  const result = await getRegions();
+  if (result.status === 200) {
+    store.commit(MutationTypes.FETCH_REGION_LIST, result.regions);
+  } else {
+    handleNetworkRequestError(store.state.i18n.lang, result);
+  }
+}
 
-  const asyncData = async () => {
-    const result = await getRegions();
-    if (result.status === 200) {
-      store.commit(MutationTypes.FETCH_REGION_LIST, result.regions);
-    } else {
-      handleNetworkRequestError(store.state.i18n.lang, result);
-    }
-  };
+export default defineComponent({
+  setup() {
+    const store = useStore<StoreState>();
 
-  return {
-    ...toRefs(store.state),
-    asyncData,
-  };
+    return {
+      ...toRefs(store.state),
+    };
+  },
+  asyncData,
 });
 
 </script>

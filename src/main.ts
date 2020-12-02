@@ -1,6 +1,10 @@
 import { createVueApp } from './main.server';
 
-const { app, router } = createVueApp(false);
+const { app, router, store } = createVueApp(false);
+
+if ((window as any).__INITIAL_STATE__) {
+  store.replaceState((window as any).__INITIAL_STATE__);
+}
 
 router.beforeResolve((route) => {
   if (route.meta.title) {
