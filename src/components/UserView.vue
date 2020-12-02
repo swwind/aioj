@@ -1,8 +1,12 @@
 <template>
-  <h1>{{ data.user.username }}</h1>
-  <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
-  <p>{{ data.user.email }}</p>
-  <p>{{ data.user.desc }}</p>
+  <Suspense>
+    <div>
+      <h1>{{ data.user.username }}</h1>
+      <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
+      <p>{{ data.user.email }}</p>
+      <p>{{ data.user.desc }}</p>
+    </div>
+  </Suspense>
 </template>
 
 <script lang="ts">
@@ -18,27 +22,21 @@ type Props = {
   username: string;
 }
 
-const asyncData = async (store: Store<StoreState>, route: Ref<RouteLocationNormalizedLoaded>) => {
-  console.log('I am fucking comming');
-  const result = await getUserDetail(String(route.value.params.username));
+export default defineComponent(async (props: Props) => {
+  const { username } = toRefs(props);
+  const store = useStore<StoreState>();
+
+  const result = await getUserDetail(username.value);
   if (result.status === 200) {
-    console.log('fucking 200!!!');
     store.commit(MutationTypes.FETCH_USER_DETAIL, result.user);
   } else {
     handleNetworkRequestError(store.state.i18n.lang, result);
   }
-}
 
-export default defineComponent({
-  setup(props: Props) {
-    const store = useStore<StoreState>();
-
-    return {
-      translate,
-      ...toRefs(store.state),
-    };
-  },
-  asyncData,
+  return {
+    translate,
+    ...toRefs(store.state),
+  };
 });
 
 </script>

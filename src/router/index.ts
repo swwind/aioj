@@ -39,9 +39,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'Region - AIOJ',
     },
-    props: (route) => ({
-      region: route.params.region,
-    }),
+    props: true,
   }, {
     path: '/r/:region/:pid',
     name: 'Post',
@@ -49,17 +47,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'Region Post - AIOJ',
     },
-    props: (route) => ({
-      region: route.params.region,
-      pid: route.params.pid,
-    }),
+    props: true,
   }, {
     path: '/u/:username',
     name: 'UserView',
     component: UserView,
-    props: (route) => ({
-      username: route.params.username,
-    }),
+    props: true,
     beforeEnter(route) {
       route.meta.title = `User ${route.params.username} - AIOJ`;
     },

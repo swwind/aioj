@@ -1,12 +1,16 @@
 <template>
-  <h1>Regions</h1>
-  <div class="region-list">
-    <el-alert type="warning" v-if="!data.regions.length">No regions yet</el-alert>
-    <div class="region-item" v-for="region of data.regions" :key="region.region">
-      <router-link :to="`/r/${region.region}`" class="title">{{ region.title }}</router-link>
-      <p class="desc">{{ region.description }}</p>
+  <Suspense>
+    <div>
+      <h1>Regions</h1>
+      <div class="region-list">
+        <el-alert type="warning" v-if="!data.regions.length">No regions yet</el-alert>
+        <div class="region-item" v-for="region of data.regions" :key="region.region">
+          <router-link :to="`/r/${region.region}`" class="title">{{ region.title }}</router-link>
+          <p class="desc">{{ region.description }}</p>
+        </div>
+      </div>
     </div>
-  </div>
+  </Suspense>
 </template>
 
 <script lang="ts">
@@ -16,24 +20,19 @@ import { handleNetworkRequestError } from '@/utils';
 import { Store, useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
 
-const asyncData = async (store: Store<StoreState>) => {
+export default defineComponent(async () => {
+  const store = useStore<StoreState>();
+
   const result = await getRegions();
   if (result.status === 200) {
     store.commit(MutationTypes.FETCH_REGION_LIST, result.regions);
   } else {
     handleNetworkRequestError(store.state.i18n.lang, result);
   }
-}
 
-export default defineComponent({
-  setup() {
-    const store = useStore<StoreState>();
-
-    return {
-      ...toRefs(store.state),
-    };
-  },
-  asyncData,
+  return {
+    ...toRefs(store.state),
+  };
 });
 
 </script>

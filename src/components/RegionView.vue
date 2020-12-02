@@ -1,14 +1,18 @@
 <template>
-  <h1>{{ data.region.title }}</h1>
-  <p>{{ data.region.desc }}</p>
-  <div class="posts-list">
-    <el-alert type="warning" v-if="!data.posts.length">No posts yet</el-alert>
-    <div class="post-item" v-for="post of data.posts" :key="post.pid">
-      <div class="title"><router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link></div>
-      <router-link class="author" :to="`/u/${post.author}`"><i class="el-icon-user-solid"></i>{{ post.author }}</router-link>
-      <time class="time"><i class="el-icon-date"></i>{{ new Date(post.date).toLocaleString() }}</time>
+  <Suspense>
+    <div>
+      <h1>{{ data.region.title }}</h1>
+      <p>{{ data.region.desc }}</p>
+      <div class="posts-list">
+        <el-alert type="warning" v-if="!data.posts.length">No posts yet</el-alert>
+        <div class="post-item" v-for="post of data.posts" :key="post.pid">
+          <div class="title"><router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link></div>
+          <router-link class="author" :to="`/u/${post.author}`"><i class="el-icon-user-solid"></i>{{ post.author }}</router-link>
+          <time class="time"><i class="el-icon-date"></i>{{ new Date(post.date).toLocaleString() }}</time>
+        </div>
+      </div>
     </div>
-  </div>
+  </Suspense>
 </template>
 
 <script lang="ts">
@@ -23,25 +27,21 @@ type Props = {
   region: string;
 }
 
-const asyncData = async (store: Store<StoreState>, route: Ref<RouteLocationNormalizedLoaded>) => {
-  const result = await getPostsList(String(route.value.params.region));
+export default defineComponent(async (props: Props) => {
+  const { region } = toRefs(props);
+  const store = useStore<StoreState>();
+
+  const result = await getPostsList(region.value);
   if (result.status === 200) {
     store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
     store.commit(MutationTypes.FETCH_POST_LIST, result.posts);
   } else {
     handleNetworkRequestError(store.state.i18n.lang, result);
   }
-}
 
-export default defineComponent({
-  setup(props: Props) {
-    const store = useStore<StoreState>();
-
-    return {
-      ...toRefs(store.state),
-    };
-  },
-  asyncData,
+  return {
+    ...toRefs(store.state),
+  };
 });
 
 </script>

@@ -1,26 +1,30 @@
 <template>
-  <h1>{{ data.post.title }}</h1>
-  <div class="comment" v-for="comment of data.comments" :key="comment.cid">
-    <div class="info">
-      <a v-if="comment.cid > 1" :href="`#${comment.cid}`" class="level" :id="comment.cid"># {{ comment.cid }}</a>
-      <router-link class="author" :to="`/u/${comment.author}`"><i class="el-icon-user"></i>{{ comment.author }}</router-link>
-      <time class="time"><i class="el-icon-date"></i>{{ new Date(comment.date).toLocaleString() }}</time>
+  <Suspense>
+    <div>
+      <h1>{{ data.post.title }}</h1>
+      <div class="comment" v-for="comment of data.comments" :key="comment.cid">
+        <div class="info">
+          <a v-if="comment.cid > 1" :href="`#${comment.cid}`" class="level" :id="comment.cid"># {{ comment.cid }}</a>
+          <router-link class="author" :to="`/u/${comment.author}`"><i class="el-icon-user"></i>{{ comment.author }}</router-link>
+          <time class="time"><i class="el-icon-date"></i>{{ new Date(comment.date).toLocaleString() }}</time>
+        </div>
+        <div class="content">{{ comment.content }}</div>
+      </div>
+      <div class="reply" v-if="accounts.username">
+        <h2>{{ translate(i18n.lang, 'reply') }}</h2>
+        <textarea v-model="reply"></textarea>
+        <div class="buttons">
+          <el-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'reply') }}</el-button>
+        </div>
+      </div>
     </div>
-    <div class="content">{{ comment.content }}</div>
-  </div>
-  <div class="reply" v-if="accounts.username">
-    <h2>{{ translate(i18n.lang, 'reply') }}</h2>
-    <textarea v-model="reply"></textarea>
-    <div class="buttons">
-      <el-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'reply') }}</el-button>
-    </div>
-  </div>
+  </Suspense>
 </template>
 
 <script lang="ts">
 import { getPostDetail, sendReply } from '@/api/forum';
 import { StoreState } from '@/store';
-import { defineComponent, Ref, ref, toRefs } from 'vue';
+import { defineAsyncComponent, defineComponent, Ref, ref, toRefs } from 'vue';
 import { Store, useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
 import { handleNetworkRequestError } from '@/utils';
@@ -33,8 +37,27 @@ type Props = {
   pid: string;
 }
 
-const asyncData = async (store: Store<StoreState>, route: Ref<RouteLocationNormalizedLoaded>) => {
-  const result = await getPostDetail(String(route.value.params.region), String(route.value.params.pid));
+export default defineComponent(async (props: Props) => {
+  const reply = ref('');
+  const { region, pid } = toRefs(props);
+
+  const store = useStore<StoreState>();
+
+  const handleReply = async () => {
+    const result = await sendReply(region.value, pid.value, reply.value);
+    if (result.status === 200) {
+      reply.value = '';
+      notify({
+        type: 'success',
+        title: translate(store.state.i18n.lang, 'success'),
+        message: translate(store.state.i18n.lang, 'reply_success'),
+      });
+    } else {
+      handleNetworkRequestError(store.state.i18n.lang, result);
+    }
+  };
+
+  const result = await getPostDetail(region.value, pid.value);
   if (result.status === 200) {
     store.commit(MutationTypes.FETCH_POST_DETAIL, result.post);
     store.commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
@@ -42,38 +65,14 @@ const asyncData = async (store: Store<StoreState>, route: Ref<RouteLocationNorma
   } else {
     handleNetworkRequestError(store.state.i18n.lang, result);
   }
-}
 
-export default defineComponent({
-  setup(props: Props) {
-    const reply = ref('');
-    const { region, pid } = toRefs(props);
+  return {
+    translate,
+    reply,
+    handleReply,
 
-    const store = useStore<StoreState>();
-
-    const handleReply = async () => {
-      const result = await sendReply(region.value, pid.value, reply.value);
-      if (result.status === 200) {
-        reply.value = '';
-        notify({
-          type: 'success',
-          title: translate(store.state.i18n.lang, 'success'),
-          message: translate(store.state.i18n.lang, 'reply_success'),
-        });
-      } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
-      }
-    };
-
-    return {
-      translate,
-      reply,
-      handleReply,
-
-      ...toRefs(store.state),
-    };
-  },
-  asyncData,
+    ...toRefs(store.state),
+  };
 });
 
 </script>

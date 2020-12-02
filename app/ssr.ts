@@ -32,13 +32,6 @@ export default async (context: SSRContext) => {
   const { app, router, store } = createVueApp(true);
   router.push(context.url);
   await router.isReady();
-  for (const routes of router.currentRoute.value.matched) {
-    for (const comp of Object.values(routes.components) as any[]) {
-      if (comp.asyncData) {
-        await comp.asyncData(store, router.currentRoute);
-      }
-    }
-  }
   const html = await renderToString(app);
   const state = JSON.stringify(store.state);
 
