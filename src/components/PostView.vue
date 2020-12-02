@@ -21,7 +21,7 @@
 import { getPostDetail, sendReply } from '@/api/forum';
 import { State } from '@/store';
 import { defineComponent, ref } from 'vue';
-import { CommentDetail, PostDetail } from 'app/db';
+import { CommentDetail, PostDetail } from '../../app/types';
 import { mapState, Store, useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
 import { handleNetworkRequestError } from '@/utils';

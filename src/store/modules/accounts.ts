@@ -1,4 +1,4 @@
-import { UserDetail } from 'app/db';
+import { UserDetail } from '../../../app/types';
 import { Mutation } from 'vuex';
 import * as MutationTypes from '../mutation-types';
 
