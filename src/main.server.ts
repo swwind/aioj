@@ -19,10 +19,5 @@ export function createVueApp(ssr: boolean) {
   app.use(store);
   app.use(router);
 
-  router.beforeResolve((route) => {
-    if (route.meta.title && typeof global.document !== 'undefined') {
-      document.title = route.meta.title;
-    }
-  });
   return { app, router };
 }

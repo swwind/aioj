@@ -1,4 +1,4 @@
-import { INTERNAL_SERVER_ERROR } from 'app/errors';
+import { INTERNAL_SERVER_ERROR } from '../../app/errors';
 import axios, { Method } from 'axios';
 import config from '../../config.json';
 

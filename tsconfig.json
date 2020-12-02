@@ -18,6 +18,5 @@
   "include": [
     "app/**/*.ts",
     "src/**/*.ts",
-    "index.ts",
   ]
 }

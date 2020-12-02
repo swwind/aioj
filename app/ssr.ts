@@ -3,7 +3,7 @@
 // 因为我找不到 @vue/server-renderer 的文档
 
 import { renderToString } from '@vue/server-renderer';
-import { createVueApp } from '../src';
+import { createVueApp } from '../build/ssr/js/app.js';
 import { promises as fs } from 'fs';
 import { RouteMeta } from 'vue-router';
 
@@ -30,7 +30,7 @@ export default async (context: SSRContext) => {
   const { app, router } = createVueApp(true);
   router.push(context.url);
   await router.isReady();
-  const html = await renderToString(app, context);
+  const html = await renderToString(app);
 
   return {
     code: router.currentRoute.value.name === 'NotFound' ? 404 : 200,

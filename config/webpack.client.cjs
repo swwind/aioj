@@ -1,6 +1,9 @@
 const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
 const rootdir = path.dirname(__dirname);
 
@@ -26,18 +29,13 @@ module.exports = {
     }, {
       test: /\.vue$/,
       loader: 'vue-loader',
-      options: {
-        loaders: {
-          less: 'vue-style-loader!css-loader!less-loader',
-        }
-      }
     }, {
       test: /\.(png|jpe?g)$/,
       loader: 'file-loader',
     }, {
       test: /\.less$/,
       use: [
-        'style-loader',
+        MiniCssExtractPlugin.loader,
         'css-loader',
         'less-loader'
       ]
@@ -50,6 +48,23 @@ module.exports = {
     ],
   },
   plugins: [
+    new ManifestPlugin(),
     new VueLoaderPlugin(),
-  ]
+    new MiniCssExtractPlugin({
+      filename: 'style.css'
+    }),
+  ],
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          format: {
+            comments: false,
+          },
+        },
+        extractComments: false,
+      }),
+    ],
+  },
 }
