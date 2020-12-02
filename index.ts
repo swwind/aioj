@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import Koa from 'koa';
 import router from './app/router';
 import body from 'koa-body';
@@ -9,7 +11,7 @@ import { promises as fs } from 'fs';
 const app = new Koa();
 
 app.use(body({ multipart: true }));
-app.use(serve('dist'));
+app.use(serve('dist', { index: false }));
 app.use(serve('static'));
 
 app.use(router.routes());
@@ -38,4 +40,3 @@ if (config.port === 443) {
 
   console.log(`Server started on http://localhost:${config.port}`);
 }
-

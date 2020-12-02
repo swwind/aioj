@@ -11,7 +11,7 @@ export type SSRContext = {
   url: string;
 }
 
-const template = await fs.readFile('src/index.prod.html', 'utf-8');
+const template = await fs.readFile('dist/index.html', 'utf-8');
 const gentemp = (meta: RouteMeta, render: string) => {
   const metastr = Object.keys(meta).map((key) => {
     if (key === 'title') {
@@ -19,11 +19,11 @@ const gentemp = (meta: RouteMeta, render: string) => {
     } else {
       return `<meta name="${key}" content="${meta[key]}">`;
     }
-  }).join('\n  ');
+  }).join('');
 
-  return template
-    .replace(/<!--vue-meta-outlet-->/g, metastr)
-    .replace(/<!--vue-ssr-outlet-->/g, render)
+  return '<!-- attack204 AK world final -->' + template
+    .replace('<meta charset="utf-8">', '<meta charset="utf-8">' + metastr)
+    .replace('<div id="app"></div>', `<div id="app">${render}</div>`);
 };
 
 export default async (context: SSRContext) => {
@@ -36,4 +36,4 @@ export default async (context: SSRContext) => {
     code: router.currentRoute.value.name === 'NotFound' ? 404 : 200,
     html: gentemp(router.currentRoute.value.meta, html),
   };
-}
+};

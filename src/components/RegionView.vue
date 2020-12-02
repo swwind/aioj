@@ -14,7 +14,7 @@
 <script lang="ts">
 import { getPostsList } from '@/api/forum';
 import { defineComponent, ref } from 'vue';
-import { PostDetail } from 'app/db';
+import { PostDetail } from '../../app/types';
 import { handleNetworkRequestError } from '@/utils';
 import { mapState } from 'vuex';
 

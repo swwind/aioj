@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb';
 import config from '../config.json';
+import { CommentData, CommentDetail, ConfigData, FileData, FileDetail, PostData, PostDetail, ProblemData, RegionData, RegionDetail, UserData, UserDetail } from './types';
 
 const client = new MongoClient(config.mongo.url, { useUnifiedTopology: true });
 await client.connect();
@@ -18,94 +19,20 @@ if (!await configs.findOne({ })) {
   configs.insertOne({ maxpid: 1000 });
 }
 
-export type ConfigData = {
-  maxpid: number; // max problem id
-}
-
-export type UserDetail = {
-  username: string;
-  description: string;
-  email: string; // for gravatar
-  admin: boolean;
-}
-
-export type UserData = {
-  password: string;
-  friends: string[];
-} & UserDetail;
-
-export type RegionDetail = {
-  region: string;
-  title: string;
-  description: string;
-}
-
-export type RegionData = {
-  maxpid: number; // for counting
-} & RegionDetail;
-
-export type PostDetail = {
-  pid: number;
-  title: string;
-  author: string;
-  date: number;
-}
-
-export type PostData = {
-  region: string;
-  maxcid: number; // for counting
-} & PostDetail;
-
-export type CommentDetail = {
-  cid: number;
-  author: string;
-  edited: boolean;
-  content: string;
-  date: number;
-}
-
-export type CommentData = {
-  pid: number;
-  region: string;
-} & CommentDetail;
-
-export type ProblemDetail = {
-  pid: number;
-  title: string;
-  author: string;
-  content: string;
-}
-
-export type ProblemData = {
-  judger: string;
-} & ProblemDetail;
-
-export type FileDetail = {
-  uploader: string;
-  size: number;
-  filename: string;
-  fid: string;
-  date: number;
-}
-
-export type FileData = {
-  filepath: string;
-} & FileDetail;
-
 export function extractUserDetail(ud: UserData): UserDetail {
   return {
     username: ud.username,
     description: ud.description,
     email: ud.email,
     admin: ud.admin,
-  }
+  };
 }
 export function extractRegionDetail(rd: RegionData): RegionDetail {
   return {
     region: rd.region,
     title: rd.title,
     description: rd.description,
-  }
+  };
 }
 export function extractPostDetail(pd: PostData): PostDetail {
   return {
@@ -113,7 +40,7 @@ export function extractPostDetail(pd: PostData): PostDetail {
     title: pd.title,
     author: pd.author,
     date: pd.date,
-  }
+  };
 }
 export function extractCommentDetail(cd: CommentData): CommentDetail {
   return {
@@ -122,7 +49,7 @@ export function extractCommentDetail(cd: CommentData): CommentDetail {
     edited: cd.edited,
     content: cd.content,
     date: cd.date,
-  }
+  };
 }
 export function extractFileDetail(fd: FileData): FileDetail {
   return {
@@ -131,5 +58,5 @@ export function extractFileDetail(fd: FileData): FileDetail {
     filename: fd.filename,
     fid: fd.fid,
     date: fd.date,
-  }
+  };
 }

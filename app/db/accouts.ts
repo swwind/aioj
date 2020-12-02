@@ -1,6 +1,6 @@
-import { users } from "../db";
-import { PASSWORD_WRONG, SERVER_ERROR, USER_EXISTS, USER_NOT_EXISTS } from "../errors";
-import { Result } from "../utils";
+import { users } from '../db';
+import { PASSWORD_WRONG, SERVER_ERROR, USER_EXISTS, USER_NOT_EXISTS } from '../errors';
+import { Result } from '../utils';
 
 export async function registerUser(username: string, password: string): Promise<Result<void, string>> {
   const existsUsers = await users.findOne({ username });

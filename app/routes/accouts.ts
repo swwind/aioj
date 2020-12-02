@@ -1,9 +1,9 @@
-import { getUserDetail } from "app/db/users";
-import Router from "koa-router";
-import { issueCookie, revoke } from "../auth";
-import { registerUser, verifyPassword } from "../db/accouts";
-import { LOGIN_REQUIRE, LOGOUT_REQUIRE, PARAMS_MISSING } from "../errors";
-import { State, Tools } from "../types";
+import { getUserDetail } from 'app/db/users';
+import Router from 'koa-router';
+import { issueCookie, revoke } from '../auth';
+import { registerUser, verifyPassword } from '../db/accouts';
+import { LOGIN_REQUIRE, LOGOUT_REQUIRE, PARAMS_MISSING } from '../errors';
+import { State, Tools } from '../types';
 
 const router = new Router<State, Tools>();
 

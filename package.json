@@ -3,12 +3,14 @@
   "scripts": {
     "start": "node .",
     "dev": "webpack --config config/webpack.server.cjs --progress --mode=development --watch & webpack --config config/webpack.client.cjs --progress --mode=development --watch && kill $!",
-    "build": "yarn clean && yarn build:client && yarn build:server",
-    "build:server": "webpack --version && webpack --config config/webpack.server.cjs --progress --mode=production",
-    "build:client": "vue-cli-service build",
-    "build:ssr": "cross-env SSR=true vue-cli-service build",
-    "lint": "eslint --ext .ts,.vue -f ./node_modules/eslint-friendly-formatter src",
-    "lint:fix": "eslint --ext .ts,.vue -f ./node_modules/eslint-friendly-formatter src --fix",
+    "build": "yarn clean && yarn build:client && yarn build:ssr && yarn build:server",
+    "webpack:4": "yarn remove webpack && yarn add webpack@webpack-4",
+    "webpack:5": "yarn remove webpack && yarn add webpack@latest",
+    "build:server": "yarn webpack:5 && webpack --config webpack/server.js --progress --mode=production",
+    "build:client": "yarn webpack:4 && vue-cli-service build",
+    "build:ssr": "yarn webpack:4 && cross-env SSR=true vue-cli-service build",
+    "lint": "eslint --ext .ts,.vue -f ./node_modules/eslint-friendly-formatter src app index.ts",
+    "lint:fix": "eslint --ext .ts,.vue -f ./node_modules/eslint-friendly-formatter src app index.ts --fix",
     "test": "./test.sh",
     "clean": "rm -rf dist build",
     "mocha": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha"
@@ -31,8 +33,7 @@
     "vue": "^3.0.2",
     "vue-router": "^4.0.0-rc.5",
     "vuex": "^4.0.0-rc.1",
-    "webpack": "^4.44.2",
-    "webpack5": "npm:webpack@5.9.0"
+    "webpack": "^5.9.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",
@@ -48,6 +49,7 @@
     "@vue/eslint-config-standard": "^5.1.2",
     "@vue/eslint-config-typescript": "^7.0.0",
     "axios": "^0.21.0",
+    "babel-loader": "^8.2.2",
     "chai": "^4.2.0",
     "cross-env": "^7.0.3",
     "css-loader": "^5.0.1",

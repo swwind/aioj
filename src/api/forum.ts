@@ -1,4 +1,4 @@
-import { CommentDetail, PostDetail, RegionDetail } from 'app/db';
+import { CommentDetail, PostDetail, RegionDetail } from '../../app/types';
 import { makeGETRequest, makePOSTRequest } from './utils';
 
 export async function getRegions() {

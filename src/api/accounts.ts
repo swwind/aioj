@@ -1,4 +1,4 @@
-import { UserDetail } from 'app/db';
+import { UserDetail } from '../../app/types';
 import axios from 'axios';
 import md5 from 'md5';
 import { makeGETRequest, makePOSTRequest } from './utils';

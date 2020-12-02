@@ -18,7 +18,10 @@ exports.chainWebpack = (webpackConfig) => {
       .plugin("manifest")
       .use(new ManifestPlugin({ fileName: "ssr-manifest.json" }));
 
-    webpackConfig.externals(nodeExternals({ allowlist: /\.(css|vue)$/ }));
+    webpackConfig.externals(nodeExternals({ allowlist: [
+      /\.(css|vue)$/,
+      /@babel/,
+    ] }));
 
     webpackConfig.optimization.splitChunks(false).minimize(false);
 
@@ -26,6 +29,7 @@ exports.chainWebpack = (webpackConfig) => {
     webpackConfig.plugins.delete("preload");
     webpackConfig.plugins.delete("prefetch");
     webpackConfig.plugins.delete("progress");
+    webpackConfig.plugins.delete("friendly-errors");
 
   } else {
 

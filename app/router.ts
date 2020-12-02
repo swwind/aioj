@@ -1,14 +1,14 @@
-import Router from "koa-router";
-import { verify } from "./auth";
-import { isAdmin } from "./db/accouts";
-import { State, Tools } from "./types";
+import Router from 'koa-router';
+import { verify } from './auth';
+import { isAdmin } from './db/accouts';
+import { State, Tools } from './types';
 
-import accouts from "./routes/accouts";
-import friends from "./routes/friends";
-import forum from "./routes/forum";
-import users from "./routes/users";
-import files from "./routes/files";
-import ssr from "./ssr";
+import accouts from './routes/accouts';
+import friends from './routes/friends';
+import forum from './routes/forum';
+import users from './routes/users';
+import files from './routes/files';
+import ssr from './ssr';
 
 const router = new Router<State, Tools>();
 
@@ -20,9 +20,9 @@ router.use('/', async (ctx, next) => {
     ctx.response.headers['Content-Type'] = 'application/json';
     ctx.response.body = JSON.stringify({
       status,
-      ...(typeof data === 'string' ? { error: data } : data)
+      ...(typeof data === 'string' ? { error: data } : data),
     });
-  }
+  };
   ctx.verifyBody = (keys: string[]) => {
     for (const key of keys) {
       if (!ctx.request.body[key]) {
@@ -30,7 +30,7 @@ router.use('/', async (ctx, next) => {
       }
     }
     return true;
-  }
+  };
 
   const auth = ctx.cookies.get('auth');
   if (auth) {
@@ -62,7 +62,7 @@ router.use('/api',
   files.allowedMethods(),
 );
 
-router.get('(.*)', async (ctx) => {
+router.get(/^\//, async (ctx) => {
   const { code, html } = await ssr({
     url: ctx.url,
   });

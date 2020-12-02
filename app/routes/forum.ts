@@ -1,8 +1,7 @@
-import { extractRegionDetail } from "app/db";
-import Router from "koa-router";
-import { createComment, createPost, createRegion, deleteComment, deletePost, deleteRegion, getCommentDetail, getPostComments, getPostDetail, getPostsList, getRegionDetail, getRegionsList, modifyComment, modifyPost, modifyRegion } from "../db/forum";
-import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors";
-import { State, Tools } from "../types";
+import Router from 'koa-router';
+import { createComment, createPost, createRegion, deleteComment, deletePost, deleteRegion, getCommentDetail, getPostComments, getPostDetail, getPostsList, getRegionDetail, getRegionsList, modifyComment, modifyPost, modifyRegion } from '../db/forum';
+import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
+import { State, Tools } from '../types';
 
 const router = new Router<State, Tools>();
 

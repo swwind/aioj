@@ -12,7 +12,7 @@
 <script lang="ts">
 import { getRegions } from '@/api/forum';
 import { defineComponent, ref } from 'vue';
-import { RegionDetail } from 'app/db';
+import { RegionDetail } from '../../app/types';
 import { handleNetworkRequestError } from '@/utils';
 import { mapState } from 'vuex';
 
