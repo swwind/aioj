@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ ssr-experiment ]
+    branches: [ master ]
   pull_request:
-    branches: [ ssr-experiment ]
+    branches: [ master ]
 
 jobs:
   build:
