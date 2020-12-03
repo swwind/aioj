@@ -63,6 +63,7 @@ export default defineComponent({
           title: translate(store.state.i18n.lang, 'success'),
           message: translate(store.state.i18n.lang, 'reply_success'),
         });
+        store.commit(MutationTypes.CREATED_COMMENT, result.comment);
       } else {
         handleNetworkRequestError(store.state.i18n.lang, result);
       }

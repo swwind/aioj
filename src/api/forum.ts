@@ -14,7 +14,7 @@ export async function getPostDetail(region: string, post: string) {
 }
 
 export async function sendReply(region: string, post: string, content: string) {
-  return await makePOSTRequest<{ cid: string }>(`/r/${region}/${post}/comment`, {
+  return await makePOSTRequest<{ comment: CommentDetail }>(`/r/${region}/${post}/comment`, {
     content,
   });
 }

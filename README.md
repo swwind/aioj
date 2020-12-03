@@ -123,7 +123,12 @@ Content-Type: application/json
     + pid: string;
 [x] POST   /r/:region/:pid/comment      Create a comment to a post
     - content: string;
-    + cid: string;
+    + comment: CommentDetail
+        + cid: number;
+        + author: string;
+        + edited: boolean;
+        + content: string;
+        + date: number;
 [x] PUT    /r/:region                   Modify a region
     - title: string;
     - description: string;

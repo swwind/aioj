@@ -1,4 +1,4 @@
-import { PostDetail, CommentDetail, RegionDetail } from 'app/types';
+import { PostDetail, CommentDetail, RegionDetail, CommentData } from 'app/types';
 import { comments, posts, regions, extractCommentDetail, extractPostDetail, extractRegionDetail } from '../db';
 import { COMMENT_NOT_EXISTS, POST_NOT_EXISTS, REGION_ALREADY_EXISTS, REGION_NOT_EXISTS } from '../errors';
 import { Result } from '../utils';
@@ -54,7 +54,7 @@ export async function createPost(region: string, title: string, author: string, 
   return Result.ok(pid);
 }
 
-export async function createComment(region: string, pid: number, author: string, content: string): Promise<Result<number, string>> {
+export async function createComment(region: string, pid: number, author: string, content: string): Promise<Result<CommentDetail, string>> {
   const res = await posts.findOne({
     region,
     pid,
@@ -64,7 +64,7 @@ export async function createComment(region: string, pid: number, author: string,
   const cid = res.maxcid + 1;
   await posts.updateOne(res, { $set: { maxcid: cid } });
 
-  await comments.insertOne({
+  const data: CommentData = {
     cid,
     author,
     edited: false,
@@ -72,9 +72,11 @@ export async function createComment(region: string, pid: number, author: string,
     date: Date.now(),
     pid,
     region,
-  });
+  };
 
-  return Result.ok(cid);
+  await comments.insertOne(data);
+
+  return Result.ok(extractCommentDetail(data));
 }
 
 export async function modifyRegion(region: string, title: string, description: string): Promise<Result<void, string>> {

@@ -127,6 +127,10 @@ body {
   overflow-y: scroll !important;
 }
 
+textarea {
+  font-family: sans-serif;
+}
+
 a, .clickable {
   text-decoration: none;
   color: #2c3e50;
