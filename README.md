@@ -9,8 +9,8 @@ yarn build && node .
 
 ## Known Issues
 
-- [ ] SSR not work
-- [ ] /r/region/pid#cid not work
+- [ ] `/r/region/pid#cid` not work
+- [ ] `/u/swwind` -> `/u/root` not work
 
 ## API
 

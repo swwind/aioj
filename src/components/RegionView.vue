@@ -61,6 +61,9 @@ export default defineComponent({
       store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
       store.commit(MutationTypes.FETCH_POST_LIST, result.posts);
       store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'region')}: ${result.region.title} - AIOJ`);
+      store.commit(MutationTypes.CHANGE_SSR_META, {
+        description: result.region.description,
+      });
     } else {
       handleNetworkRequestError(store, result);
     }

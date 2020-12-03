@@ -20,7 +20,7 @@ export type InternationalizationLanguage = {
   cancel: string;
   not_found: string;
   description: string;
-  
+
   no_posts: string;
   no_regions: string;
   region: string;

@@ -18,6 +18,6 @@ export default defineComponent({
     const store = useStore<StoreState>();
 
     store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'about')} - AIOJ`);
-  }
+  },
 });
 </script>
