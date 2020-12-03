@@ -29,47 +29,49 @@
 
 <script lang="ts">
 import { loginAttempt } from '../api/accounts';
-import { computed, defineComponent, ref, toRefs } from 'vue';
+import { defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
 import { handleNetworkRequestError } from '@/utils';
 import { translate } from '@/i18n/translate';
 
-export default defineComponent(() => {
-  const username = ref('');
-  const password = ref('');
+export default defineComponent({
+  setup() {
+    const username = ref('');
+    const password = ref('');
 
-  const router = useRouter();
-  const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
+    const router = useRouter();
+    const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
-  const store = useStore<StoreState>();
+    const store = useStore<StoreState>();
 
-  const handleLogin = async () => {
-    const result = await loginAttempt(username.value, password.value);
-    if (result.status === 200) {
-      store.commit(MutationTypes.LOGIN, result.user);
-      router.push(redirect);
-    } else {
-      handleNetworkRequestError(store.state.i18n.lang, result);
-    }
-  };
-  const handleKeydown = (key: string) => {
-    if (key === 'Enter') {
-      handleLogin();
-    }
-  };
+    const handleLogin = async () => {
+      const result = await loginAttempt(username.value, password.value);
+      if (result.status === 200) {
+        store.commit(MutationTypes.LOGIN, result.user);
+        router.push(redirect);
+      } else {
+        handleNetworkRequestError(store.state.i18n.lang, result);
+      }
+    };
+    const handleKeydown = (key: string) => {
+      if (key === 'Enter') {
+        handleLogin();
+      }
+    };
 
-  return {
-    username,
-    password,
-    handleLogin,
-    handleKeydown,
-    redirect,
-    translate,
+    return {
+      username,
+      password,
+      handleLogin,
+      handleKeydown,
+      redirect,
+      translate,
 
-    ...toRefs(store.state),
-  };
+      ...toRefs(store.state),
+    };
+  },
 });
 </script>
 

@@ -45,45 +45,47 @@ import { StoreState } from '@/store';
 import { handleNetworkRequestError } from '@/utils';
 import { translate } from '@/i18n/translate';
 
-export default defineComponent(() => {
-  const username = ref('');
-  const password = ref('');
-  const reptpass = ref('');
+export default defineComponent({
+  setup() {
+    const username = ref('');
+    const password = ref('');
+    const reptpass = ref('');
 
-  const router = useRouter();
-  const store = useStore<StoreState>();
-  const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
+    const router = useRouter();
+    const store = useStore<StoreState>();
+    const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
-  const handleRegister = async () => {
-    if (password.value !== reptpass.value) {
-      alert('password mismatch!');
-      return;
-    }
-    const result = await registerAttempt(username.value, password.value);
-    if (result.status === 200) {
-      store.commit(MutationTypes.LOGIN, result);
-      router.push(redirect);
-    } else {
-      handleNetworkRequestError(store.state.i18n.lang, result);
-    }
-  };
-  const handleKeydown = (key: string) => {
-    if (key === 'Enter') {
-      handleRegister();
-    }
-  };
+    const handleRegister = async () => {
+      if (password.value !== reptpass.value) {
+        alert('password mismatch!');
+        return;
+      }
+      const result = await registerAttempt(username.value, password.value);
+      if (result.status === 200) {
+        store.commit(MutationTypes.LOGIN, result);
+        router.push(redirect);
+      } else {
+        handleNetworkRequestError(store.state.i18n.lang, result);
+      }
+    };
+    const handleKeydown = (key: string) => {
+      if (key === 'Enter') {
+        handleRegister();
+      }
+    };
 
-  return {
-    username,
-    password,
-    reptpass,
-    handleRegister,
-    handleKeydown,
-    redirect,
-    translate,
+    return {
+      username,
+      password,
+      reptpass,
+      handleRegister,
+      handleKeydown,
+      redirect,
+      translate,
 
-    ...toRefs(store.state),
-  };
+      ...toRefs(store.state),
+    };
+  },
 });
 </script>
 

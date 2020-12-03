@@ -6,7 +6,6 @@ import { renderToString } from '@vue/server-renderer';
 import { createVueApp } from '../build/ssr/js/app.js';
 import { promises as fs } from 'fs';
 import { RouteMeta } from 'vue-router';
-import component from '*.vue';
 
 export type SSRContext = {
   url: string;
@@ -22,10 +21,10 @@ const gentemp = (meta: RouteMeta, render: string, state: string) => {
     }
   }).join('');
 
-  return '<!-- attack204 AK world final -->' + template
+  return '<!-- attack204 AK world final -->\n' + template
     .replace('<meta charset="utf-8">', '<meta charset="utf-8">' + metastr)
     .replace('<div id="app"></div>', `<div id="app">${render}</div>`)
-    .replace('</head>', `<script>window.__INITIAL_STATE__=${state};</script></head>`)
+    .replace('</head>', `<script>window.__INITIAL_STATE__=${state};</script></head>`);
 };
 
 export default async (context: SSRContext) => {

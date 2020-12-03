@@ -9,11 +9,13 @@ import { StoreState } from '@/store';
 import { defineComponent, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
-export default defineComponent(() => {
-  const store = useStore<StoreState>();
+export default defineComponent({
+  setup() {
+    const store = useStore<StoreState>();
 
-  return {
-    ...toRefs(store.state),
-  };
+    return {
+      ...toRefs(store.state),
+    };
+  },
 });
 </script>

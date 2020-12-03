@@ -1,38 +1,36 @@
 <template>
-  <Suspense>
-    <div>
-      <h1>Regions</h1>
-      <div class="region-list">
-        <el-alert type="warning" v-if="!data.regions.length">No regions yet</el-alert>
-        <div class="region-item" v-for="region of data.regions" :key="region.region">
-          <router-link :to="`/r/${region.region}`" class="title">{{ region.title }}</router-link>
-          <p class="desc">{{ region.description }}</p>
-        </div>
-      </div>
+  <h1>Regions</h1>
+  <div class="region-list">
+    <el-alert type="warning" v-if="!data.regions.length">No regions yet</el-alert>
+    <div class="region-item" v-for="region of data.regions" :key="region.region">
+      <router-link :to="`/r/${region.region}`" class="title">{{ region.title }}</router-link>
+      <p class="desc">{{ region.description }}</p>
     </div>
-  </Suspense>
+  </div>
 </template>
 
 <script lang="ts">
 import { getRegions } from '@/api/forum';
 import { defineComponent, toRefs } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
-import { Store, useStore } from 'vuex';
+import { useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
 
-export default defineComponent(async () => {
-  const store = useStore<StoreState>();
+export default defineComponent({
+  async setup() {
+    const store = useStore<StoreState>();
 
-  const result = await getRegions();
-  if (result.status === 200) {
-    store.commit(MutationTypes.FETCH_REGION_LIST, result.regions);
-  } else {
-    handleNetworkRequestError(store.state.i18n.lang, result);
-  }
+    const result = await getRegions();
+    if (result.status === 200) {
+      store.commit(MutationTypes.FETCH_REGION_LIST, result.regions);
+    } else {
+      handleNetworkRequestError(store.state.i18n.lang, result);
+    }
 
-  return {
-    ...toRefs(store.state),
-  };
+    return {
+      ...toRefs(store.state),
+    };
+  },
 });
 
 </script>
