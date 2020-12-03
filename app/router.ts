@@ -82,7 +82,7 @@ function getLanguage(acceptedLanguages: string) {
 }
 
 router.get(/^\//, async (ctx) => {
-  const { code, html } = await ssr(ctx.url, getLanguage(ctx.request.headers['accept-language'] || ''));
+  const { code, html } = await ssr(ctx.url, getLanguage(ctx.get('Accept-Language')));
   ctx.response.status = code;
   ctx.set('Content-Type', 'text/html');
   ctx.response.body = html;
