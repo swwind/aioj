@@ -1,6 +1,6 @@
-import { users } from "../db";
-import { FRIEND_ALREADY_EXISTS, FRIEND_NOT_EXISTS, SERVER_ERROR, USER_NOT_EXISTS } from "../errors";
-import { neq, Result } from "../utils";
+import { users } from '../db';
+import { FRIEND_ALREADY_EXISTS, FRIEND_NOT_EXISTS, SERVER_ERROR, USER_NOT_EXISTS } from '../errors';
+import { neq, Result } from '../utils';
 
 export async function getFriendsList(username: string): Promise<Result<string[], string>> {
   const result = await users.findOne({ username });

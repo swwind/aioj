@@ -1,13 +1,18 @@
-import { UserDetail } from 'app/db';
+import { UserDetail } from '../../../app/types';
 import { Mutation } from 'vuex';
 import * as MutationTypes from '../mutation-types';
 
-const state = {
+export type State = {
+  username: string;
+  admin: boolean;
+}
+
+const state = (): State => ({
   username: '',
   admin: false,
-};
+});
 
-const mutations: { [key: string]: Mutation<typeof state> } = {
+const mutations: { [key: string]: Mutation<State> } = {
   [MutationTypes.LOGIN](state, payload: UserDetail) {
     state.username = payload.username;
     state.admin = payload.admin;
@@ -22,5 +27,3 @@ export default {
   state,
   mutations,
 };
-
-export type State = typeof state;

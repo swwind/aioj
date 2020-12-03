@@ -1,9 +1,9 @@
-import Router from "koa-router";
-import { deleteFile, getFileData, getFileDetail, getFileDetailsByUsername, saveFile } from "../db/files";
-import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors";
-import { State, Tools } from "../types";
+import Router from 'koa-router';
+import { deleteFile, getFileData, getFileDetail, getFileDetailsByUsername, saveFile } from '../db/files';
+import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
+import { State, Tools } from '../types';
 import { promises as fs } from 'fs';
-import { lookup } from "mime-types";
+import { lookup } from 'mime-types';
 
 const router = new Router<State, Tools>();
 
@@ -17,7 +17,7 @@ router.post('/upload', async (ctx) => {
   }
 
   const { filename, file } = ctx.request.body;
-  
+
   const result = await saveFile(ctx.state.username, filename, file);
   if (!result.ok) {
     return ctx.end(400, result.error());
@@ -41,7 +41,7 @@ router.get('/files/:fid', async (ctx) => {
     if (st) range[0] = Number(st);
     if (ed) range[1] = Number(ed);
   }
-  
+
   ctx.response.status = 206;
   ctx.set('Content-Type', lookup(file.filename) || 'text/plain');
   ctx.set('Content-Length', String(range[1] - range[0] + 1));
@@ -56,7 +56,7 @@ router.get('/files/i/:fid', async (ctx) => {
   if (!result.ok) {
     return ctx.end(404, result.error());
   }
-  ctx.end(200, result.result());
+  ctx.end(200, { file: result.result() });
 });
 router.get('/files/u/:username', async (ctx) => {
   if (!ctx.state.authorized) {
@@ -71,7 +71,7 @@ router.get('/files/u/:username', async (ctx) => {
   if (!result.ok) {
     return ctx.end(400, result.error());
   }
-  ctx.end(200, { list: result.result() });
+  ctx.end(200, { files: result.result() });
 });
 
 router.delete('/files/:fid', async (ctx) => {

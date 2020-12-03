@@ -1,9 +1,9 @@
-import { getUserDetail } from "app/db/users";
-import Router from "koa-router";
-import { issueCookie, revoke } from "../auth";
-import { registerUser, verifyPassword } from "../db/accouts";
-import { LOGIN_REQUIRE, LOGOUT_REQUIRE, PARAMS_MISSING } from "../errors";
-import { State, Tools } from "../types";
+import { getUserDetail } from 'app/db/users';
+import Router from 'koa-router';
+import { issueCookie, revoke } from '../auth';
+import { registerUser, verifyPassword } from '../db/accouts';
+import { LOGIN_REQUIRE, LOGOUT_REQUIRE, PARAMS_MISSING } from '../errors';
+import { State, Tools } from '../types';
 
 const router = new Router<State, Tools>();
 
@@ -28,7 +28,7 @@ router.post('/login', async (ctx) => {
 
   const cookie = issueCookie(ctx.request.body.username);
   ctx.cookies.set('auth', cookie);
-  ctx.end(200, result.result());
+  ctx.end(200, { user: result.result() });
 });
 
 router.post('/register', async (ctx) => {
@@ -52,7 +52,7 @@ router.post('/register', async (ctx) => {
 
   const cookie = issueCookie(ctx.request.body.username);
   ctx.cookies.set('auth', cookie);
-  ctx.end(200, result.result());
+  ctx.end(200, { user: result.result() });
 });
 
 router.post('/logout', async (ctx) => {

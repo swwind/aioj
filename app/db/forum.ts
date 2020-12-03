@@ -1,9 +1,9 @@
-import { CommentDetail, comments, PostDetail, posts, RegionDetail, regions, extractCommentDetail, extractPostDetail, extractRegionDetail } from "../db";
-import { COMMENT_NOT_EXISTS, POST_NOT_EXISTS, REGION_ALREADY_EXISTS, REGION_NOT_EXISTS } from "../errors";
-import { Result } from "../utils";
+import { PostDetail, CommentDetail, RegionDetail } from 'app/types';
+import { comments, posts, regions, extractCommentDetail, extractPostDetail, extractRegionDetail } from '../db';
+import { COMMENT_NOT_EXISTS, POST_NOT_EXISTS, REGION_ALREADY_EXISTS, REGION_NOT_EXISTS } from '../errors';
+import { Result } from '../utils';
 
 export async function createRegion(region: string, title: string, description: string): Promise<Result<void, string>> {
-
   const res = await regions.findOne({
     region,
   });
@@ -40,7 +40,7 @@ export async function createPost(region: string, title: string, author: string, 
     region,
     maxcid: 1,
   });
-  
+
   await comments.insertOne({
     cid: 1,
     author,
@@ -55,7 +55,6 @@ export async function createPost(region: string, title: string, author: string, 
 }
 
 export async function createComment(region: string, pid: number, author: string, content: string): Promise<Result<number, string>> {
-
   const res = await posts.findOne({
     region,
     pid,

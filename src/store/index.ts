@@ -1,9 +1,10 @@
 import { createStore } from 'vuex';
-import modules, { State } from './modules';
+import modules, { StoreState } from './modules';
 
-const store = createStore<State>({
+const store = () => createStore<StoreState>({
   modules,
 });
 
 export default store;
-export { State } from './modules';
+export { StoreState };
+export * as MutationTypes from './mutation-types';

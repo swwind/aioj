@@ -1,10 +1,10 @@
 <template>
-  <h1>{{ title }}</h1>
-  <p>{{ desc }}</p>
+  <h1>{{ data.region.title }}</h1>
+  <p>{{ data.region.desc }}</p>
   <div class="posts-list">
-    <el-alert type="warning" v-if="!postlist.length">No posts yet</el-alert>
-    <div class="post-item" v-for="post of postlist" :key="post.pid">
-      <div class="title"><router-link :to="`/r/${region}/${post.pid}`">{{ post.title }}</router-link></div>
+    <el-alert type="warning" v-if="!data.posts.length">No posts yet</el-alert>
+    <div class="post-item" v-for="post of data.posts" :key="post.pid">
+      <div class="title"><router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link></div>
       <router-link class="author" :to="`/u/${post.author}`"><i class="el-icon-user-solid"></i>{{ post.author }}</router-link>
       <time class="time"><i class="el-icon-date"></i>{{ new Date(post.date).toLocaleString() }}</time>
     </div>
@@ -13,10 +13,10 @@
 
 <script lang="ts">
 import { getPostsList } from '@/api/forum';
-import { defineComponent, ref } from 'vue';
-import { PostDetail } from 'app/db';
+import { defineComponent, toRefs } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
-import { mapState } from 'vuex';
+import { useStore } from 'vuex';
+import { MutationTypes, StoreState } from '@/store';
 
 export default defineComponent({
   props: {
@@ -25,29 +25,21 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
-    const title = ref('');
-    const desc = ref('');
-    const postlist = ref([] as PostDetail[]);
+  async setup(props) {
+    const { region } = toRefs(props);
+    const store = useStore<StoreState>();
+
+    const result = await getPostsList(region.value);
+    if (result.status === 200) {
+      store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
+      store.commit(MutationTypes.FETCH_POST_LIST, result.posts);
+    } else {
+      handleNetworkRequestError(store.state.i18n.lang, result);
+    }
 
     return {
-      title,
-      desc,
-      postlist,
+      ...toRefs(store.state),
     };
-  },
-  computed: {
-    ...mapState(['i18n']),
-  },
-  async mounted() {
-    const result = await getPostsList(this.region);
-    if (result.status === 200) {
-      this.title = result.title;
-      this.desc = result.description;
-      this.postlist = result.list;
-    } else {
-      handleNetworkRequestError(this.i18n.lang, result);
-    }
   },
 });
 

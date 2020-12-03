@@ -1,7 +1,7 @@
-import Router from "koa-router";
-import { getUserDetail, modifyUserDetail } from "../db/users";
-import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors";
-import { State, Tools } from "../types";
+import Router from 'koa-router';
+import { getUserDetail, modifyUserDetail } from '../db/users';
+import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
+import { State, Tools } from '../types';
 
 const router = new Router<State, Tools>();
 
@@ -33,7 +33,7 @@ router.get('/u/:username', async (ctx) => {
   if (!result.ok) {
     return ctx.end(400, result.error());
   }
-  ctx.end(200, result.result());
+  ctx.end(200, { user: result.result() });
 });
 
 router.get('/whoami', async (ctx) => {
@@ -46,7 +46,7 @@ router.get('/whoami', async (ctx) => {
     return ctx.end(400, result.error());
   }
 
-  ctx.end(200, result.result());
+  ctx.end(200, { user: result.result() });
 });
 
 export default router;

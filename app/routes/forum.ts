@@ -1,8 +1,7 @@
-import { extractRegionDetail } from "app/db";
-import Router from "koa-router";
-import { createComment, createPost, createRegion, deleteComment, deletePost, deleteRegion, getCommentDetail, getPostComments, getPostDetail, getPostsList, getRegionDetail, getRegionsList, modifyComment, modifyPost, modifyRegion } from "../db/forum";
-import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "../errors";
-import { State, Tools } from "../types";
+import Router from 'koa-router';
+import { createComment, createPost, createRegion, deleteComment, deletePost, deleteRegion, getCommentDetail, getPostComments, getPostDetail, getPostsList, getRegionDetail, getRegionsList, modifyComment, modifyPost, modifyRegion } from '../db/forum';
+import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
+import { State, Tools } from '../types';
 
 const router = new Router<State, Tools>();
 
@@ -201,7 +200,7 @@ router.delete('/r/:region', async (ctx) => {
 });
 
 router.get('/regions', async (ctx) => {
-  ctx.end(200, { list: await getRegionsList() });
+  ctx.end(200, { regions: await getRegionsList() });
 });
 router.get('/r/:region/:pid', async (ctx) => {
   const rd = await getRegionDetail(ctx.params.region);
@@ -213,7 +212,7 @@ router.get('/r/:region/:pid', async (ctx) => {
     return ctx.end(404, pd.error());
   }
   ctx.end(200, {
-    ...pd.result(),
+    post: pd.result(),
     comments: await getPostComments(ctx.params.region, Number(ctx.params.pid)),
     region: rd.result(),
   });
@@ -224,8 +223,8 @@ router.get('/r/:region', async (ctx) => {
     return ctx.end(404, detail.error());
   }
   ctx.end(200, {
-    ...detail.result(),
-    list: await getPostsList(ctx.params.region),
+    region: detail.result(),
+    posts: await getPostsList(ctx.params.region),
   });
 });
 

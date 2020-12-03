@@ -20,7 +20,16 @@
     </div>
   </el-header>
   <el-main class="main">
-    <router-view/>
+    <router-view v-slot="{ Component }">
+      <suspense>
+        <template #default>
+          <component :is="Component"/>
+        </template>
+        <template #fallback>
+          <div>Loading...</div>
+        </template>
+      </suspense>
+    </router-view>
   </el-main>
   <el-footer class="footer">
     <p>
@@ -40,18 +49,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { whoami } from './api/accounts';
-import * as MutationTypes from '@/store/mutation-types';
-import { mapState, useStore } from 'vuex';
+import { useStore } from 'vuex';
 import { getRedirect } from './utils';
 import { translate } from '@/i18n/translate';
+import { StoreState, MutationTypes } from './store';
+import { defineComponent, onMounted, toRefs } from 'vue';
 
 export default defineComponent({
   setup() {
     const router = useRouter();
-    const store = useStore();
+    const store = useStore<StoreState>();
 
     const menus = [{
       name: 'home',
@@ -83,6 +92,15 @@ export default defineComponent({
       store.commit(MutationTypes.UPDATE_LANGUAGE, lang);
     };
 
+    onMounted(async () => {
+      const result = await whoami();
+      if (result.status === 200) {
+        store.commit(MutationTypes.LOGIN, result.user);
+      } else {
+        // ignore it
+      }
+    });
+
     return {
       handleMenuSelect,
       menus,
@@ -91,18 +109,9 @@ export default defineComponent({
       translate,
       langs,
       useLang,
+
+      ...toRefs(store.state),
     };
-  },
-
-  computed: {
-    ...mapState(['accounts', 'i18n']),
-  },
-
-  async mounted() {
-    const result = await whoami();
-    if (result.status === 200) {
-      this.$store.commit(MutationTypes.LOGIN, result);
-    }
   },
 });
 </script>
@@ -159,6 +168,10 @@ a, .clickable {
   }
 }
 
+</style>
+
+<style lang="less" scoped>
+
 .buttonset, .userpanel {
   border-bottom: solid 1px #e6e6e6;
 }
@@ -181,8 +194,4 @@ a, .clickable {
   }
 }
 
-.admin {
-  color: purple;
-  font-weight: bold;
-}
 </style>

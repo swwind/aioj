@@ -1,4 +1,4 @@
-import { UserDetail } from 'app/db';
+import { UserDetail } from '../../app/types';
 import axios from 'axios';
 import md5 from 'md5';
 import { makeGETRequest, makePOSTRequest } from './utils';
@@ -10,22 +10,22 @@ export function passwordHash(psw: string) {
 }
 
 export async function loginAttempt(username: string, password: string) {
-  return await makePOSTRequest<UserDetail>('/login', {
+  return await makePOSTRequest<{ user: UserDetail }>('/login', {
     username,
     password: passwordHash(password),
   });
 }
 
 export async function registerAttempt(username: string, password: string) {
-  return await makePOSTRequest<UserDetail>('/register', {
+  return await makePOSTRequest<{ user: UserDetail }>('/register', {
     username,
     password: passwordHash(password),
   });
 }
 export async function whoami() {
-  return await makeGETRequest<UserDetail>('/whoami');
+  return await makeGETRequest<{ user: UserDetail }>('/whoami');
 }
 
 export async function getUserDetail(username: string) {
-  return await makeGETRequest<UserDetail>(`/u/${username}`);
+  return await makeGETRequest<{ user: UserDetail }>(`/u/${username}`);
 }

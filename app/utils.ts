@@ -12,6 +12,7 @@ export class Result<T, R> {
   static ok<T, R>(t?: T) {
     return new Result<T, R>(true, t as T);
   }
+
   static error<T, R>(r: R) {
     return new Result<T, R>(false, r);
   }
@@ -28,4 +29,4 @@ export class Result<T, R> {
 export const neq = <T> (x: T) => (y: T) => x !== y;
 export const generateRandomBytes = (n: number) => {
   return crypto.randomBytes(n).toString('hex');
-}
+};

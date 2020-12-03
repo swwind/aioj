@@ -37,11 +37,11 @@
 
 <script lang="ts">
 import { registerAttempt } from '../api/accounts';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import * as MutationTypes from '../store/mutation-types';
-import { mapState, Store, useStore } from 'vuex';
-import { State } from '@/store';
+import { useStore } from 'vuex';
+import { StoreState } from '@/store';
 import { handleNetworkRequestError } from '@/utils';
 import { translate } from '@/i18n/translate';
 
@@ -52,7 +52,7 @@ export default defineComponent({
     const reptpass = ref('');
 
     const router = useRouter();
-    const store = useStore() as Store<State>;
+    const store = useStore<StoreState>();
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
     const handleRegister = async () => {
@@ -82,10 +82,9 @@ export default defineComponent({
       handleKeydown,
       redirect,
       translate,
+
+      ...toRefs(store.state),
     };
-  },
-  computed: {
-    ...mapState(['accounts', 'i18n']),
   },
 });
 </script>

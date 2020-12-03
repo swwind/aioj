@@ -1,6 +1,6 @@
 <template>
-  <h1>{{ post.title }}</h1>
-  <div class="comment" v-for="comment of comments" :key="comment.cid">
+  <h1>{{ data.post.title }}</h1>
+  <div class="comment" v-for="comment of data.comments" :key="comment.cid">
     <div class="info">
       <a v-if="comment.cid > 1" :href="`#${comment.cid}`" class="level" :id="comment.cid"># {{ comment.cid }}</a>
       <router-link class="author" :to="`/u/${comment.author}`"><i class="el-icon-user"></i>{{ comment.author }}</router-link>
@@ -19,13 +19,13 @@
 
 <script lang="ts">
 import { getPostDetail, sendReply } from '@/api/forum';
-import { State } from '@/store';
-import { defineComponent, ref } from 'vue';
-import { CommentDetail, PostDetail } from 'app/db';
-import { mapState, Store, useStore } from 'vuex';
+import { StoreState } from '@/store';
+import { defineComponent, ref, toRefs } from 'vue';
+import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
 import { handleNetworkRequestError } from '@/utils';
 import { ElNotification as notify } from 'element-plus';
+import * as MutationTypes from '@/store/mutation-types';
 
 export default defineComponent({
   props: {
@@ -38,15 +38,14 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
-    const post = ref({} as PostDetail);
-    const comments = ref([] as CommentDetail[]);
+  async setup(props) {
     const reply = ref('');
+    const { region, pid } = toRefs(props);
 
-    const store = useStore() as Store<State>;
+    const store = useStore<StoreState>();
 
     const handleReply = async () => {
-      const result = await sendReply(props.region, props.pid, reply.value);
+      const result = await sendReply(region.value, pid.value, reply.value);
       if (result.status === 200) {
         reply.value = '';
         notify({
@@ -59,25 +58,22 @@ export default defineComponent({
       }
     };
 
+    const result = await getPostDetail(region.value, pid.value);
+    if (result.status === 200) {
+      store.commit(MutationTypes.FETCH_POST_DETAIL, result.post);
+      store.commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
+      store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
+    } else {
+      handleNetworkRequestError(store.state.i18n.lang, result);
+    }
+
     return {
-      post,
-      comments,
       translate,
       reply,
       handleReply,
+
+      ...toRefs(store.state),
     };
-  },
-  computed: {
-    ...mapState(['accounts', 'i18n']),
-  },
-  async mounted() {
-    const result = await getPostDetail(this.region, this.pid);
-    if (result.status === 200) {
-      this.post = result;
-      this.comments = result.comments;
-    } else {
-      handleNetworkRequestError(this.i18n.lang, result);
-    }
   },
 });
 

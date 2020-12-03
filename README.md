@@ -65,28 +65,32 @@ Content-Type: application/json
 [x] POST   /login                       Log in
     - username: string;
     - password: string;
-    + username: string;
-    + description: string;
-    + email: string;
-    + admin: boolean;
+    + user: UserDetail
+        + username: string;
+        + description: string;
+        + email: string;
+        + admin: boolean;
 [x] POST   /logout                      Log out
 [x] POST   /register                    Sign up
     - username: string;
     - password: string;
-    + username: string;
-    + description: string;
-    + email: string;
-    + admin: boolean;
+    + user: UserDetail
+        + username: string;
+        + description: string;
+        + email: string;
+        + admin: boolean;
 [x] GET    /whoami                      Get the current user's detail
-    + username: string;
-    + description: string;
-    + email: string;
-    + admin: boolean;
+    + user: UserDetail
+        + username: string;
+        + description: string;
+        + email: string;
+        + admin: boolean;
 [x] GET    /u/:username                 Get user's detail
-    + username: string;
-    + description: string;
-    + email: string;
-    + admin: boolean;
+    + user: UserDetail
+        + username: string;
+        + description: string;
+        + email: string;
+        + admin: boolean;
 [x] PUT    /u/:username                 Modify user's detail
     - description: string;
     - email: string;
@@ -129,31 +133,33 @@ Content-Type: application/json
 [x] DELETE /r/:region/:pid              Delete a post
 [x] DELETE /r/:region/:pid/:cid         Delete a comment
 [x] GET    /regions                     Get regions list
-    + list: [] of
+    + list: RegionDetail[]
         + region: string;
         + title: string;
         + description: string;
 [x] GET    /r/:region                   Get posts list in a region
-    + region: string;
-    + title: string;
-    + description: string;
-    + list: [] of
+    + region: RegionDetail
+        + region: string;
+        + title: string;
+        + description: string;
+    + posts: PostDetail[]
         + pid: number;
         + title: string;
         + author: string;
         + date: number;
 [x] GET    /r/:region/:pid              Get post details (including comments)
-    + pid: number;
-    + title: string;
-    + author: string;
-    + date: number;
-    + comments: [] of
+    + post: PostDetail
+        + pid: number;
+        + title: string;
+        + author: string;
+        + date: number;
+    + comments: CommentDetail[]
         + cid: number;
         + author: string;
         + edited: boolean;
         + content: string;
         + date: number;
-    + region:
+    + region: RegionDetail
         + region: string;
         + title: string;
         + description: string;
@@ -164,13 +170,14 @@ Content-Type: application/json
 [x] GET    /files/:fid                  Fetch the uploaded file
     + ... (206 partical content support)
 [x] GET    /files/i/:fid                Get file's information
-    + fid: string;
-    + filename: string;
-    + author: string;
-    + size: number;
-    + date: number;
+    + file: FileDetail
+        + fid: string;
+        + filename: string;
+        + author: string;
+        + size: number;
+        + date: number;
 [x] GET    /files/u/:username           Get user's upload
-    + list: [] of
+    + files: FileDetail[]
         + fid: string;
         + filename: string;
         + author: string;

@@ -1,16 +1,16 @@
 <template>
-  <h1>{{ username }}</h1>
-  <span v-if="admin">{{ translate(i18n.lang, 'admin') }}</span>
-  <p>{{ desc }}</p>
-  <p>{{ email }}</p>
+  <h1>{{ data.user.username }}</h1>
+  <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
+  <p>{{ data.user.email }}</p>
+  <p>{{ data.user.desc }}</p>
 </template>
 
 <script lang="ts">
 import { getUserDetail } from '@/api/accounts';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
-import { mapState, Store, useStore } from 'vuex';
-import { State } from '@/store';
+import { useStore } from 'vuex';
+import { MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
 
 export default defineComponent({
@@ -20,41 +20,21 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
-    const desc = ref('');
-    const email = ref('');
-    const admin = ref(false);
+  async setup(props) {
+    const { username } = toRefs(props);
+    const store = useStore<StoreState>();
 
-    const store = useStore() as Store<State>;
-
-    const resolveUserDetail = async (username: string) => {
-      const result = await getUserDetail(username);
-      if (result.status === 200) {
-        desc.value = result.description;
-        email.value = result.email;
-        admin.value = result.admin;
-      } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
-      }
-    };
-
-    resolveUserDetail(props.username);
+    const result = await getUserDetail(username.value);
+    if (result.status === 200) {
+      store.commit(MutationTypes.FETCH_USER_DETAIL, result.user);
+    } else {
+      handleNetworkRequestError(store.state.i18n.lang, result);
+    }
 
     return {
-      desc,
-      email,
-      admin,
-      resolveUserDetail,
       translate,
+      ...toRefs(store.state),
     };
-  },
-  watch: {
-    username(newval) {
-      this.resolveUserDetail(newval);
-    },
-  },
-  computed: {
-    ...mapState(['i18n']),
   },
 });
 
