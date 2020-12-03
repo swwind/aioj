@@ -45,6 +45,7 @@ export default defineComponent({
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
     const store = useStore<StoreState>();
+    store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'login')} - AIOJ`);
 
     const handleLogin = async () => {
       const result = await loginAttempt(username.value, password.value);
@@ -52,7 +53,7 @@ export default defineComponent({
         store.commit(MutationTypes.LOGIN, result.user);
         router.push(redirect);
       } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
+        handleNetworkRequestError(store, result);
       }
     };
     const handleKeydown = (key: string) => {

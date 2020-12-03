@@ -6,3 +6,18 @@
     <p>More about this project: <a href="https://github.com/attack204/AIFuckingSystem">github</a></p>
   </div>
 </template>
+
+<script lang="ts">
+import { useStore } from 'vuex';
+import { MutationTypes, StoreState } from '@/store';
+import { translate } from '@/i18n/translate';
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  setup() {
+    const store = useStore<StoreState>();
+
+    store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'about')} - AIOJ`);
+  }
+});
+</script>

@@ -60,8 +60,9 @@ export default defineComponent({
     if (result.status === 200) {
       store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
       store.commit(MutationTypes.FETCH_POST_LIST, result.posts);
+      store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'region')}: ${result.region.title} - AIOJ`);
     } else {
-      handleNetworkRequestError(store.state.i18n.lang, result);
+      handleNetworkRequestError(store, result);
     }
 
     const title = ref('');
@@ -71,7 +72,7 @@ export default defineComponent({
       if (result.status === 200) {
         router.push(`/r/${region.value}/${result.pid}`);
       } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
+        handleNetworkRequestError(store, result);
       }
     };
 
@@ -99,7 +100,7 @@ export default defineComponent({
           message: translate(store.state.i18n.lang, 'delete_success'),
         });
       } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
+        handleNetworkRequestError(store, result);
       }
     };
 

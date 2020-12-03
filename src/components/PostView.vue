@@ -65,7 +65,7 @@ export default defineComponent({
         });
         store.commit(MutationTypes.CREATED_COMMENT, result.comment);
       } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
+        handleNetworkRequestError(store, result);
       }
     };
 
@@ -74,8 +74,9 @@ export default defineComponent({
       store.commit(MutationTypes.FETCH_POST_DETAIL, result.post);
       store.commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
       store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
+      store.commit(MutationTypes.CHANGE_SSR_TITLE, `${result.post.title} - AIOJ`);
     } else {
-      handleNetworkRequestError(store.state.i18n.lang, result);
+      handleNetworkRequestError(store, result);
     }
 
     const handleDeletePost = async () => {
@@ -103,7 +104,7 @@ export default defineComponent({
         });
         router.push(`/r/${region.value}`);
       } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
+        handleNetworkRequestError(store, result);
       }
     };
 
@@ -137,7 +138,7 @@ export default defineComponent({
         });
         store.commit(MutationTypes.DELETED_COMMENT, cid);
       } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
+        handleNetworkRequestError(store, result);
       }
     };
 

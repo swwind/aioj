@@ -12,19 +12,15 @@ export type SSRContext = {
 }
 
 const template = await fs.readFile('dist/index.html', 'utf-8');
-const gentemp = (meta: RouteMeta, render: string, state: string) => {
-  const metastr = Object.keys(meta).map((key) => {
-    if (key === 'title') {
-      return `<title>${meta[key]}</title>`;
-    } else {
-      return `<meta name="${key}" content="${meta[key]}">`;
-    }
+const gentemp = (title: string, meta: RouteMeta, rendered: string, statestr: string) => {
+  const metastr = `<title>${title}</title>` + Object.keys(meta).map((key) => {
+    return `<meta name="${key}" content="${meta[key]}">`;
   }).join('');
 
   return '<!-- attack204 AK world final -->\n' + template
     .replace('<meta charset="utf-8">', '<meta charset="utf-8">' + metastr)
-    .replace('<div id="app"></div>', `<div id="app">${render}</div>`)
-    .replace('</head>', `<script>window.__INITIAL_STATE__=${state};</script></head>`);
+    .replace('<div id="app"></div>', `<div id="app">${rendered}</div>`)
+    .replace('</head>', `<script>window.__INITIAL_STATE__=${statestr};</script></head>`);
 };
 
 export default async (url: string, lang = 'en_us') => {
@@ -33,10 +29,10 @@ export default async (url: string, lang = 'en_us') => {
   router.push(url);
   await router.isReady();
   const html = await renderToString(app);
-  const state = JSON.stringify(store.state);
+  const statestr = JSON.stringify(store.state);
 
   return {
-    code: router.currentRoute.value.name === 'NotFound' ? 404 : 200,
-    html: gentemp(router.currentRoute.value.meta, html, state),
+    code: store.state.ssr.status,
+    html: gentemp(store.state.ssr.title, store.state.ssr.meta, html, statestr),
   };
 };

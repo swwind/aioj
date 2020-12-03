@@ -1,13 +1,18 @@
 <template>
-  <h1>{{ data.user.username }}</h1>
-  <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
-  <p>{{ data.user.email }}</p>
-  <p>{{ data.user.desc }}</p>
+  <div v-if="data.user.username">
+    <h1>{{ data.user.username }}</h1>
+    <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
+    <p>{{ data.user.email }}</p>
+    <p>{{ data.user.desc }}</p>
+  </div>
+  <div v-else>
+    <h1>{{ translate(i18n.lang, 'user_not_exists') }}</h1>
+  </div>
 </template>
 
 <script lang="ts">
 import { getUserDetail } from '@/api/accounts';
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent, toRefs, watch } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
 import { useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
@@ -24,12 +29,17 @@ export default defineComponent({
     const { username } = toRefs(props);
     const store = useStore<StoreState>();
 
-    const result = await getUserDetail(username.value);
-    if (result.status === 200) {
-      store.commit(MutationTypes.FETCH_USER_DETAIL, result.user);
-    } else {
-      handleNetworkRequestError(store.state.i18n.lang, result);
+    const loadUserDetail = async () => {
+      const result = await getUserDetail(username.value);
+      if (result.status === 200) {
+        store.commit(MutationTypes.FETCH_USER_DETAIL, result.user);
+        store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'user')}: ${result.user.username} - AIOJ`);
+      } else {
+        handleNetworkRequestError(store, result);
+      }
     }
+    await loadUserDetail();
+    watch(username, loadUserDetail);
 
     return {
       translate,

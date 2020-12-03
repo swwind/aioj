@@ -14,69 +14,41 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: {
-      title: 'AIOJ - An open AI online judging system',
-      description: 'AIOJ is an open AI online judging system, try to figure out your AI is much better than others!',
-    },
   }, {
     path: '/about',
     name: 'About',
     component: About,
-    meta: {
-      title: 'About - AIOJ',
-    },
   }, {
     path: '/r',
     name: 'Forum',
     component: Regions,
-    meta: {
-      title: 'Forum - AIOJ',
-    },
   }, {
     path: '/r/:region',
     name: 'Region',
     component: RegionView,
-    meta: {
-      title: 'Region - AIOJ',
-    },
     props: true,
   }, {
     path: '/r/:region/:pid',
     name: 'Post',
     component: PostView,
-    meta: {
-      title: 'Region Post - AIOJ',
-    },
     props: true,
   }, {
     path: '/u/:username',
     name: 'UserView',
     component: UserView,
     props: true,
-    beforeEnter(route) {
-      route.meta.title = `User ${route.params.username} - AIOJ`;
-    },
   }, {
     path: '/login',
     name: 'Login',
     component: Login,
-    meta: {
-      title: 'Login - AIOJ',
-    },
   }, {
     path: '/register',
     name: 'Register',
     component: Register,
-    meta: {
-      title: 'Register - AIOJ',
-    },
   }, {
     path: '/:a(.*)',
     name: 'NotFound',
     component: NotFound,
-    meta: {
-      title: 'Not Found - AIOJ',
-    },
   },
 ];
 

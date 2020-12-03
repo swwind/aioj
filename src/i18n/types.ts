@@ -18,9 +18,13 @@ export type InternationalizationLanguage = {
   repeat_password: string;
   ok: string;
   cancel: string;
-
+  not_found: string;
+  description: string;
+  
   no_posts: string;
   no_regions: string;
+  region: string;
+  user: string;
   regions: string;
   create_new_region: string;
   create_new_post: string;

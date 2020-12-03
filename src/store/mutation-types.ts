@@ -17,3 +17,7 @@ export const DELETED_COMMENT = 'deleted_comment';
 export const CREATED_REGION = 'created_region';
 export const CREATED_POST = 'created_post';
 export const CREATED_COMMENT = 'created_comment';
+
+export const CHANGE_SSR_STATUS = 'change_ssr_status';
+export const CHANGE_SSR_TITLE = 'change_ssr_title';
+export const CHANGE_SSR_META = 'change_ssr_meta';

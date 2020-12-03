@@ -18,9 +18,13 @@ const en_us: InternationalizationLanguage = {
   repeat_password: 'Repeat Password',
   ok: 'Ok',
   cancel: 'Cancel',
+  not_found: 'Not Found',
+  description: 'AIOJ is an AI online judging platform.',
 
   no_posts: 'No posts yet',
   no_regions: 'No regions yet',
+  region: 'Region',
+  user: 'User',
   regions: 'Regions',
   create_new_region: 'Create a new region',
   create_new_post: 'Create a new post',

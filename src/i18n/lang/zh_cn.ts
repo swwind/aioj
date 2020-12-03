@@ -18,9 +18,13 @@ const zh_cn: InternationalizationLanguage = {
   repeat_password: '重复密码',
   ok: '确认',
   cancel: '取消',
+  not_found: '404 NOT FOUND',
+  description: 'AIOJ 是一个 AI 在线对战平台。',
 
   no_posts: '还没有帖子',
   no_regions: '还没有模块',
+  region: '模块',
+  user: '用户',
   regions: '模块',
   create_new_region: '新建模块',
   create_new_post: '新建帖子',

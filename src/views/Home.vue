@@ -5,13 +5,19 @@
 </template>
 
 <script lang="ts">
-import { StoreState } from '@/store';
+import { translate } from '@/i18n/translate';
+import { MutationTypes, StoreState } from '@/store';
 import { defineComponent, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
 export default defineComponent({
   setup() {
     const store = useStore<StoreState>();
+
+    store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'home')} - AIOJ`);
+    store.commit(MutationTypes.CHANGE_SSR_META, {
+      description: translate(store.state.i18n.lang, 'description'),
+    });
 
     return {
       ...toRefs(store.state),

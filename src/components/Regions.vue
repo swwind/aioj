@@ -47,12 +47,13 @@ export default defineComponent({
   async setup() {
     const store = useStore<StoreState>();
     const router = useRouter();
+    store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'regions')} - AIOJ`);
 
     const result = await getRegions();
     if (result.status === 200) {
       store.commit(MutationTypes.FETCH_REGION_LIST, result.regions);
     } else {
-      handleNetworkRequestError(store.state.i18n.lang, result);
+      handleNetworkRequestError(store, result);
     }
 
     const region = ref('');
@@ -64,7 +65,7 @@ export default defineComponent({
       if (result.status === 200) {
         router.push(`/r/${region.value}`);
       } else {
-        handleNetworkRequestError(store.state.i18n.lang, result);
+        handleNetworkRequestError(store, result);
       }
     };
 
