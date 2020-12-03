@@ -27,9 +27,10 @@ const gentemp = (meta: RouteMeta, render: string, state: string) => {
     .replace('</head>', `<script>window.__INITIAL_STATE__=${state};</script></head>`);
 };
 
-export default async (context: SSRContext) => {
+export default async (url: string, lang: string = 'en_us') => {
   const { app, router, store } = createVueApp(true);
-  router.push(context.url);
+  store.commit('update_language', lang);
+  router.push(url);
   await router.isReady();
   const html = await renderToString(app);
   const state = JSON.stringify(store.state);

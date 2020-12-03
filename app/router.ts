@@ -62,10 +62,27 @@ router.use('/api',
   files.allowedMethods(),
 );
 
+const supportedLanguages = ['en_us', 'zh_cn'];
+
+function getLanguage(acceptedLanguages: string) {
+  const acpt = acceptedLanguages.split(',')
+    .map((s) => s.split(';')[0])
+    .map((s) => s.toLowerCase())
+    .map((s) => s.replace(/\-/g, '_'));
+
+  for (const lang of acpt) {
+    for (const slang of supportedLanguages) {
+      if (slang.startsWith(lang)) {
+        return slang;
+      }
+    }
+  }
+
+  return supportedLanguages[0];
+}
+
 router.get(/^\//, async (ctx) => {
-  const { code, html } = await ssr({
-    url: ctx.url,
-  });
+  const { code, html } = await ssr(ctx.url, getLanguage(ctx.request.headers['accept-language'] || ''));
   ctx.response.status = code;
   ctx.set('Content-Type', 'text/html');
   ctx.response.body = html;
