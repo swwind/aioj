@@ -6,5 +6,5 @@ const store = () => createStore<StoreState>({
 });
 
 export default store;
-export { StoreState };
+export type { StoreState };
 export * as MutationTypes from './mutation-types';

@@ -2,15 +2,23 @@ import { INTERNAL_SERVER_ERROR } from '../../app/errors';
 import axios, { Method } from 'axios';
 import config from '../../config.json';
 
-const getBaseURL = () => {
+const getNodeURL = () => {
   return config.port === 443
     ? 'https://localhost/api'
     : `http://localhost:${config.port}/api`;
 };
 
+const getBrowserURL = () => {
+  if (typeof (window as any).__VUE_HMR_RUNTIME__ === 'undefined') {
+    return '/api';
+  } else {
+    return 'http://localhost:8080/api';
+  }
+}
+
 export const request = axios.create({
   baseURL: typeof global.window === 'undefined'
-    ? getBaseURL() : '/api',
+    ? getNodeURL() : getBrowserURL(),
   validateStatus() { return true; },
 });
 

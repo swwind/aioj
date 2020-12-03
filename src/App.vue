@@ -40,8 +40,7 @@
         @click="useLang(lang.name)"
         :key="lang.name"
         class="clickable"
-        :class="{ disabled: lang.name === i18n.lang }"
-        :href="lang.name !== i18n.lang ? '#' : ''">
+        :class="{ disabled: lang.name === i18n.lang }">
         {{ lang.show }}
       </span>
     </p>

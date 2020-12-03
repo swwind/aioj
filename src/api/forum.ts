@@ -14,7 +14,21 @@ export async function getPostDetail(region: string, post: string) {
 }
 
 export async function sendReply(region: string, post: string, content: string) {
-  return await makePOSTRequest(`/r/${region}/${post}/comment`, {
+  return await makePOSTRequest<{ cid: string }>(`/r/${region}/${post}/comment`, {
     content,
+  });
+}
+
+export async function createPost(region: string, title: string, content: string) {
+  return await makePOSTRequest<{ pid: string }>(`/r/${region}/post`, {
+    title,
+    content,
+  });
+}
+
+export async function createRegion(region: string, title: string, description: string) {
+  return await makePOSTRequest(`/r/${region}`, {
+    title,
+    description,
   });
 }

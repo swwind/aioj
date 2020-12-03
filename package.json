@@ -2,7 +2,7 @@
   "main": "build/main.js",
   "scripts": {
     "start": "node .",
-    "serve": "vue-cli-service serve",
+    "serve": "cross-env TEST=test node . & vue-cli-service serve --port 8000",
     "dev": "webpack --config webpack/server.js --progress --mode=development --watch",
     "build": "yarn clean && yarn webpack:4 && yarn build:client && yarn build:ssr && yarn webpack:5 && yarn build:server",
     "webpack:4": "yarn remove webpack; yarn add webpack@webpack-4",
@@ -17,6 +17,7 @@
     "mocha": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha"
   },
   "dependencies": {
+    "@koa/cors": "^3.1.0",
     "@types/md5": "^2.2.1",
     "@vue/cli-plugin-babel": "^4.5.9",
     "@vue/cli-plugin-typescript": "^4.5.9",
@@ -41,6 +42,7 @@
     "@types/koa": "^2.11.6",
     "@types/koa-router": "^7.4.1",
     "@types/koa-static": "^4.0.1",
+    "@types/koa__cors": "^3.0.2",
     "@types/mime-types": "^2.1.0",
     "@types/mocha": "^8.0.4",
     "@types/mongodb": "^3.5.33",

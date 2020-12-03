@@ -4,11 +4,17 @@ import Koa from 'koa';
 import router from './app/router';
 import body from 'koa-body';
 import serve from 'koa-static';
+import cors from '@koa/cors';
 import config from './config.json';
 import https from 'https';
 import { promises as fs } from 'fs';
 
 const app = new Koa();
+
+if (process.env.TEST === 'test') {
+  console.log('CORS closed');
+  app.use(cors());
+}
 
 app.use(body({ multipart: true }));
 app.use(serve('dist', { index: false }));

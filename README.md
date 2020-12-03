@@ -120,8 +120,10 @@ Content-Type: application/json
 [x] POST   /r/:region/post              Create a new post in region
     - title: string;
     - content: string;
+    + pid: string;
 [x] POST   /r/:region/:pid/comment      Create a comment to a post
     - content: string;
+    + cid: string;
 [x] PUT    /r/:region                   Modify a region
     - title: string;
     - description: string;
@@ -133,7 +135,7 @@ Content-Type: application/json
 [x] DELETE /r/:region/:pid              Delete a post
 [x] DELETE /r/:region/:pid/:cid         Delete a comment
 [x] GET    /regions                     Get regions list
-    + list: RegionDetail[]
+    + regions: RegionDetail[]
         + region: string;
         + title: string;
         + description: string;

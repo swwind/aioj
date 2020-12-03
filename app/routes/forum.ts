@@ -23,7 +23,7 @@ router.post('/r/:region/:pid/comment', async (ctx) => {
     return ctx.end(400, result.error());
   }
 
-  ctx.end(200, { cid: result.result() });
+  ctx.end(200, { cid: String(result.result()) });
 });
 
 router.post('/r/:region/post', async (ctx) => {
@@ -41,7 +41,7 @@ router.post('/r/:region/post', async (ctx) => {
     return ctx.end(400, result.error());
   }
 
-  ctx.end(200, { pid: result.result() });
+  ctx.end(200, { pid: String(result.result()) });
 });
 
 router.post('/r/:region', async (ctx) => {

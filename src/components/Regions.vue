@@ -1,24 +1,48 @@
 <template>
-  <h1>Regions</h1>
+  <h1>{{ translate(i18n.lang, 'regions') }}</h1>
   <div class="region-list">
-    <el-alert type="warning" v-if="!data.regions.length">No regions yet</el-alert>
+    <el-alert type="warning" v-if="!data.regions.length">{{ translate(i18n.lang, 'no_regions') }}</el-alert>
     <div class="region-item" v-for="region of data.regions" :key="region.region">
       <router-link :to="`/r/${region.region}`" class="title">{{ region.title }}</router-link>
       <p class="desc">{{ region.description }}</p>
     </div>
   </div>
+  <div class="create" v-if="accounts.admin">
+    <h2>{{ translate(i18n.lang, 'create_new_region') }}</h2>
+    <el-input
+      type="text"
+      class="form-item"
+      v-model="region"
+      :placeholder="translate(i18n.lang, 'region_url')" />
+    <el-input
+      type="text"
+      class="form-item"
+      v-model="title"
+      :placeholder="translate(i18n.lang, 'region_title')" />
+    <el-input
+      type="textarea"
+      class="form-item"
+      v-model="description"
+      :placeholder="translate(i18n.lang, 'region_desc')" />
+    <div class="buttonset">
+      <el-button type="primary">{{ translate(i18n.lang, 'post') }}</el-button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { getRegions } from '@/api/forum';
-import { defineComponent, toRefs } from 'vue';
+import { createRegion, getRegions } from '@/api/forum';
+import { defineComponent, ref, toRefs } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
 import { useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
+import { translate } from '@/i18n/translate';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   async setup() {
     const store = useStore<StoreState>();
+    const router = useRouter();
 
     const result = await getRegions();
     if (result.status === 200) {
@@ -27,7 +51,25 @@ export default defineComponent({
       handleNetworkRequestError(store.state.i18n.lang, result);
     }
 
+    const region = ref('');
+    const title = ref('');
+    const description = ref('');
+
+    const handleCreateRegion = async () => {
+      const result = await createRegion(region.value, title.value, description.value);
+      if (result.status === 200) {
+        router.push(`/r/${region.value}`);
+      } else {
+        handleNetworkRequestError(store.state.i18n.lang, result);
+      }
+    }
+
     return {
+      translate,
+      region,
+      title,
+      description,
+
       ...toRefs(store.state),
     };
   },
@@ -52,6 +94,10 @@ export default defineComponent({
     margin-top: 10px;
     font-size: .8rem;
   }
+}
+
+.form-item {
+  margin-bottom: 20px;
 }
 
 </style>

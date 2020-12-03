@@ -10,7 +10,7 @@
   </div>
   <div class="reply" v-if="accounts.username">
     <h2>{{ translate(i18n.lang, 'reply') }}</h2>
-    <textarea v-model="reply"></textarea>
+    <el-input type="textarea" v-model="reply" />
     <div class="buttons">
       <el-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'reply') }}</el-button>
     </div>
@@ -102,15 +102,6 @@ export default defineComponent({
 }
 
 .reply {
-
-  textarea {
-    display: block;
-    min-width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    min-height: 200px;
-    padding: 5px;
-  }
 
   .buttons {
     margin-top: 20px;

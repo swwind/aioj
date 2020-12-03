@@ -81,7 +81,16 @@ function getLanguage(acceptedLanguages: string) {
   return supportedLanguages[0];
 }
 
-router.get(/^\//, async (ctx) => {
+const isTest = process.env.TEST === 'test';
+if (isTest) {
+  console.log('Test mode enabled, SSR will be disabled');
+}
+
+router.get(/^\//, async (ctx, next) => {
+  if (isTest) {
+    await next();
+    return;
+  }
   const { code, html } = await ssr(ctx.url, getLanguage(ctx.get('Accept-Language')));
   ctx.response.status = code;
   ctx.set('Content-Type', 'text/html');
