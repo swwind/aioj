@@ -39,6 +39,24 @@ const mutations: { [key: string]: Mutation<State> } = {
   [MutationTypes.FETCH_COMMENT_LIST](state, payload: CommentDetail[]) {
     state.comments = payload;
   },
+  [MutationTypes.DELETED_REGION](state, payload: string) {
+    state.regions = state.regions.filter((s) => s.region !== payload);
+  },
+  [MutationTypes.DELETED_POST](state, payload: number) {
+    state.posts = state.posts.filter((s) => s.pid !== payload);
+  },
+  [MutationTypes.DELETED_COMMENT](state, payload: number) {
+    state.comments = state.comments.filter((s) => s.cid !== payload);
+  },
+  [MutationTypes.CREATED_REGION](state, payload: RegionDetail) {
+    state.regions = state.regions.concat(payload);
+  },
+  [MutationTypes.CREATED_POST](state, payload: PostDetail) {
+    state.posts = state.posts.concat(payload);
+  },
+  [MutationTypes.CREATED_COMMENT](state, payload: CommentDetail) {
+    state.comments = state.comments.concat(payload);
+  },
 };
 
 export default {

@@ -8,12 +8,16 @@ const en_us: InternationalizationLanguage = {
   register: 'Register',
   logout: 'Logout',
   error: 'Error',
+  warning: 'Warning',
   success: 'Success',
   reply_success: 'Successfully replied to the post',
+  delete_success: 'Successfully deleted',
   admin: 'Admin',
   username: 'Username',
   password: 'Password',
   repeat_password: 'Repeat Password',
+  ok: 'Ok',
+  cancel: 'Cancel',
 
   no_posts: 'No posts yet',
   no_regions: 'No regions yet',
@@ -27,6 +31,11 @@ const en_us: InternationalizationLanguage = {
   region_url: 'Region URL',
   region_title: 'Title',
   region_desc: 'Description',
+  delete: 'Delete',
+
+  confirm_delete_comment: 'Are you sure you want to delete this comment?',
+  confirm_delete_post: 'Are you sure you want to delete this post?',
+  confirm_delete_region: 'Are you sure you want to delete this region?',
 
   password_wrong: 'Password incorrect',
   login_require: 'Please login first',

@@ -1,5 +1,5 @@
 import { CommentDetail, PostDetail, RegionDetail } from '../../app/types';
-import { makeGETRequest, makePOSTRequest } from './utils';
+import { makeDELETERequest, makeGETRequest, makePOSTRequest } from './utils';
 
 export async function getRegions() {
   return await makeGETRequest<{ regions: RegionDetail[]; }>('/regions');
@@ -31,4 +31,16 @@ export async function createRegion(region: string, title: string, description: s
     title,
     description,
   });
+}
+
+export async function deleteRegion(region: string) {
+  return await makeDELETERequest(`/r/${region}`);
+}
+
+export async function deletePost(region: string, pid: string) {
+  return await makeDELETERequest(`/r/${region}/${pid}`);
+}
+
+export async function deleteComment(region: string, pid: string, cid: string) {
+  return await makeDELETERequest(`/r/${region}/${pid}/${cid}`);
 }

@@ -5,6 +5,16 @@
       <a v-if="comment.cid > 1" :href="`#${comment.cid}`" class="level" :id="comment.cid"># {{ comment.cid }}</a>
       <router-link class="author" :to="`/u/${comment.author}`"><i class="el-icon-user"></i>{{ comment.author }}</router-link>
       <time class="time"><i class="el-icon-date"></i>{{ new Date(comment.date).toLocaleString() }}</time>
+      <span class="edited" v-if="comment.edited">
+        <i class="el-icon-edit"></i>
+        Edited
+      </span>
+      <div class="operations" v-if="accounts.admin || accounts.username === comment.author">
+        <i class="delete el-icon-delete"
+          @click="handleDeleteComment(comment.cid)" />
+        <i class="edit el-icon-edit"
+          @click="handleEditComment(comment.cid)" />
+      </div>
     </div>
     <div class="content">{{ comment.content }}</div>
   </div>
@@ -18,14 +28,13 @@
 </template>
 
 <script lang="ts">
-import { getPostDetail, sendReply } from '@/api/forum';
-import { StoreState } from '@/store';
+import { getPostDetail, sendReply, deletePost, deleteComment } from '@/api/forum';
+import { MutationTypes, StoreState } from '@/store';
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
-import { handleNetworkRequestError } from '@/utils';
-import { ElNotification as notify } from 'element-plus';
-import * as MutationTypes from '@/store/mutation-types';
+import { handleNetworkRequestError, msgbox, notify } from '@/utils';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   props: {
@@ -43,6 +52,7 @@ export default defineComponent({
     const { region, pid } = toRefs(props);
 
     const store = useStore<StoreState>();
+    const router = useRouter();
 
     const handleReply = async () => {
       const result = await sendReply(region.value, pid.value, reply.value);
@@ -67,10 +77,79 @@ export default defineComponent({
       handleNetworkRequestError(store.state.i18n.lang, result);
     }
 
+    const handleDeletePost = async () => {
+      try {
+        await msgbox.confirm(
+          translate(store.state.i18n.lang, 'confirm_delete_post'),
+          translate(store.state.i18n.lang, 'warning'),
+          {
+            type: 'warning',
+            confirmButtonText: translate(store.state.i18n.lang, 'ok'),
+            cancelButtonText: translate(store.state.i18n.lang, 'cancel'),
+          }
+        );
+      } catch (e) {
+        // cancel
+        return;
+      }
+
+      const result = await deletePost(region.value, pid.value);
+      if (result.status === 200) {
+        notify({
+          title: translate(store.state.i18n.lang, 'success'),
+          type: 'success',
+          message: translate(store.state.i18n.lang, 'delete_success'),
+        });
+        router.push(`/r/${region.value}`);
+      } else {
+        handleNetworkRequestError(store.state.i18n.lang, result);
+      }
+    }
+
+    const handleDeleteComment = async (cid: number) => {
+      if (cid === 1) {
+        await handleDeletePost();
+        return;
+      }
+
+      try {
+        await msgbox.confirm(
+          translate(store.state.i18n.lang, 'confirm_delete_comment'),
+          translate(store.state.i18n.lang, 'warning'),
+          {
+            type: 'warning',
+            confirmButtonText: translate(store.state.i18n.lang, 'ok'),
+            cancelButtonText: translate(store.state.i18n.lang, 'cancel'),
+          }
+        );
+      } catch (e) {
+        // cancel
+        return;
+      }
+
+      const result = await deleteComment(region.value, pid.value, String(cid));
+      if (result.status === 200) {
+        notify({
+          title: translate(store.state.i18n.lang, 'success'),
+          type: 'success',
+          message: translate(store.state.i18n.lang, 'delete_success'),
+        });
+        store.commit(MutationTypes.DELETED_COMMENT, cid);
+      } else {
+        handleNetworkRequestError(store.state.i18n.lang, result);
+      }
+    }
+
+    const handleEditComment = (cid: number) => {
+      alert('Not implemented yet');
+    }
+
     return {
       translate,
       reply,
       handleReply,
+      handleEditComment,
+      handleDeleteComment,
 
       ...toRefs(store.state),
     };
@@ -86,18 +165,39 @@ export default defineComponent({
   margin-top: 20px;
 
   .info {
+    position: relative;
+
     i {
       margin-right: 5px;
     }
 
-    .level, .author {
+    .level, .author, .time {
       margin-right: 20px;
+    }
+
+    .operations {
+      float: right;
+      opacity: 0;
+      transition: opacity .2s;
+
+      .delete {
+        color: red;
+        cursor: pointer;
+      }
+
+      .edit {
+        cursor: pointer;
+      }
     }
   }
 
   .content {
     margin-top: 20px;
     white-space: pre-wrap;
+  }
+
+  &:hover .operations {
+    opacity: 1;
   }
 }
 

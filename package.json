@@ -2,11 +2,11 @@
   "main": "build/main.js",
   "scripts": {
     "start": "node .",
-    "serve": "cross-env TEST=test node . & vue-cli-service serve --port 8000",
+    "serve": "cross-env TEST=true node . & vue-cli-service serve --port 8000",
     "dev": "webpack --config webpack/server.js --progress --mode=development --watch",
     "build": "yarn clean && yarn webpack:4 && yarn build:client && yarn build:ssr && yarn webpack:5 && yarn build:server",
-    "webpack:4": "yarn remove webpack; yarn add webpack@webpack-4",
-    "webpack:5": "yarn remove webpack; yarn add webpack@latest",
+    "webpack:4": "yarn remove webpack; yarn add webpack@4.44.2 --offline",
+    "webpack:5": "yarn remove webpack; yarn add webpack@5.9.0 --offline",
     "build:server": "webpack --config webpack/server.js --progress --mode=production",
     "build:client": "vue-cli-service build",
     "build:ssr": "cross-env SSR=true vue-cli-service build",
@@ -35,7 +35,7 @@
     "vue": "^3.0.2",
     "vue-router": "^4.0.0-rc.5",
     "vuex": "^4.0.0-rc.1",
-    "webpack": "^5.9.0"
+    "webpack": "4.44.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",

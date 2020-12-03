@@ -123,6 +123,10 @@ body, html {
   width: 100%;
 }
 
+body {
+  overflow-y: scroll !important;
+}
+
 a, .clickable {
   text-decoration: none;
   color: #2c3e50;
@@ -153,9 +157,6 @@ a, .clickable {
   .maxw, .main {
     width: 1000px;
     margin: 0 auto;
-  }
-  body {
-    overflow-y: scroll;
   }
 }
 

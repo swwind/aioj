@@ -8,12 +8,16 @@ export type InternationalizationLanguage = {
   register: string;
   logout: string;
   error: string;
+  warning: string;
   success: string;
   reply_success: string;
+  delete_success: string;
   admin: string;
   username: string;
   password: string;
   repeat_password: string;
+  ok: string;
+  cancel: string;
 
   no_posts: string;
   no_regions: string;
@@ -27,4 +31,9 @@ export type InternationalizationLanguage = {
   region_url: string;
   region_title: string;
   region_desc: string;
+  delete: string;
+
+  confirm_delete_comment: string;
+  confirm_delete_post: string;
+  confirm_delete_region: string;
 } & { [key in typeof ErrorMessages[keyof typeof ErrorMessages]]: string };

@@ -1,6 +1,10 @@
 <template>
   <h1>{{ data.region.title }}</h1>
-  <p>{{ data.region.desc }}</p>
+  <p>{{ data.region.description }}</p>
+  <div class="operations" v-if="accounts.admin">
+    <i class="el-icon-delete" @click="handleDeleteRegion"></i>
+    <i class="el-icon-edit"></i>
+  </div>
   <div class="posts-list">
     <el-alert type="warning" v-if="!data.posts.length">{{ translate(i18n.lang, 'no_posts') }}</el-alert>
     <div class="post-item" v-for="post of data.posts" :key="post.pid">
@@ -24,7 +28,7 @@
     <div class="buttonset">
       <el-button
         type="primary"
-        @click="sendPost">
+        @click="handleSendPost">
         {{ translate(i18n.lang, 'post') }}
       </el-button>
     </div>
@@ -32,9 +36,9 @@
 </template>
 
 <script lang="ts">
-import { getPostsList, createPost } from '@/api/forum';
+import { getPostsList, createPost, deleteRegion } from '@/api/forum';
 import { defineComponent, ref, toRefs } from 'vue';
-import { handleNetworkRequestError } from '@/utils';
+import { handleNetworkRequestError, msgbox, notify } from '@/utils';
 import { useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
@@ -62,7 +66,7 @@ export default defineComponent({
 
     const title = ref('');
     const content = ref('');
-    const sendPost = async () => {
+    const handleSendPost = async () => {
       const result = await createPost(region.value, title.value, content.value);
       if (result.status === 200) {
         router.push(`/r/${region.value}/${result.pid}`);
@@ -71,11 +75,40 @@ export default defineComponent({
       }
     };
 
+    const handleDeleteRegion = async () => {
+      try {
+        await msgbox.confirm(
+          translate(store.state.i18n.lang, 'confirm_delete_region'),
+          translate(store.state.i18n.lang, 'warning'),
+          {
+            type: 'warning',
+            confirmButtonText: translate(store.state.i18n.lang, 'ok'),
+            cancelButtonText: translate(store.state.i18n.lang, 'cancel'),
+          }
+        );
+      } catch (e) {
+        // cancel
+        return;
+      }
+
+      const result = await deleteRegion(region.value);
+      if (result.status === 200) {
+        notify({
+          title: translate(store.state.i18n.lang, 'success'),
+          type: 'success',
+          message: translate(store.state.i18n.lang, 'delete_success'),
+        });
+      } else {
+        handleNetworkRequestError(store.state.i18n.lang, result);
+      }
+    }
+
     return {
       title,
       content,
       translate,
-      sendPost,
+      handleSendPost,
+      handleDeleteRegion,
 
       ...toRefs(store.state),
     };
@@ -86,6 +119,16 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+
+.operations {
+  margin: 20px 0;
+  font-size: 1.2rem;
+  
+  i {
+    margin-right: 5px;
+    cursor: pointer;
+  }
+}
 
 .post-item {
   display: flex;

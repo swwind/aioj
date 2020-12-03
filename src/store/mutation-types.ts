@@ -9,3 +9,11 @@ export const FETCH_POST_LIST = 'fetch_post_list';
 export const FETCH_POST_DETAIL = 'fetch_post_detail';
 export const FETCH_COMMENT_LIST = 'fetch_comment_list';
 export const FETCH_USER_DETAIL = 'fetch_user_detail';
+
+export const DELETED_REGION = 'deleted_region';
+export const DELETED_POST = 'deleted_post';
+export const DELETED_COMMENT = 'deleted_comment';
+
+export const CREATED_REGION = 'created_region';
+export const CREATED_POST = 'created_post';
+export const CREATED_COMMENT = 'created_comment';

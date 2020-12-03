@@ -8,12 +8,16 @@ const zh_cn: InternationalizationLanguage = {
   register: '注册',
   logout: '注销',
   error: '错误',
+  warning: '警告',
   success: '成功',
   reply_success: '回复帖子成功',
+  delete_success: '删除成功',
   admin: '管理员',
   username: '用户名',
   password: '密码',
   repeat_password: '重复密码',
+  ok: '确认',
+  cancel: '取消',
 
   no_posts: '还没有帖子',
   no_regions: '还没有模块',
@@ -27,6 +31,11 @@ const zh_cn: InternationalizationLanguage = {
   region_url: '模块 URL',
   region_title: '标题',
   region_desc: '描述',
+  delete: '删除',
+
+  confirm_delete_comment: '确认要删除该评论吗？',
+  confirm_delete_post: '确认要删除该帖子吗？',
+  confirm_delete_region: '确认要删除该模块吗？',
 
   password_wrong: '密码错误',
   login_require: '请先登录',

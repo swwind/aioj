@@ -27,3 +27,10 @@ export function handleNetworkRequestError(lang: string, result: APIResponse) {
     });
   }
 }
+
+export {
+  ElNotification as notify,
+  ElMessageBox as msgbox,
+  ElPopconfirm as confim,
+} from 'element-plus';
+

@@ -11,7 +11,7 @@ import { promises as fs } from 'fs';
 
 const app = new Koa();
 
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = !process.env.TEST;
 
 if (!isProd) {
   console.log('CORS closed');
