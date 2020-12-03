@@ -148,7 +148,7 @@ export async function getPostsList(region: string): Promise<PostDetail[]> {
 export async function getRegionDetail(region: string): Promise<Result<RegionDetail, string>> {
   const res = await regions.findOne({ region });
   if (!res) return Result.error(REGION_NOT_EXISTS);
-  return Result.ok(res);
+  return Result.ok(extractRegionDetail(res));
 }
 
 export async function getRegionsList(): Promise<RegionDetail[]> {
