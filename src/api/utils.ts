@@ -14,7 +14,7 @@ const getBrowserURL = () => {
   } else {
     return 'http://localhost:8080/api';
   }
-}
+};
 
 export const request = axios.create({
   baseURL: typeof global.window === 'undefined'

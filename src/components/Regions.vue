@@ -25,7 +25,11 @@
       v-model="description"
       :placeholder="translate(i18n.lang, 'region_desc')" />
     <div class="buttonset">
-      <el-button type="primary">{{ translate(i18n.lang, 'post') }}</el-button>
+      <el-button
+        type="primary"
+        @click="handleCreateRegion">
+        {{ translate(i18n.lang, 'post') }}
+      </el-button>
     </div>
   </div>
 </template>
@@ -62,13 +66,14 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store.state.i18n.lang, result);
       }
-    }
+    };
 
     return {
       translate,
       region,
       title,
       description,
+      handleCreateRegion,
 
       ...toRefs(store.state),
     };

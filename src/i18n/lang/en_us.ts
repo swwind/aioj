@@ -14,7 +14,7 @@ const en_us: InternationalizationLanguage = {
   username: 'Username',
   password: 'Password',
   repeat_password: 'Repeat Password',
-  
+
   no_posts: 'No posts yet',
   no_regions: 'No regions yet',
   regions: 'Regions',

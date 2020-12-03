@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import Koa from 'koa';
-import router from './app/router';
+import router, { ssr } from './app/router';
 import body from 'koa-body';
 import serve from 'koa-static';
 import cors from '@koa/cors';
@@ -11,7 +11,9 @@ import { promises as fs } from 'fs';
 
 const app = new Koa();
 
-if (process.env.TEST === 'test') {
+const isProd = process.env.NODE_ENV === 'production';
+
+if (!isProd) {
   console.log('CORS closed');
   app.use(cors());
 }
@@ -22,6 +24,11 @@ app.use(serve('static'));
 
 app.use(router.routes());
 app.use(router.allowedMethods());
+
+if (isProd) {
+  console.log('Server Side Rendering enabled');
+  app.use(ssr);
+}
 
 if (config.port === 443) {
   const server = https.createServer({
@@ -39,7 +46,7 @@ if (config.port === 443) {
     });
     jump.listen(80);
 
-    console.log('And HSTS server started on http://localhost');
+    console.log('HSTS server started on http://localhost');
   }
 } else {
   app.listen(config.port);

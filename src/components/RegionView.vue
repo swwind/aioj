@@ -69,7 +69,7 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store.state.i18n.lang, result);
       }
-    }
+    };
 
     return {
       title,

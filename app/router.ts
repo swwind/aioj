@@ -8,7 +8,8 @@ import friends from './routes/friends';
 import forum from './routes/forum';
 import users from './routes/users';
 import files from './routes/files';
-import ssr from './ssr';
+import serverSideRender from './ssr';
+import { Middleware } from 'koa';
 
 const router = new Router<State, Tools>();
 
@@ -81,20 +82,11 @@ function getLanguage(acceptedLanguages: string) {
   return supportedLanguages[0];
 }
 
-const isTest = process.env.TEST === 'test';
-if (isTest) {
-  console.log('Test mode enabled, SSR will be disabled');
-}
+export default router;
 
-router.get(/^\//, async (ctx, next) => {
-  if (isTest) {
-    await next();
-    return;
-  }
-  const { code, html } = await ssr(ctx.url, getLanguage(ctx.get('Accept-Language')));
+export const ssr: Middleware = async (ctx) => {
+  const { code, html } = await serverSideRender(ctx.url, getLanguage(ctx.get('Accept-Language')));
   ctx.response.status = code;
   ctx.set('Content-Type', 'text/html');
   ctx.response.body = html;
-});
-
-export default router;
+};
