@@ -86,7 +86,7 @@ export default defineComponent({
             type: 'warning',
             confirmButtonText: translate(store.state.i18n.lang, 'ok'),
             cancelButtonText: translate(store.state.i18n.lang, 'cancel'),
-          }
+          },
         );
       } catch (e) {
         // cancel
@@ -104,7 +104,7 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store.state.i18n.lang, result);
       }
-    }
+    };
 
     const handleDeleteComment = async (cid: number) => {
       if (cid === 1) {
@@ -120,7 +120,7 @@ export default defineComponent({
             type: 'warning',
             confirmButtonText: translate(store.state.i18n.lang, 'ok'),
             cancelButtonText: translate(store.state.i18n.lang, 'cancel'),
-          }
+          },
         );
       } catch (e) {
         // cancel
@@ -138,11 +138,11 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store.state.i18n.lang, result);
       }
-    }
+    };
 
     const handleEditComment = (cid: number) => {
-      alert('Not implemented yet');
-    }
+      alert('Not implemented yet ' + cid);
+    };
 
     return {
       translate,

@@ -84,7 +84,7 @@ export default defineComponent({
             type: 'warning',
             confirmButtonText: translate(store.state.i18n.lang, 'ok'),
             cancelButtonText: translate(store.state.i18n.lang, 'cancel'),
-          }
+          },
         );
       } catch (e) {
         // cancel
@@ -101,7 +101,7 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store.state.i18n.lang, result);
       }
-    }
+    };
 
     return {
       title,
@@ -123,7 +123,7 @@ export default defineComponent({
 .operations {
   margin: 20px 0;
   font-size: 1.2rem;
-  
+
   i {
     margin-right: 5px;
     cursor: pointer;
