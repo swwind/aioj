@@ -68,7 +68,7 @@ function getLanguage(acceptedLanguages: string) {
   const acpt = acceptedLanguages.split(',')
     .map((s) => s.split(';')[0])
     .map((s) => s.toLowerCase())
-    .map((s) => s.replace(/\-/g, '_'));
+    .map((s) => s.replace(/-/g, '_'));
 
   for (const lang of acpt) {
     for (const slang of supportedLanguages) {

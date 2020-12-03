@@ -27,7 +27,7 @@ const gentemp = (meta: RouteMeta, render: string, state: string) => {
     .replace('</head>', `<script>window.__INITIAL_STATE__=${state};</script></head>`);
 };
 
-export default async (url: string, lang: string = 'en_us') => {
+export default async (url: string, lang = 'en_us') => {
   const { app, router, store } = createVueApp(true);
   store.commit('update_language', lang);
   router.push(url);
