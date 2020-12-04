@@ -3,7 +3,8 @@
     <h1>
       {{ data.user.username }}
       <i
-        v-if="accounts.username"
+        v-if="accounts.username && accounts.username !== data.user.username"
+        class="button"
         :class="accounts.friends.indexOf(data.user.username) > -1 ? 'el-icon-star-on' : 'el-icon-star-off'"
         @click="handleToggleFriend"/>
     </h1>
@@ -17,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent, toRefs, watch } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
 import { useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
@@ -36,21 +37,33 @@ export default defineComponent({
     const { username } = toRefs(props);
     const store = useStore<StoreState>();
 
-    const result = await API.getUserDetail(username.value);
-    if (result.status === 200) {
-      store.commit(MutationTypes.FETCH_USER_DETAIL, result.user);
-      store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'user')}: ${result.user.username} - AIOJ`);
-    } else {
-      handleNetworkRequestError(store, result);
+    const loadUser = async () => {
+      const result = await API.getUserDetail(username.value);
+      if (result.status === 200) {
+        store.commit(MutationTypes.FETCH_USER_DETAIL, result.user);
+        store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'user')}: ${result.user.username} - AIOJ`);
+      } else {
+        handleNetworkRequestError(store, result);
+      }
     }
+    watch(username, loadUser);
+    await loadUser();
 
     const handleRemoveFriend = async () => {
       const result = await API.removeFriend(username.value);
-      handleNetworkRequestError(store, result);
+      if (result.status === 200) {
+        store.commit(MutationTypes.REMOVE_FRIEND, username.value);
+      } else {
+        handleNetworkRequestError(store, result);
+      }
     }
     const handleAddFriend = async () => {
       const result = await API.addFriend(username.value);
-      handleNetworkRequestError(store, result);
+      if (result.status === 200) {
+        store.commit(MutationTypes.ADD_NEW_FRIEND, username.value);
+      } else {
+        handleNetworkRequestError(store, result);
+      }
     }
 
     const handleToggleFriend = async () => {
@@ -63,6 +76,7 @@ export default defineComponent({
 
     return {
       translate,
+      handleToggleFriend,
       ...toRefs(store.state),
     };
   },
@@ -74,7 +88,11 @@ export default defineComponent({
 <style scoped lang="less">
 
 .el-icon-star-on {
-  color: yellow;
+  color: #ffd200;
+}
+
+.button {
+  cursor: pointer;
 }
 
 </style>

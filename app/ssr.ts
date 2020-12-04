@@ -27,7 +27,6 @@ export default async (url: string, lang: string, cookie: string) => {
   await router.isReady();
 
   await lock(); // sync lock
-  console.log('cookie: ' + cookie);
   if (cookie) {
     setMockingCookie(cookie);
   }

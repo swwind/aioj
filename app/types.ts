@@ -83,3 +83,9 @@ export type FileDetail = {
 export type FileData = {
   filepath: string;
 } & FileDetail;
+
+export type AuthData = {
+  username: string;
+  token: string;
+  date: number;
+};

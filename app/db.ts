@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 import config from '../config.json';
-import { CommentData, CommentDetail, ConfigData, FileData, FileDetail, PostData, PostDetail, ProblemData, RegionData, RegionDetail, UserData, UserDetail } from './types';
+import { AuthData, CommentData, CommentDetail, ConfigData, FileData, FileDetail, PostData, PostDetail, ProblemData, RegionData, RegionDetail, UserData, UserDetail } from './types';
 
 const client = new MongoClient(config.mongo.url, { useUnifiedTopology: true });
 await client.connect();
@@ -13,6 +13,7 @@ export const posts = db.collection<PostData>('post');
 export const comments = db.collection<CommentData>('comment');
 export const problems = db.collection<ProblemData>('problem');
 export const files = db.collection<FileData>('file');
+export const auths = db.collection<AuthData>('auth');
 
 // initialize db
 if (!await configs.findOne({ })) {

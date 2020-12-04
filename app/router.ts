@@ -1,5 +1,5 @@
 import Router from 'koa-router';
-import { verify } from './auth';
+import { verify } from './db/auth';
 import { isAdmin } from './db/accouts';
 import { State, Tools } from './types';
 
@@ -35,7 +35,7 @@ router.use('/', async (ctx, next) => {
 
   const auth = ctx.cookies.get('auth');
   if (auth) {
-    const username = verify(auth);
+    const username = await verify(auth);
     if (username) {
       ctx.state.authorized = true;
       ctx.state.username = username;

@@ -53,7 +53,7 @@ import { useStore } from 'vuex';
 import { getRedirect, handleNetworkRequestError } from './utils';
 import { translate } from '@/i18n/translate';
 import { StoreState, MutationTypes } from './store';
-import { defineComponent, onMounted, toRefs } from 'vue';
+import { defineComponent, onMounted, toRefs, watch } from 'vue';
 import { API } from './api';
 
 export default defineComponent({
@@ -97,7 +97,7 @@ export default defineComponent({
 
       const frires = await API.getMyFriends();
       if (frires.status === 200) {
-        store.commit(MutationTypes.FETCH_REGION_LIST, frires.friends);
+        store.commit(MutationTypes.FETCH_USER_FRIENDS, frires.friends);
       } else {
         handleNetworkRequestError(store, frires);
       }

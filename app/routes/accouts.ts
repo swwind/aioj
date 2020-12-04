@@ -1,6 +1,6 @@
 import { getUserDetail } from 'app/db/users';
 import Router from 'koa-router';
-import { issueCookie, revoke } from '../auth';
+import { issueCookie, revoke } from '../db/auth';
 import { registerUser, verifyPassword } from '../db/accouts';
 import { LOGIN_REQUIRE, LOGOUT_REQUIRE, PARAMS_MISSING } from '../errors';
 import { State, Tools } from '../types';
@@ -26,7 +26,7 @@ router.post('/login', async (ctx) => {
     return ctx.end(400, result.error());
   }
 
-  const cookie = issueCookie(ctx.request.body.username);
+  const cookie = await issueCookie(ctx.request.body.username);
   ctx.cookies.set('auth', cookie);
   ctx.end(200, { user: result.result() });
 });
@@ -50,7 +50,7 @@ router.post('/register', async (ctx) => {
     return ctx.end(400, result.error());
   }
 
-  const cookie = issueCookie(ctx.request.body.username);
+  const cookie = await issueCookie(ctx.request.body.username);
   ctx.cookies.set('auth', cookie);
   ctx.end(200, { user: result.result() });
 });

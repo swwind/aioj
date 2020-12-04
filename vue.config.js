@@ -39,8 +39,9 @@ exports.chainWebpack = (webpackConfig) => {
 
 };
 
-exports.filenameHashing = false;
+exports.productionSourceMap = false;
 
 if (process.env.SSR) {
+  exports.filenameHashing = false;
   exports.outputDir = path.resolve(__dirname, 'build', 'ssr');
 }
