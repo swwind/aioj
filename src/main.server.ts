@@ -22,3 +22,8 @@ export function createVueApp(ssr: boolean) {
 
   return { app, router, store };
 }
+
+export {
+  synclock,
+  unlock,
+} from '@/api';

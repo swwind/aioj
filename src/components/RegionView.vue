@@ -36,13 +36,13 @@
 </template>
 
 <script lang="ts">
-import { getPostsList, createPost, deleteRegion } from '@/api/forum';
 import { defineComponent, ref, toRefs } from 'vue';
 import { handleNetworkRequestError, msgbox, notify } from '@/utils';
 import { useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
 import { useRouter } from 'vue-router';
+import { API } from '@/api';
 
 export default defineComponent({
   props: {
@@ -56,7 +56,7 @@ export default defineComponent({
     const store = useStore<StoreState>();
     const router = useRouter();
 
-    const result = await getPostsList(region.value);
+    const result = await API.getPostsList(region.value);
     if (result.status === 200) {
       store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
       store.commit(MutationTypes.FETCH_POST_LIST, result.posts);
@@ -71,7 +71,7 @@ export default defineComponent({
     const title = ref('');
     const content = ref('');
     const handleSendPost = async () => {
-      const result = await createPost(region.value, title.value, content.value);
+      const result = await API.createPost(region.value, title.value, content.value);
       if (result.status === 200) {
         router.push(`/r/${region.value}/${result.pid}`);
       } else {
@@ -95,7 +95,7 @@ export default defineComponent({
         return;
       }
 
-      const result = await deleteRegion(region.value);
+      const result = await API.deleteRegion(region.value);
       if (result.status === 200) {
         notify({
           title: translate(store.state.i18n.lang, 'success'),

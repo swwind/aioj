@@ -27,6 +27,41 @@ export type APIResponse = {
   error: string;
 }
 
+let generatedToken = 1;
+let lockToken = 0;
+const pendings: Function[] = [];
+
+export const updatelock = () => {
+  if (lockToken) {
+    return;
+  }
+
+  const pd = pendings.shift();
+  if (!pd) {
+    return;
+  }
+
+  const newToken = ++ generatedToken;
+  lockToken = newToken;
+  pd(newToken); // resolve it
+}
+
+export const unlock = (token: number) => {
+  if (token === lockToken) {
+    lockToken = 0;
+    updatelock();
+  } else {
+    throw new Error('Sync lock error!!!');
+  }
+}
+
+export const synclock = () => {
+  return new Promise((resolve) => {
+    pendings.push(resolve);
+    updatelock();
+  });
+}
+
 export const makeJSONRequest = (method: Method) => async <T = {}> (url: string, data?: object, headers?: object): Promise<APIResponse & T> => {
   const res = await request.request({
     url,

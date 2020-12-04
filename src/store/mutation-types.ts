@@ -21,3 +21,7 @@ export const CREATED_COMMENT = 'created_comment';
 export const CHANGE_SSR_STATUS = 'change_ssr_status';
 export const CHANGE_SSR_TITLE = 'change_ssr_title';
 export const CHANGE_SSR_META = 'change_ssr_meta';
+
+export const FETCH_USER_FRIENDS = 'fetch_user_friends';
+export const ADD_NEW_FRIEND = 'add_new_friend';
+export const REMOVE_FRIEND = 'remove_friend';

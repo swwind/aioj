@@ -36,7 +36,6 @@
 </template>
 
 <script lang="ts">
-import { registerAttempt } from '../api/accounts';
 import { defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import * as MutationTypes from '../store/mutation-types';
@@ -44,6 +43,7 @@ import { useStore } from 'vuex';
 import { StoreState } from '@/store';
 import { handleNetworkRequestError } from '@/utils';
 import { translate } from '@/i18n/translate';
+import { API } from '@/api';
 
 export default defineComponent({
   setup() {
@@ -61,7 +61,7 @@ export default defineComponent({
         alert('password mismatch!');
         return;
       }
-      const result = await registerAttempt(username.value, password.value);
+      const result = await API.registerAttempt(username.value, password.value);
       if (result.status === 200) {
         store.commit(MutationTypes.LOGIN, result);
         router.push(redirect);

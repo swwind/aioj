@@ -35,13 +35,13 @@
 </template>
 
 <script lang="ts">
-import { createRegion, getRegions } from '@/api/forum';
 import { defineComponent, ref, toRefs } from 'vue';
 import { handleNetworkRequestError } from '@/utils';
 import { useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
 import { useRouter } from 'vue-router';
+import { API } from '@/api';
 
 export default defineComponent({
   async setup() {
@@ -49,7 +49,7 @@ export default defineComponent({
     const router = useRouter();
     store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'regions')} - AIOJ`);
 
-    const result = await getRegions();
+    const result = await API.getRegions();
     if (result.status === 200) {
       store.commit(MutationTypes.FETCH_REGION_LIST, result.regions);
     } else {
@@ -61,7 +61,7 @@ export default defineComponent({
     const description = ref('');
 
     const handleCreateRegion = async () => {
-      const result = await createRegion(region.value, title.value, description.value);
+      const result = await API.createRegion(region.value, title.value, description.value);
       if (result.status === 200) {
         router.push(`/r/${region.value}`);
       } else {

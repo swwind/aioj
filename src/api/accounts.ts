@@ -1,9 +1,6 @@
 import { UserDetail } from '../../app/types';
-import axios from 'axios';
 import md5 from 'md5';
 import { makeGETRequest, makePOSTRequest } from './utils';
-
-axios.defaults.baseURL = '/api';
 
 export function passwordHash(psw: string) {
   return md5(`attack_ak_world_final_round_${psw}`);

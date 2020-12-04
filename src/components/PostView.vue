@@ -28,13 +28,13 @@
 </template>
 
 <script lang="ts">
-import { getPostDetail, sendReply, deletePost, deleteComment } from '@/api/forum';
 import { MutationTypes, StoreState } from '@/store';
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
 import { handleNetworkRequestError, msgbox, notify } from '@/utils';
 import { useRouter } from 'vue-router';
+import { API } from '@/api';
 
 export default defineComponent({
   props: {
@@ -55,7 +55,7 @@ export default defineComponent({
     const router = useRouter();
 
     const handleReply = async () => {
-      const result = await sendReply(region.value, pid.value, reply.value);
+      const result = await API.sendReply(region.value, pid.value, reply.value);
       if (result.status === 200) {
         reply.value = '';
         notify({
@@ -69,7 +69,7 @@ export default defineComponent({
       }
     };
 
-    const result = await getPostDetail(region.value, pid.value);
+    const result = await API.getPostDetail(region.value, pid.value);
     if (result.status === 200) {
       store.commit(MutationTypes.FETCH_POST_DETAIL, result.post);
       store.commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
@@ -95,7 +95,7 @@ export default defineComponent({
         return;
       }
 
-      const result = await deletePost(region.value, pid.value);
+      const result = await API.deletePost(region.value, pid.value);
       if (result.status === 200) {
         notify({
           title: translate(store.state.i18n.lang, 'success'),
@@ -129,7 +129,7 @@ export default defineComponent({
         return;
       }
 
-      const result = await deleteComment(region.value, pid.value, String(cid));
+      const result = await API.deleteComment(region.value, pid.value, String(cid));
       if (result.status === 200) {
         notify({
           title: translate(store.state.i18n.lang, 'success'),

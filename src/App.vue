@@ -49,12 +49,12 @@
 
 <script lang="ts">
 import { useRouter } from 'vue-router';
-import { whoami } from './api/accounts';
 import { useStore } from 'vuex';
-import { getRedirect } from './utils';
+import { getRedirect, handleNetworkRequestError } from './utils';
 import { translate } from '@/i18n/translate';
 import { StoreState, MutationTypes } from './store';
 import { defineComponent, onMounted, toRefs } from 'vue';
+import { API } from './api';
 
 export default defineComponent({
   setup() {
@@ -92,11 +92,19 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      const result = await whoami();
+      const result = await API.whoami();
       if (result.status === 200) {
         store.commit(MutationTypes.LOGIN, result.user);
       } else {
         // ignore it
+        return;
+      }
+
+      const frires = await API.getMyFriends();
+      if (frires.status === 200) {
+        store.commit(MutationTypes.FETCH_REGION_LIST, frires.friends);
+      } else {
+        handleNetworkRequestError(store, frires);
       }
     });
 

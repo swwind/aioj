@@ -7,3 +7,6 @@ export function createVueApp(ssr: boolean): {
   router: Router,
   store: Store<any>,
 }
+
+export function synclock(): Promise<number>;
+export function unlock(token: number): void;
