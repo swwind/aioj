@@ -43,16 +43,16 @@ const updateQueue = () => {
   }
   locked = true;
   top();
-}
+};
 
 export const lock = () => {
   return new Promise((resolve) => {
     pendings.push(resolve);
     updateQueue();
   });
-}
+};
 
 export const unlock = () => {
   locked = false;
   updateQueue();
-}
+};

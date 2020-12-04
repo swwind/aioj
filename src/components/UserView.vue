@@ -24,7 +24,6 @@ import { useStore } from 'vuex';
 import { MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
 import { API } from '@/api';
-import accounts from '@/store/modules/accounts';
 
 export default defineComponent({
   props: {
@@ -45,7 +44,7 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store, result);
       }
-    }
+    };
     watch(username, loadUser);
     await loadUser();
 
@@ -56,7 +55,7 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store, result);
       }
-    }
+    };
     const handleAddFriend = async () => {
       const result = await API.addFriend(username.value);
       if (result.status === 200) {
@@ -64,7 +63,7 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store, result);
       }
-    }
+    };
 
     const handleToggleFriend = async () => {
       if (store.state.accounts.friends.indexOf(username.value) > -1) {
@@ -72,7 +71,7 @@ export default defineComponent({
       } else {
         await handleAddFriend();
       }
-    }
+    };
 
     return {
       translate,

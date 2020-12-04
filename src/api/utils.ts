@@ -30,7 +30,7 @@ export type APIResponse = {
 let mockingCookie = '';
 export const setMockingCookie = (cookie: string) => {
   mockingCookie = cookie;
-}
+};
 
 export const makeJSONRequest = (method: Method) => async <T = {}> (url: string, data?: object, headers?: object): Promise<APIResponse & T> => {
   const res = await request.request({

@@ -6,6 +6,6 @@ export const API = {
   ...AccountsAPI,
   ...ForumAPI,
   ...FriendsAPI,
-}
+};
 
 export { setMockingCookie } from './utils';

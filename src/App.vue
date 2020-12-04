@@ -53,7 +53,7 @@ import { useStore } from 'vuex';
 import { getRedirect, handleNetworkRequestError } from './utils';
 import { translate } from '@/i18n/translate';
 import { StoreState, MutationTypes } from './store';
-import { defineComponent, onMounted, toRefs, watch } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 import { API } from './api';
 
 export default defineComponent({
