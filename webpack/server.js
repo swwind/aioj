@@ -15,7 +15,14 @@ module.exports = {
     topLevelAwait: true,
   },
   externals: [
-    nodeExternals()
+    nodeExternals(),
+    ({ context, request }, callback) => {
+      if (request.endsWith('/build/ssr/js/app.js')) {
+        return callback(null, 'commonjs ' + request);
+      }
+
+      callback();
+    }
   ],
   module: {
     rules: [{
@@ -31,5 +38,8 @@ module.exports = {
     plugins: [
       new TsconfigPathsPlugin({ configFile: path.resolve(rootdir, 'tsconfig.json') })
     ],
+  },
+  optimization: {
+    minimize: false,
   }
 }

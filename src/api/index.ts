@@ -8,7 +8,4 @@ export const API = {
   ...FriendsAPI,
 }
 
-export {
-  synclock,
-  unlock,
-} from './utils'
+export { setMockingCookie } from './utils';

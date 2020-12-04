@@ -8,5 +8,4 @@ export function createVueApp(ssr: boolean): {
   store: Store<any>,
 }
 
-export function synclock(): Promise<number>;
-export function unlock(token: number): void;
+export function setMockingCookie(cookie: string): void;

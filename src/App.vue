@@ -57,7 +57,7 @@ import { defineComponent, onMounted, toRefs } from 'vue';
 import { API } from './api';
 
 export default defineComponent({
-  setup() {
+  async setup() {
     const router = useRouter();
     const store = useStore<StoreState>();
 
@@ -91,14 +91,9 @@ export default defineComponent({
       store.commit(MutationTypes.UPDATE_LANGUAGE, lang);
     };
 
-    onMounted(async () => {
-      const result = await API.whoami();
-      if (result.status === 200) {
-        store.commit(MutationTypes.LOGIN, result.user);
-      } else {
-        // ignore it
-        return;
-      }
+    const result = await API.whoami();
+    if (result.status === 200) {
+      store.commit(MutationTypes.LOGIN, result.user);
 
       const frires = await API.getMyFriends();
       if (frires.status === 200) {
@@ -106,7 +101,7 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store, frires);
       }
-    });
+    }
 
     return {
       handleMenuSelect,

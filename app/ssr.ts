@@ -3,13 +3,10 @@
 // 因为我找不到 @vue/server-renderer 的文档
 
 import { renderToString } from '@vue/server-renderer';
-import { createVueApp } from '../build/ssr/js/app.js';
+import { createVueApp, setMockingCookie } from '../build/ssr/js/app.js';
 import { promises as fs } from 'fs';
 import { RouteMeta } from 'vue-router';
-
-export type SSRContext = {
-  url: string;
-}
+import { lock, unlock } from './utils';
 
 const template = await fs.readFile('dist/index.html', 'utf-8');
 const gentemp = (title: string, meta: RouteMeta, rendered: string, statestr: string) => {
@@ -23,12 +20,21 @@ const gentemp = (title: string, meta: RouteMeta, rendered: string, statestr: str
     .replace('</head>', `<script>window.__INITIAL_STATE__=${statestr};</script></head>`);
 };
 
-export default async (url: string, lang = 'en_us') => {
+export default async (url: string, lang: string, cookie: string) => {
   const { app, router, store } = createVueApp(true);
   store.commit('update_language', lang);
   router.push(url);
   await router.isReady();
+
+  await lock(); // sync lock
+  console.log('cookie: ' + cookie);
+  if (cookie) {
+    setMockingCookie(cookie);
+  }
   const html = await renderToString(app);
+  setMockingCookie('');
+  unlock(); // sync unlock
+
   const statestr = JSON.stringify(store.state);
 
   return {

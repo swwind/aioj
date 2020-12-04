@@ -85,7 +85,9 @@ function getLanguage(acceptedLanguages: string) {
 export default router;
 
 export const ssr: Middleware = async (ctx) => {
-  const { code, html } = await serverSideRender(ctx.url, getLanguage(ctx.get('Accept-Language')));
+  const lang = getLanguage(ctx.get('Accept-Language'));
+  const cookie = ctx.get('Cookie');
+  const { code, html } = await serverSideRender(ctx.url, lang, cookie);
   ctx.response.status = code;
   ctx.set('Content-Type', 'text/html');
   ctx.response.body = html;

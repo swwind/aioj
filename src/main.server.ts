@@ -1,4 +1,4 @@
-import { createApp, createSSRApp } from 'vue';
+import { createApp, createSSRApp, defineComponent } from 'vue';
 import App from '@/App.vue';
 import routes from './router';
 import createStore from './store';
@@ -6,9 +6,13 @@ import ElementPlus from 'element-plus';
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router';
 
 export function createVueApp(ssr: boolean) {
+  const SuspenseApp = defineComponent({
+    template: '<Suspense><App/></Suspense>',
+    components: { App },
+  });
   const app = ssr
-    ? createSSRApp(App)
-    : createApp(App);
+    ? createSSRApp(SuspenseApp)
+    : createApp(SuspenseApp);
   const router = createRouter({
     history: ssr
       ? createMemoryHistory()
@@ -23,7 +27,4 @@ export function createVueApp(ssr: boolean) {
   return { app, router, store };
 }
 
-export {
-  synclock,
-  unlock,
-} from '@/api';
+export { setMockingCookie } from '@/api';
