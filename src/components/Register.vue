@@ -63,7 +63,7 @@ export default defineComponent({
       }
       const result = await API.registerAttempt(username.value, password.value);
       if (result.status === 200) {
-        store.commit(MutationTypes.LOGIN, result);
+        store.commit(MutationTypes.LOGIN, result.user);
         router.push(redirect);
       } else {
         handleNetworkRequestError(store, result);

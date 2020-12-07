@@ -4,7 +4,7 @@ import config from '../../config.json';
 
 const getNodeURL = () => {
   return config.port === 443
-    ? 'https://localhost/api'
+    ? `${config.host}/api`
     : `http://localhost:${config.port}/api`;
 };
 
@@ -12,7 +12,7 @@ const getBrowserURL = () => {
   if (typeof (window as any).__VUE_HMR_RUNTIME__ === 'undefined') {
     return '/api';
   } else {
-    return 'http://localhost:8080/api';
+    return `http://localhost:${config.port}/api`;
   }
 };
 

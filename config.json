@@ -8,5 +8,6 @@
     "hsts": true,
     "key": "localhost-key.pem",
     "cert": "localhost.pem"
-  }
+  },
+  "host": "https://aioj.ac"
 }
