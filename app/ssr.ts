@@ -17,16 +17,16 @@ const gentemp = (title: string, meta: RouteMeta, rendered: string, statestr: str
   return '<!-- attack204 AK world final -->\n' + template
     .replace('<meta charset="utf-8">', '<meta charset="utf-8">' + metastr)
     .replace('<div id="app"></div>', `<div id="app">${rendered}</div>`)
-    .replace('</head>', `<script>window.__INITIAL_STATE__=${statestr};</script></head>`);
+    .replace('</head>', `<script>window.__INITIAL_STATE__=JSON.parse(${statestr});</script></head>`);
 };
 
 export default async (url: string, lang: string, cookie: string) => {
   const { app, router, store } = createVueApp(true);
   store.commit('update_language', lang);
+  
+  await lock(); // sync lock
   router.push(url);
   await router.isReady();
-
-  await lock(); // sync lock
   if (cookie) {
     setMockingCookie(cookie);
   }
@@ -34,7 +34,7 @@ export default async (url: string, lang: string, cookie: string) => {
   setMockingCookie('');
   unlock(); // sync unlock
 
-  const statestr = JSON.stringify(store.state);
+  const statestr = JSON.stringify(JSON.stringify(store.state));
 
   return {
     code: store.state.ssr.status,
