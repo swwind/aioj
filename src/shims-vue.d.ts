@@ -4,3 +4,8 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>;
   export default component;
 }
+
+declare module 'insane' {
+  function insane(str: string, option: any): string;
+  export = insane;
+}

@@ -178,6 +178,12 @@ a, .clickable {
   }
 }
 
+.marked {
+  img, audio, video {
+    max-width: 100%;
+  }
+}
+
 </style>
 
 <style lang="less" scoped>

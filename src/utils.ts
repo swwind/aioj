@@ -5,6 +5,8 @@ import { ElNotification as notify } from 'element-plus';
 import { translate } from './i18n/translate';
 import { Store } from 'vuex';
 import { MutationTypes, StoreState } from './store';
+import marked from 'marked';
+import insane from 'insane';
 
 export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   let ret = '';
@@ -55,5 +57,26 @@ export function chooseFile() {
       resolve(input.files && input.files[0]);
     });
     input.click();
+  });
+}
+
+export function santinizeMarked(mkd: string) {
+  const html = marked(mkd)
+    // add controls automatically
+    .replace(/<(video|audio)\b/gi, '<$1 controls');
+
+  return insane(html, {
+    allowedAttributes: {
+      a: ["href", "name", "target"],
+      img: ["src", "alt"],
+      video: ["src", "controls"],
+      audio: ["src", "controls"],
+    },
+    allowedTags: [
+      "a", "article", "b", "blockquote", "br", "caption", "code", "del", "details", "div", "em",
+      "h1", "h2", "h3", "h4", "h5", "h6", "hr", "i", "img", "ins", "kbd", "li", "main", "ol",
+      "p", "pre", "section", "span", "strike", "strong", "sub", "summary", "sup", "table",
+      "tbody", "td", "th", "thead", "tr", "u", "ul", "video", "audio",
+    ],
   });
 }

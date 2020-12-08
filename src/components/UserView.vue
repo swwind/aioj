@@ -17,6 +17,7 @@
         v-if="accounts.username === data.user.username"
         type="primary"
         size="small"
+        :disabled="data.uploading"
         @click="handleUpload">
         {{ translate(i18n.lang, 'upload') }}
       </el-button>

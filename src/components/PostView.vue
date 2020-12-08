@@ -16,7 +16,7 @@
           @click="handleEditComment(comment.cid)" />
       </div>
     </div>
-    <div class="content">{{ comment.content }}</div>
+    <div class="content marked" v-html="santinizeMarked(comment.content)"></div>
   </div>
   <div class="reply" v-if="accounts.username">
     <h2>{{ translate(i18n.lang, 'reply') }}</h2>
@@ -32,7 +32,7 @@ import { MutationTypes, StoreState } from '@/store';
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
-import { handleNetworkRequestError, msgbox, notify } from '@/utils';
+import { handleNetworkRequestError, msgbox, notify, santinizeMarked } from '@/utils';
 import { useRouter } from 'vue-router';
 import { API } from '@/api';
 
@@ -152,7 +152,7 @@ export default defineComponent({
       handleReply,
       handleEditComment,
       handleDeleteComment,
-
+      santinizeMarked,
       ...toRefs(store.state),
     };
   },
