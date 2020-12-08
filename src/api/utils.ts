@@ -33,14 +33,21 @@ export const setMockingCookie = (cookie: string) => {
 };
 
 export const makeRequest = async <T = {}> (response: Promise<AxiosResponse>): Promise<APIResponse & T> => {
-  const res = await response;
-  if (typeof res.data === 'object') {
-    return res.data;
+  try {
+    const res = await response;
+    if (typeof res.data === 'object') {
+      return res.data;
+    }
+    return {
+      status: res.status,
+      error: INTERNAL_SERVER_ERROR,
+    } as any;
+  } catch (e) {
+    return {
+      status: 500,
+      error: INTERNAL_SERVER_ERROR,
+    } as any;
   }
-  return {
-    status: res.status,
-    error: INTERNAL_SERVER_ERROR,
-  } as any;
 };
 
 export const makeJSONRequest = (method: Method) => <T = {}> (url: string, data?: object, headers?: object) => {
@@ -56,7 +63,7 @@ export const makeJSONRequest = (method: Method) => <T = {}> (url: string, data?:
   }));
 };
 
-export const makeMultipartRequest = <T = {}> (url: string, formdata: FormData) => {
+export const makeMultipartRequest = <T = {}> (url: string, formdata: FormData, onUploadProgress: (progressEvent: any) => void) => {
   return makeRequest<T>(request.request({
     method: 'post',
     url,
@@ -64,6 +71,7 @@ export const makeMultipartRequest = <T = {}> (url: string, formdata: FormData) =
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+    onUploadProgress,
   }));
 };
 

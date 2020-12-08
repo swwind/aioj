@@ -28,3 +28,7 @@ export const CHANGE_SSR_META = 'change_ssr_meta';
 export const FETCH_USER_FRIENDS = 'fetch_user_friends';
 export const ADD_NEW_FRIEND = 'add_new_friend';
 export const REMOVE_FRIEND = 'remove_friend';
+
+export const UPLOAD_START = 'upload_start';
+export const UPLOAD_PROGRESS = 'upload_progress';
+export const UPLOAD_END = 'upload_end';

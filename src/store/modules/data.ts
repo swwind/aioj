@@ -10,6 +10,8 @@ export type State = {
   comments: CommentDetail[];
   user: UserDetail;
   files: FileDetail[];
+  uploading: boolean;
+  progress: number; // range [0,1]
 }
 
 const state = (): State => ({
@@ -20,6 +22,8 @@ const state = (): State => ({
   comments: [],
   user: {} as any,
   files: [],
+  uploading: false,
+  progress: 0,
 });
 
 const mutations: { [key: string]: Mutation<State> } = {
@@ -67,6 +71,16 @@ const mutations: { [key: string]: Mutation<State> } = {
   },
   [MutationTypes.CREATED_FILE](state, payload: FileDetail) {
     state.files = state.files.concat(payload);
+  },
+  [MutationTypes.UPLOAD_START](state) {
+    state.uploading = true;
+    state.progress = 0;
+  },
+  [MutationTypes.UPLOAD_PROGRESS](state, progress: number) {
+    state.progress = progress;
+  },
+  [MutationTypes.UPLOAD_END](state) {
+    state.uploading = false;
   },
 };
 

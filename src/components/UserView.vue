@@ -20,6 +20,7 @@
         @click="handleUpload">
         {{ translate(i18n.lang, 'upload') }}
       </el-button>
+      <span class="progress" v-if="data.uploading">{{ (data.progress * 100).toFixed(2) }}%</span>
       <div
         v-if="accounts.username === data.user.username"
         class="el-upload__tip">
@@ -47,6 +48,7 @@
       <h2>{{ translate(i18n.lang, 'my_accounts') }}</h2>
       <el-button
         type="danger"
+        size="small"
         @click="handleLogout">
         {{ translate(i18n.lang, 'logout') }}
       </el-button>
@@ -129,7 +131,11 @@ export default defineComponent({
     const handleUpload = async () => {
       const file = await chooseFile();
       if (!file) return;
-      const result = await API.uploadFile(file);
+      store.commit(MutationTypes.UPLOAD_START);
+      const result = await API.uploadFile(file, (e) => {
+        store.commit(MutationTypes.UPLOAD_PROGRESS, e.loaded / e.total);
+      });
+      store.commit(MutationTypes.UPLOAD_END);
       if (result.status === 200) {
         store.commit(MutationTypes.CREATED_FILE, result.file);
       } else {
@@ -197,6 +203,10 @@ export default defineComponent({
 
 .button {
   cursor: pointer;
+}
+
+.progress {
+  margin-left: 20px;
 }
 
 .file-list {
