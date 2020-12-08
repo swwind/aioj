@@ -36,7 +36,12 @@ const zh_cn: InternationalizationLanguage = {
   region_title: '标题',
   region_desc: '描述',
   delete: '删除',
+  my_files: '我的文件',
+  upload_tips: '文件大小请勿超过 2GB',
+  upload: '上传',
 
+  confirm_delete: '确认要删除 {} 吗？',
+  confirm_delete_file: '确认要删除该文件吗？',
   confirm_delete_comment: '确认要删除该评论吗？',
   confirm_delete_post: '确认要删除该帖子吗？',
   confirm_delete_region: '确认要删除该模块吗？',

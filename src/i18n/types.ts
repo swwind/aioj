@@ -36,7 +36,12 @@ export type InternationalizationLanguage = {
   region_title: string;
   region_desc: string;
   delete: string;
+  my_files: string;
+  upload_tips: string;
+  upload: string;
 
+  confirm_delete: string;
+  confirm_delete_file: string;
   confirm_delete_comment: string;
   confirm_delete_post: string;
   confirm_delete_region: string;

@@ -1,5 +1,5 @@
 import { INTERNAL_SERVER_ERROR } from '../../app/errors';
-import axios, { Method } from 'axios';
+import axios, { AxiosResponse, Method } from 'axios';
 import config from '../../config.json';
 
 const getNodeURL = () => {
@@ -32,8 +32,19 @@ export const setMockingCookie = (cookie: string) => {
   mockingCookie = cookie;
 };
 
-export const makeJSONRequest = (method: Method) => async <T = {}> (url: string, data?: object, headers?: object): Promise<APIResponse & T> => {
-  const res = await request.request({
+export const makeRequest = async <T = {}> (response: Promise<AxiosResponse>): Promise<APIResponse & T> => {
+  const res = await response;
+  if (typeof res.data === 'object') {
+    return res.data;
+  }
+  return {
+    status: res.status,
+    error: INTERNAL_SERVER_ERROR,
+  } as any;
+};
+
+export const makeJSONRequest = (method: Method) => <T = {}> (url: string, data?: object, headers?: object) => {
+  return makeRequest<T>(request.request({
     url,
     method,
     data: data ? JSON.stringify(data) : '',
@@ -42,14 +53,18 @@ export const makeJSONRequest = (method: Method) => async <T = {}> (url: string, 
       ...headers,
       ...(mockingCookie && { Cookie: mockingCookie }),
     },
-  });
-  if (typeof res.data === 'object') {
-    return res.data;
-  }
-  return {
-    status: res.status,
-    error: INTERNAL_SERVER_ERROR,
-  } as any;
+  }));
+};
+
+export const makeMultipartRequest = <T = {}> (url: string, formdata: FormData) => {
+  return makeRequest<T>(request.request({
+    method: 'post',
+    url,
+    data: formdata,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }));
 };
 
 export const makeGETRequest = makeJSONRequest('GET');

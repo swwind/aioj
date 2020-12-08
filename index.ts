@@ -14,9 +14,17 @@ const app = new Koa();
 const isProd = !process.env.TEST;
 
 if (!isProd) {
-  console.log('CORS closed');
+  console.log('CORS diabled');
   app.use(cors());
+} else if (config.port === 443) {
+  console.log('CORS stricted to ' + config.host);
+  app.use(cors({ origin: config.host }));
 }
+
+app.on('error', () => {
+  // ignore it
+  // FIXME
+});
 
 app.use(body({ multipart: true }));
 app.use(serve('dist', { index: false }));

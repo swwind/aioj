@@ -23,7 +23,7 @@ const gentemp = (title: string, meta: RouteMeta, rendered: string, statestr: str
 export default async (url: string, lang: string, cookie: string) => {
   const { app, router, store } = createVueApp(true);
   store.commit('update_language', lang);
-  
+
   await lock(); // sync lock
   router.push(url);
   await router.isReady();

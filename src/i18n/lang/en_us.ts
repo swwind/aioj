@@ -36,7 +36,12 @@ const en_us: InternationalizationLanguage = {
   region_title: 'Title',
   region_desc: 'Description',
   delete: 'Delete',
+  my_files: 'My files',
+  upload_tips: 'File should not exceed 2GB',
+  upload: 'Upload',
 
+  confirm_delete: 'Are you sure you want to delete {}?',
+  confirm_delete_file: 'Are you sure you want to delete file?',
   confirm_delete_comment: 'Are you sure you want to delete this comment?',
   confirm_delete_post: 'Are you sure you want to delete this post?',
   confirm_delete_region: 'Are you sure you want to delete this region?',

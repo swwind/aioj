@@ -4,29 +4,31 @@ import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
 import { State, Tools } from '../types';
 import { promises as fs } from 'fs';
 import { lookup } from 'mime-types';
+import { Middleware } from 'koa';
 
 const router = new Router<State, Tools>();
 
 router.post('/upload', async (ctx) => {
   if (!ctx.state.authorized) {
-    return ctx.end(403, PERMISSION_DENIED);
+    return ctx.end(403, LOGIN_REQUIRE);
   }
 
   if (!ctx.verifyBody(['filename', 'file'])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
-  const { filename, file } = ctx.request.body;
+  const { filename } = ctx.request.body;
+  const { file } = ctx.request.files as any;
 
-  const result = await saveFile(ctx.state.username, filename, file);
+  const result = await saveFile(ctx.state.username, filename, await fs.readFile(file.path));
   if (!result.ok) {
     return ctx.end(400, result.error());
   }
 
-  return ctx.end(200, { fid: result.result() });
+  return ctx.end(200, { file: result.result() });
 });
 
-router.get('/files/:fid', async (ctx) => {
+export const getFileSource: Middleware = async (ctx) => {
   const result = await getFileData(ctx.params.fid);
   if (!result.ok) {
     return ctx.end(404, result.error());
@@ -49,7 +51,9 @@ router.get('/files/:fid', async (ctx) => {
   ctx.set('Content-Range', `bytes ${range[0]}-${range[1]}/${range[2]}`);
   const buffer = await fs.readFile(file.filepath);
   ctx.response.body = buffer.slice(range[0], range[1] + 1);
-});
+};
+
+router.get('/files/:fid', getFileSource);
 
 router.get('/files/i/:fid', async (ctx) => {
   const result = await getFileDetail(ctx.params.fid);

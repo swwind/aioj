@@ -173,8 +173,15 @@ Content-Type: application/json
 [x] POST   /upload                      Upload a file
     - filename: string;
     - file: Buffer;
+    + file: FileDetail
+        + fid: string;
+        + filename: string;
+        + author: string;
+        + size: number;
+        + date: number;
 [x] GET    /files/:fid                  Fetch the uploaded file
     + ... (206 partical content support)
+    alias  //host/f/:fid
 [x] GET    /files/i/:fid                Get file's information
     + file: FileDetail
         + fid: string;

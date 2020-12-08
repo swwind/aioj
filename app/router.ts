@@ -7,7 +7,7 @@ import accouts from './routes/accouts';
 import friends from './routes/friends';
 import forum from './routes/forum';
 import users from './routes/users';
-import files from './routes/files';
+import files, { getFileSource } from './routes/files';
 import serverSideRender from './ssr';
 import { Middleware } from 'koa';
 
@@ -26,7 +26,7 @@ router.use('/', async (ctx, next) => {
   };
   ctx.verifyBody = (keys: string[]) => {
     for (const key of keys) {
-      if (!ctx.request.body[key]) {
+      if (!ctx.request.body[key] && !(ctx.request.files && ctx.request.files[key])) {
         return false;
       }
     }
@@ -62,6 +62,8 @@ router.use('/api',
   files.routes(),
   files.allowedMethods(),
 );
+
+router.get('/f/:fid', getFileSource);
 
 const supportedLanguages = ['en_us', 'zh_cn'];
 

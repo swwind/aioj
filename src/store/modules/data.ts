@@ -1,4 +1,4 @@
-import { CommentDetail, PostDetail, RegionDetail, UserDetail } from '../../../app/types';
+import { CommentDetail, FileDetail, PostDetail, RegionDetail, UserDetail } from '../../../app/types';
 import { Mutation } from 'vuex';
 import * as MutationTypes from '../mutation-types';
 
@@ -9,6 +9,7 @@ export type State = {
   post: PostDetail;
   comments: CommentDetail[];
   user: UserDetail;
+  files: FileDetail[];
 }
 
 const state = (): State => ({
@@ -18,6 +19,7 @@ const state = (): State => ({
   post: {} as any,
   comments: [],
   user: {} as any,
+  files: [],
 });
 
 const mutations: { [key: string]: Mutation<State> } = {
@@ -39,6 +41,9 @@ const mutations: { [key: string]: Mutation<State> } = {
   [MutationTypes.FETCH_COMMENT_LIST](state, payload: CommentDetail[]) {
     state.comments = payload;
   },
+  [MutationTypes.FETCH_FILE_LIST](state, payload: FileDetail[]) {
+    state.files = payload;
+  },
   [MutationTypes.DELETED_REGION](state, payload: string) {
     state.regions = state.regions.filter((s) => s.region !== payload);
   },
@@ -48,6 +53,9 @@ const mutations: { [key: string]: Mutation<State> } = {
   [MutationTypes.DELETED_COMMENT](state, payload: number) {
     state.comments = state.comments.filter((s) => s.cid !== payload);
   },
+  [MutationTypes.DELETED_FILE](state, payload: string) {
+    state.files = state.files.filter((s) => s.fid !== payload);
+  },
   [MutationTypes.CREATED_REGION](state, payload: RegionDetail) {
     state.regions = state.regions.concat(payload);
   },
@@ -56,6 +64,9 @@ const mutations: { [key: string]: Mutation<State> } = {
   },
   [MutationTypes.CREATED_COMMENT](state, payload: CommentDetail) {
     state.comments = state.comments.concat(payload);
+  },
+  [MutationTypes.CREATED_FILE](state, payload: FileDetail) {
+    state.files = state.files.concat(payload);
   },
 };
 

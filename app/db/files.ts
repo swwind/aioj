@@ -12,21 +12,23 @@ async function getNewFileId() {
   return fid;
 }
 
-export async function saveFile(username: string, filename: string, buffer: Buffer): Promise<Result<string, string>> {
+export async function saveFile(username: string, filename: string, buffer: Buffer): Promise<Result<FileDetail, string>> {
   const fid = await getNewFileId();
   const filepath = `uploads/${fid}`;
 
-  await files.insertOne({
+  const filedata: FileData = {
     fid,
     uploader: username,
     size: buffer.length,
     filename,
     filepath,
     date: Date.now(),
-  });
+  };
+
+  await files.insertOne(filedata);
   await fs.writeFile(filepath, buffer);
 
-  return Result.ok(fid);
+  return Result.ok(extractFileDetail(filedata));
 }
 
 export async function getFileData(fid: string): Promise<Result<FileData, string>> {

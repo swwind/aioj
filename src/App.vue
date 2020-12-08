@@ -28,6 +28,9 @@
         <template #fallback>
           <div>Loading...</div>
         </template>
+        <template #error>
+          <div>Explosion!!!</div>
+        </template>
       </suspense>
     </router-view>
   </el-main>

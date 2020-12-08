@@ -27,7 +27,7 @@ router.post('/login', async (ctx) => {
   }
 
   const cookie = await issueCookie(ctx.request.body.username);
-  ctx.cookies.set('auth', cookie);
+  ctx.cookies.set('auth', cookie, { expires: new Date(Date.now() + 50 * 365 * 24 * 60 * 60 * 1000) });
   ctx.end(200, { user: result.result() });
 });
 
@@ -51,7 +51,7 @@ router.post('/register', async (ctx) => {
   }
 
   const cookie = await issueCookie(ctx.request.body.username);
-  ctx.cookies.set('auth', cookie);
+  ctx.cookies.set('auth', cookie, { expires: new Date(Date.now() + 50 * 365 * 24 * 60 * 60 * 1000) });
   ctx.end(200, { user: result.result() });
 });
 
