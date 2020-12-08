@@ -26,3 +26,7 @@ export async function whoami() {
 export async function getUserDetail(username: string) {
   return await makeGETRequest<{ user: UserDetail }>(`/u/${username}`);
 }
+
+export async function logoutAttempt() {
+  return await makePOSTRequest('/logout');
+}

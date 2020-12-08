@@ -44,6 +44,11 @@
         </div>
       </div>
     </div>
+    <el-button
+      v-if="accounts.username === data.user.username"
+      @click="handleLogout">
+      {{ translate(i18n.lang, 'logout') }}
+    </el-button>
   </div>
   <div v-else>
     <h1>{{ translate(i18n.lang, 'user_not_exists') }}</h1>
@@ -154,6 +159,15 @@ export default defineComponent({
       }
     };
 
+    const handleLogout = async () => {
+      const result = await API.logoutAttempt();
+      if (result.status === 200) {
+        store.commit(MutationTypes.LOGOUT);
+      } else {
+        handleNetworkRequestError(store, result);
+      }
+    }
+
     return {
       translate,
       handleToggleFriend,
@@ -161,6 +175,7 @@ export default defineComponent({
       toSizeString,
       handleUpload,
       handleDeleteFile,
+      handleLogout,
     };
   },
 });
