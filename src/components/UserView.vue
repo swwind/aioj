@@ -179,7 +179,7 @@ export default defineComponent({
       } else {
         handleNetworkRequestError(store, result);
       }
-    }
+    };
 
     return {
       translate,

@@ -28,7 +28,7 @@ router.post('/upload', async (ctx) => {
   return ctx.end(200, { file: result.result() });
 });
 
-export const getFileSource: Middleware = async (ctx, next) => {
+export const getFileSource: Middleware = async (ctx) => {
   const result = await getFileData(ctx.params.fid);
   if (!result.ok) {
     ctx.response.status = 404;

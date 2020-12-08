@@ -67,16 +67,16 @@ export function santinizeMarked(mkd: string) {
 
   return insane(html, {
     allowedAttributes: {
-      a: ["href", "name", "target"],
-      img: ["src", "alt"],
-      video: ["src", "controls"],
-      audio: ["src", "controls"],
+      a: ['href', 'name', 'target'],
+      img: ['src', 'alt'],
+      video: ['src', 'controls'],
+      audio: ['src', 'controls'],
     },
     allowedTags: [
-      "a", "article", "b", "blockquote", "br", "caption", "code", "del", "details", "div", "em",
-      "h1", "h2", "h3", "h4", "h5", "h6", "hr", "i", "img", "ins", "kbd", "li", "main", "ol",
-      "p", "pre", "section", "span", "strike", "strong", "sub", "summary", "sup", "table",
-      "tbody", "td", "th", "thead", "tr", "u", "ul", "video", "audio",
+      'a', 'article', 'b', 'blockquote', 'br', 'caption', 'code', 'del', 'details', 'div', 'em',
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'main', 'ol',
+      'p', 'pre', 'section', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table',
+      'tbody', 'td', 'th', 'thead', 'tr', 'u', 'ul', 'video', 'audio',
     ],
   });
 }
