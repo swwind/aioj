@@ -28,29 +28,40 @@ router.post('/upload', async (ctx) => {
   return ctx.end(200, { file: result.result() });
 });
 
-export const getFileSource: Middleware = async (ctx) => {
+export const getFileSource: Middleware = async (ctx, next) => {
   const result = await getFileData(ctx.params.fid);
   if (!result.ok) {
-    return ctx.end(404, result.error());
+    ctx.response.status = 404;
+    ctx.response.body = '404 NOT FOUND';
+    return;
   }
 
   const file = result.result();
+  const contentType = lookup(file.filename) || 'application/octet-stream';
+  if (contentType.startsWith('audio/') || contentType.startsWith('video/')) {
+    // handle media
+    const range = [0, file.size - 1, file.size];
+    const rg = ctx.get('Range');
+    if (rg && rg.startsWith('bytes=')) {
+      const [st, ed] = rg.slice(6).split('-');
+      if (st) range[0] = Number(st);
+      if (ed) range[1] = Number(ed);
+    }
 
-  const range = [0, file.size - 1, file.size];
-  const rg = ctx.get('Range');
-  if (rg && rg.startsWith('bytes=')) {
-    const [st, ed] = rg.slice(6).split('-');
-    if (st) range[0] = Number(st);
-    if (ed) range[1] = Number(ed);
+    ctx.response.status = 206;
+    ctx.set('Content-Type', contentType);
+    ctx.set('Content-Length', String(range[1] - range[0] + 1));
+    ctx.set('Accept-Ranges', 'bytes');
+    ctx.set('Content-Range', `bytes ${range[0]}-${range[1]}/${range[2]}`);
+    const buffer = await fs.readFile(file.filepath);
+    ctx.response.body = buffer.slice(range[0], range[1] + 1);
+  } else {
+    // handle others
+    ctx.response.status = 200;
+    ctx.set('Content-Type', contentType);
+    ctx.set('Content-Disposition', `inline; filename="${file.filename.replace(/"/g, '\\"')}"`);
+    ctx.response.body = await fs.readFile(file.filepath);
   }
-
-  ctx.response.status = 206;
-  ctx.set('Content-Type', lookup(file.filename) || 'application/octet-stream');
-  ctx.set('Content-Length', String(range[1] - range[0] + 1));
-  ctx.set('Accept-Ranges', 'bytes');
-  ctx.set('Content-Range', `bytes ${range[0]}-${range[1]}/${range[2]}`);
-  const buffer = await fs.readFile(file.filepath);
-  ctx.response.body = buffer.slice(range[0], range[1] + 1);
 };
 
 router.get('/files/:fid', getFileSource);

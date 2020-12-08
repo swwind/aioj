@@ -1,7 +1,7 @@
 <template>
   <div v-if="data.user.username">
     <h1>
-      {{ translate(i18n.lang, 'user') }}: {{ data.user.username }}
+      {{ data.user.username }}
       <i
         v-if="accounts.username && accounts.username !== data.user.username"
         class="button"
@@ -28,7 +28,7 @@
       <div class="file-list">
         <div class="file-item" v-for="file in data.files" :key="file.fid">
           <span class="file-name">
-            <a :href="`/f/${file.fid}`">{{ file.filename }}</a>
+            <a :href="`/f/${file.fid}`" target="_blank">{{ file.filename }}</a>
           </span>
           <span class="file-size">
             {{ toSizeString(file.size) }}
@@ -46,6 +46,7 @@
     <div v-if="accounts.username === data.user.username">
       <h2>{{ translate(i18n.lang, 'my_accounts') }}</h2>
       <el-button
+        type="danger"
         @click="handleLogout">
         {{ translate(i18n.lang, 'logout') }}
       </el-button>
