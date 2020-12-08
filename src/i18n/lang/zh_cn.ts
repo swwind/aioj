@@ -39,6 +39,7 @@ const zh_cn: InternationalizationLanguage = {
   my_files: '我的文件',
   upload_tips: '文件大小请勿超过 2GB',
   upload: '上传',
+  my_accounts: '账户相关',
 
   confirm_delete: '确认要删除 {} 吗？',
   confirm_delete_file: '确认要删除该文件吗？',

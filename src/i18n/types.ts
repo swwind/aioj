@@ -39,6 +39,7 @@ export type InternationalizationLanguage = {
   my_files: string;
   upload_tips: string;
   upload: string;
+  my_accounts: string;
 
   confirm_delete: string;
   confirm_delete_file: string;

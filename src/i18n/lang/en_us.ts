@@ -39,6 +39,7 @@ const en_us: InternationalizationLanguage = {
   my_files: 'My files',
   upload_tips: 'File should not exceed 2GB',
   upload: 'Upload',
+  my_accounts: 'My accounts',
 
   confirm_delete: 'Are you sure you want to delete {}?',
   confirm_delete_file: 'Are you sure you want to delete file?',

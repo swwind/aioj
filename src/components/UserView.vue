@@ -11,7 +11,6 @@
     <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
     <p>Email: {{ data.user.email }}</p>
     <p>Desc: {{ data.user.desc }}</p>
-    <hr/>
     <div v-if="accounts.username === data.user.username || accounts.admin">
       <h2>{{ translate(i18n.lang, 'my_files') }}</h2>
       <el-button
@@ -44,11 +43,13 @@
         </div>
       </div>
     </div>
-    <el-button
-      v-if="accounts.username === data.user.username"
-      @click="handleLogout">
-      {{ translate(i18n.lang, 'logout') }}
-    </el-button>
+    <div v-if="accounts.username === data.user.username">
+      <h2>{{ translate(i18n.lang, 'my_accounts') }}</h2>
+      <el-button
+        @click="handleLogout">
+        {{ translate(i18n.lang, 'logout') }}
+      </el-button>
+    </div>
   </div>
   <div v-else>
     <h1>{{ translate(i18n.lang, 'user_not_exists') }}</h1>
@@ -82,6 +83,10 @@ export default defineComponent({
         store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'user')}: ${result.user.username} - AIOJ`);
       } else {
         handleNetworkRequestError(store, result);
+        return;
+      }
+
+      if (store.state.accounts.username !== username.value && !store.state.accounts.admin) {
         return;
       }
 

@@ -45,7 +45,7 @@ export const getFileSource: Middleware = async (ctx) => {
   }
 
   ctx.response.status = 206;
-  ctx.set('Content-Type', lookup(file.filename) || 'text/plain');
+  ctx.set('Content-Type', lookup(file.filename) || 'application/octet-stream');
   ctx.set('Content-Length', String(range[1] - range[0] + 1));
   ctx.set('Accept-Ranges', 'bytes');
   ctx.set('Content-Range', `bytes ${range[0]}-${range[1]}/${range[2]}`);

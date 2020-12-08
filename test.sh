@@ -5,4 +5,4 @@ sleep 1
 yarn mocha
 EXIT_CODE=$?
 kill $ID
-exit $?
+exit $EXIT_CODE
