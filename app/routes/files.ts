@@ -3,7 +3,7 @@ import { deleteFile, getFileData, getFileDetail, getFileDetailsByUsername, saveF
 import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
 import { State, Tools } from '../types';
 import { promises as fs } from 'fs';
-import { lookup } from 'mime-types';
+import { fromFile } from 'file-type';
 import { Middleware } from 'koa';
 
 const router = new Router<State, Tools>();
@@ -13,14 +13,13 @@ router.post('/upload', async (ctx) => {
     return ctx.end(403, LOGIN_REQUIRE);
   }
 
-  if (!ctx.verifyBody(['filename', 'file'])) {
+  if (!ctx.request.files || !ctx.request.files.file) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
-  const { filename } = ctx.request.body;
-  const { file } = ctx.request.files as any;
+  const { file } = ctx.request.files;
 
-  const result = await saveFile(ctx.state.username, filename, await fs.readFile(file.path));
+  const result = await saveFile(ctx.state.username, file.type, file.name, await fs.readFile(file.path));
   if (!result.ok) {
     return ctx.end(400, result.error());
   }
@@ -37,15 +36,20 @@ export const getFileSource: Middleware = async (ctx) => {
   }
 
   const file = result.result();
-  const contentType = lookup(file.filename) || 'application/octet-stream';
-  if (contentType.startsWith('audio/') || contentType.startsWith('video/')) {
-    // handle media
+  const contentType = file.mimetype || 'application/octet-stream';
+  if (ctx.get('Range')) {
     const range = [0, file.size - 1, file.size];
     const rg = ctx.get('Range');
     if (rg && rg.startsWith('bytes=')) {
       const [st, ed] = rg.slice(6).split('-');
       if (st) range[0] = Number(st);
       if (ed) range[1] = Number(ed);
+    }
+
+    if (isNaN(range[0]) || isNaN(range[1]) || range[0] < 0 || range[1] >= file.size || range[0] > range[1]) {
+      ctx.response.status = 400;
+      ctx.response.body = 'BAD RANGE HEADER';
+      return;
     }
 
     ctx.response.status = 206;
@@ -56,9 +60,10 @@ export const getFileSource: Middleware = async (ctx) => {
     const buffer = await fs.readFile(file.filepath);
     ctx.response.body = buffer.slice(range[0], range[1] + 1);
   } else {
-    // handle others
     ctx.response.status = 200;
     ctx.set('Content-Type', contentType);
+    ctx.set('Content-Length', String(file.size));
+    ctx.set('Accept-Ranges', 'bytes');
     ctx.set('Content-Disposition', `inline; filename="${file.filename.replace(/"/g, '\\"')}"`);
     ctx.response.body = await fs.readFile(file.filepath);
   }

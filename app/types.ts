@@ -82,6 +82,7 @@ export type FileDetail = {
 
 export type FileData = {
   filepath: string;
+  mimetype: string;
 } & FileDetail;
 
 export type AuthData = {

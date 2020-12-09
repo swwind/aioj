@@ -171,8 +171,7 @@ Content-Type: application/json
         + description: string;
 
 [x] POST   /upload                      Upload a file
-    - filename: string;
-    - file: Buffer;
+    - file: File;
     + file: FileDetail
         + fid: string;
         + filename: string;

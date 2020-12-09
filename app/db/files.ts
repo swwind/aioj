@@ -12,7 +12,7 @@ async function getNewFileId() {
   return fid;
 }
 
-export async function saveFile(username: string, filename: string, buffer: Buffer): Promise<Result<FileDetail, string>> {
+export async function saveFile(username: string, mimetype: string, filename: string, buffer: Buffer): Promise<Result<FileDetail, string>> {
   const fid = await getNewFileId();
   const filepath = `uploads/${fid}`;
 
@@ -22,6 +22,7 @@ export async function saveFile(username: string, filename: string, buffer: Buffe
     size: buffer.length,
     filename,
     filepath,
+    mimetype,
     date: Date.now(),
   };
 
