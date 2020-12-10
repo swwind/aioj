@@ -3,7 +3,6 @@ import { deleteFile, getFileData, getFileDetail, getFileDetailsByUsername, saveF
 import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
 import { State, Tools } from '../types';
 import { promises as fs } from 'fs';
-import { fromFile } from 'file-type';
 import { Middleware } from 'koa';
 
 const router = new Router<State, Tools>();
@@ -64,7 +63,7 @@ export const getFileSource: Middleware = async (ctx) => {
     ctx.set('Content-Type', contentType);
     ctx.set('Content-Length', String(file.size));
     ctx.set('Accept-Ranges', 'bytes');
-    ctx.set('Content-Disposition', `inline; filename="${file.filename.replace(/"/g, '\\"')}"`);
+    ctx.set('Content-Disposition', `inline; filename=${JSON.stringify(encodeURIComponent(file.filename))}`);
     ctx.response.body = await fs.readFile(file.filepath);
   }
 };
