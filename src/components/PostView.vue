@@ -195,7 +195,7 @@ export default defineComponent({
 
   .content {
     margin-top: 20px;
-    // white-space: pre-wrap;
+    word-wrap: break-word;
   }
 
   &:hover .operations {

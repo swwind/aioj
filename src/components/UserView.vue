@@ -21,7 +21,12 @@
         @click="handleUpload">
         {{ translate(i18n.lang, 'upload') }}
       </el-button>
-      <span class="progress" v-if="data.uploading">{{ (data.progress * 100).toFixed(2) }}%</span>
+      <el-progress
+        class="progress"
+        v-if="data.uploading"
+        :text-inside="true"
+        :stroke-width="16"
+        :percentage="Math.round(data.progress * 100)" />
       <div
         v-if="accounts.username === data.user.username"
         class="el-upload__tip">
@@ -208,6 +213,8 @@ export default defineComponent({
 
 .progress {
   margin-left: 20px;
+  display: inline-block;
+  width: 200px;
 }
 
 .file-list {
@@ -216,6 +223,10 @@ export default defineComponent({
     display: grid;
     grid-template-columns: 1fr auto auto auto;
     grid-column-gap: 20px;
+
+    .file-name {
+      word-break: break-word;
+    }
   }
 }
 

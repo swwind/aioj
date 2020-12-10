@@ -8,9 +8,17 @@
   <div class="posts-list">
     <el-alert type="warning" v-if="!data.posts.length">{{ translate(i18n.lang, 'no_posts') }}</el-alert>
     <div class="post-item" v-for="post of data.posts" :key="post.pid">
-      <div class="title"><router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link></div>
-      <router-link class="author" :to="`/u/${post.author}`"><i class="el-icon-user-solid"></i>{{ post.author }}</router-link>
-      <time class="time"><i class="el-icon-date"></i>{{ new Date(post.date).toLocaleString() }}</time>
+      <div class="title">
+        <router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link>
+      </div>
+      <router-link class="author" :to="`/u/${post.author}`">
+        <i class="el-icon-user-solid"></i>
+        {{ post.author }}
+      </router-link>
+      <time class="time">
+        <i class="el-icon-date"></i>
+        {{ new Date(post.date).toLocaleString() }}
+      </time>
     </div>
   </div>
   <div class="create" v-if="accounts.username">
@@ -135,14 +143,12 @@ export default defineComponent({
 }
 
 .post-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  grid-column-gap: 20px;
 
   .title {
-    flex: 1;
-  }
-
-  .time {
-    margin-left: 20px;
+    word-break: break-word;
   }
 
   i {
