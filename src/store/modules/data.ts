@@ -1,8 +1,8 @@
 import { CommentDetail, FileDetail, PostDetail, RegionDetail, UserDetail } from '../../../app/types';
 import { Action, Mutation } from 'vuex';
 import * as MutationTypes from '../mutation-types';
-import { Store } from 'element-plus/lib/el-table/src/table.type';
-import { ActionTypes, StoreState } from '..';
+import * as ActionTypes from '../action-types';
+import { StoreState } from '..';
 import { API } from '@/api';
 import { translate } from '@/i18n/translate';
 import { chooseFile, notify } from '@/utils';

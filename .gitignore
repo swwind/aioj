@@ -4,5 +4,6 @@
 /uploads
 /build
 /static
+/config.json
 *.log
 *.pem

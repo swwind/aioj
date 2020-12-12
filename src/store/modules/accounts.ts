@@ -1,7 +1,7 @@
 import { UserDetail } from '../../../app/types';
 import { Action, Mutation } from 'vuex';
 import * as MutationTypes from '../mutation-types';
-import { ActionTypes } from '..';
+import * as ActionTypes from '../action-types';
 import { API } from '@/api';
 import { Ref } from 'vue';
 

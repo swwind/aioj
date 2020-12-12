@@ -1,30 +1,45 @@
 <template>
-  <h1>{{ data.post.title }}</h1>
-  <div class="comment" v-for="comment of data.comments" :key="comment.cid">
-    <div class="info">
-      <a v-if="comment.cid > 1" :href="`#${comment.cid}`" class="level" :id="comment.cid"># {{ comment.cid }}</a>
+  <h1 class="title">{{ data.post.title }}</h1>
+  <el-card
+    class="comment"
+    v-for="comment of data.comments"
+    :key="comment.cid"
+    :body-style="{ padding: '0 20px' }"
+    shadow="hover">
+    <template #header>
+      <a :href="`#${comment.cid}`" class="level" :id="comment.cid"># {{ comment.cid }}</a>
       <router-link class="author" :to="`/u/${comment.author}`"><i class="el-icon-user"></i>{{ comment.author }}</router-link>
       <time class="time"><i class="el-icon-date"></i>{{ new Date(comment.date).toLocaleString() }}</time>
       <span class="edited" v-if="comment.edited">
         <i class="el-icon-edit"></i>
         Edited
       </span>
-      <div class="operations" v-if="accounts.admin || accounts.username === comment.author">
+      <span class="operations" v-if="accounts.admin || accounts.username === comment.author">
         <i class="delete el-icon-delete"
           @click="handleDeleteComment(comment.cid)" />
         <i class="edit el-icon-edit"
           @click="handleEditComment(comment.cid)" />
-      </div>
-    </div>
+      </span>
+    </template>
     <div class="content marked" v-html="santinizeMarked(comment.content)"></div>
-  </div>
-  <div class="reply" v-if="accounts.username">
-    <h2>{{ translate(i18n.lang, 'reply') }}</h2>
-    <el-input type="textarea" v-model="content" />
+  </el-card>
+  <el-card class="reply" v-if="accounts.username" shadow="hover">
+    <template #header>
+      <h2 class="reply-title">{{ translate(i18n.lang, 'reply') }}</h2>
+    </template>
+    <div class="reply-warn">
+      欢迎大家留下<b>邮箱</b>求资源，将随机挑选幸运儿永久封号。
+    </div>
+    <el-input
+      type="textarea"
+      v-model="content"
+      :autosize="{ minRows: 6 }"
+      placeholder="你留下了评论，这使得作者充满了决心。"
+      class="reply-content" />
     <div class="buttons">
       <el-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'reply') }}</el-button>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts">
@@ -60,9 +75,6 @@ export default defineComponent({
         pid,
         content,
       });
-    };
-
-    const handleDeletePost = async () => {
     };
 
     const handleDeleteComment = async (cid: number) => {
@@ -114,11 +126,16 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 
+.title {
+  background-color: #ffffffc0;
+  padding: 10px 20px;
+  margin: 0;
+}
+
 .comment {
   margin-top: 20px;
 
-  .info {
-    position: relative;
+  .el-card__header {
 
     i {
       margin-right: 5px;
@@ -145,7 +162,6 @@ export default defineComponent({
   }
 
   .content {
-    margin-top: 20px;
     word-wrap: break-word;
   }
 
@@ -155,6 +171,19 @@ export default defineComponent({
 }
 
 .reply {
+  margin-top: 20px;
+
+  .reply-warn {
+    color: red;
+  }
+
+  .reply-content {
+    margin-top: 20px;
+  }
+  
+  .reply-title {
+    margin: 0;
+  }
 
   .buttons {
     margin-top: 20px;

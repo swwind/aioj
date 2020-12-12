@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Hello {{ accounts.username || 'werid guest' }}!</h1>
+    <h1>Hello {{ accounts.username || 'weird guest' }}!</h1>
   </div>
 </template>
 

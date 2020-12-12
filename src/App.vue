@@ -58,6 +58,7 @@ import { translate } from '@/i18n/translate';
 import { StoreState, MutationTypes, ActionTypes } from './store';
 import { defineComponent, onMounted, toRefs } from 'vue';
 import { API } from './api';
+import configs from '../config.json';
 
 export default defineComponent({
   async setup() {
@@ -96,6 +97,23 @@ export default defineComponent({
 
     onMounted(() => {
       closeSSRFetchPrevention();
+
+      const fuck = (bg: string) => {
+        const bgdiv = document.createElement('div');
+        bgdiv.classList.add('background-image');
+        bgdiv.style.backgroundImage = `url(${bg})`;
+        document.body.appendChild(bgdiv);
+        return bgdiv;
+      }
+      const divs = configs.backgrounds.map(fuck);
+
+      let cnt = 0;
+      divs[cnt].classList.add('show');
+      setInterval(() => {
+        divs[cnt].classList.remove('show');
+        cnt = (cnt + 1) % configs.backgrounds.length;
+        divs[cnt].classList.add('show');
+      }, 5000);
     });
 
     if (preventSSRFetchTwice()) {
@@ -131,6 +149,24 @@ body {
 
 textarea {
   font-family: sans-serif;
+}
+
+.background-image {
+  position: fixed;
+  z-index: -1;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity .5s;
+
+  &.show {
+    opacity: 1;
+  }
 }
 
 a, .clickable {
@@ -180,9 +216,21 @@ a, .clickable {
   }
 }
 
+.el-menu {
+  background-color: transparent;
+}
+
+.el-card, .el-header {
+  background-color: #ffffffc0 !important;
+}
+
 </style>
 
 <style lang="less" scoped>
+
+.header {
+  background-color: white;
+}
 
 .buttonset, .userpanel {
   border-bottom: solid 1px #e6e6e6;
