@@ -53,10 +53,10 @@
 <script lang="ts">
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { getRedirect, handleNetworkRequestError } from './utils';
+import { closeSSRFetchPrevention, getRedirect, handleNetworkRequestError, preventSSRFetchTwice } from './utils';
 import { translate } from '@/i18n/translate';
-import { StoreState, MutationTypes } from './store';
-import { defineComponent, toRefs } from 'vue';
+import { StoreState, MutationTypes, ActionTypes } from './store';
+import { defineComponent, onMounted, toRefs } from 'vue';
 import { API } from './api';
 
 export default defineComponent({
@@ -94,16 +94,12 @@ export default defineComponent({
       store.commit(MutationTypes.UPDATE_LANGUAGE, lang);
     };
 
-    const result = await API.whoami();
-    if (result.status === 200) {
-      store.commit(MutationTypes.LOGIN, result.user);
+    onMounted(() => {
+      closeSSRFetchPrevention();
+    });
 
-      const frires = await API.getMyFriends();
-      if (frires.status === 200) {
-        store.commit(MutationTypes.FETCH_USER_FRIENDS, frires.friends);
-      } else {
-        handleNetworkRequestError(store, frires);
-      }
+    if (preventSSRFetchTwice()) {
+      await store.dispatch(ActionTypes.FETCH_ACCOUNT_DATA);
     }
 
     return {

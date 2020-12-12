@@ -28,11 +28,11 @@
 </template>
 
 <script lang="ts">
-import { MutationTypes, StoreState } from '@/store';
+import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
-import { handleNetworkRequestError, msgbox, notify, santinizeMarked } from '@/utils';
+import { preventSSRFetchTwice, handleNetworkRequestError, msgbox, notify, santinizeMarked } from '@/utils';
 import { useRouter } from 'vue-router';
 import { API } from '@/api';
 
@@ -68,16 +68,6 @@ export default defineComponent({
         handleNetworkRequestError(store, result);
       }
     };
-
-    const result = await API.getPostDetail(region.value, pid.value);
-    if (result.status === 200) {
-      store.commit(MutationTypes.FETCH_POST_DETAIL, result.post);
-      store.commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
-      store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
-      store.commit(MutationTypes.CHANGE_SSR_TITLE, `${result.post.title} - AIOJ`);
-    } else {
-      handleNetworkRequestError(store, result);
-    }
 
     const handleDeletePost = async () => {
       try {
@@ -145,6 +135,13 @@ export default defineComponent({
     const handleEditComment = (cid: number) => {
       alert('Not implemented yet ' + cid);
     };
+
+    if (preventSSRFetchTwice()) {
+      await store.dispatch(ActionTypes.FETCH_POST_DATA, {
+        region: region.value,
+        pid: pid.value,
+      });
+    }
 
     return {
       translate,

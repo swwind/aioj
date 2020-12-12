@@ -45,9 +45,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
-import { handleNetworkRequestError, msgbox, notify } from '@/utils';
+import { handleNetworkRequestError, msgbox, notify, preventSSRFetchTwice } from '@/utils';
 import { useStore } from 'vuex';
-import { MutationTypes, StoreState } from '@/store';
+import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
 import { useRouter } from 'vue-router';
 import { API } from '@/api';
@@ -63,18 +63,6 @@ export default defineComponent({
     const { region } = toRefs(props);
     const store = useStore<StoreState>();
     const router = useRouter();
-
-    const result = await API.getPostsList(region.value);
-    if (result.status === 200) {
-      store.commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
-      store.commit(MutationTypes.FETCH_POST_LIST, result.posts);
-      store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'region')}: ${result.region.title} - AIOJ`);
-      store.commit(MutationTypes.CHANGE_SSR_META, {
-        description: result.region.description,
-      });
-    } else {
-      handleNetworkRequestError(store, result);
-    }
 
     const title = ref('');
     const content = ref('');
@@ -114,6 +102,10 @@ export default defineComponent({
         handleNetworkRequestError(store, result);
       }
     };
+
+    if (preventSSRFetchTwice()) {
+      await store.dispatch(ActionTypes.FETCH_REGION_DATA, region.value);
+    }
 
     return {
       title,

@@ -67,9 +67,9 @@
 
 <script lang="ts">
 import { defineComponent, toRefs, watch } from 'vue';
-import { chooseFile, handleNetworkRequestError, toSizeString, msgbox, notify } from '@/utils';
+import { chooseFile, handleNetworkRequestError, toSizeString, msgbox, notify, preventSSRFetchTwice } from '@/utils';
 import { useStore } from 'vuex';
-import { MutationTypes, StoreState } from '@/store';
+import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
 import { API } from '@/api';
 import { FileDetail } from 'app/types';
@@ -84,30 +84,6 @@ export default defineComponent({
   async setup(props) {
     const { username } = toRefs(props);
     const store = useStore<StoreState>();
-
-    const loadUser = async () => {
-      const result = await API.getUserDetail(username.value);
-      if (result.status === 200) {
-        store.commit(MutationTypes.FETCH_USER_DETAIL, result.user);
-        store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'user')}: ${result.user.username} - AIOJ`);
-      } else {
-        handleNetworkRequestError(store, result);
-        return;
-      }
-
-      if (store.state.accounts.username !== username.value && !store.state.accounts.admin) {
-        return;
-      }
-
-      const fileres = await API.getUserUploadedFiles(username.value);
-      if (fileres.status === 200) {
-        store.commit(MutationTypes.FETCH_FILE_LIST, fileres.files);
-      } else {
-        handleNetworkRequestError(store, result);
-      }
-    };
-    watch(username, loadUser);
-    await loadUser();
 
     const handleRemoveFriend = async () => {
       const result = await API.removeFriend(username.value);
@@ -185,6 +161,17 @@ export default defineComponent({
         handleNetworkRequestError(store, result);
       }
     };
+
+    const loadUser = async () => {
+      await store.dispatch(ActionTypes.FETCH_USER_DATA, username.value);
+      if (store.state.accounts.username === username.value || store.state.accounts.admin) {
+        await store.dispatch(ActionTypes.FETCH_USER_FILES, username.value);
+      }
+    };
+    watch(username, loadUser);
+    if (preventSSRFetchTwice()) {
+      await loadUser();
+    }
 
     return {
       translate,

@@ -36,9 +36,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
-import { handleNetworkRequestError } from '@/utils';
+import { handleNetworkRequestError, preventSSRFetchTwice } from '@/utils';
 import { useStore } from 'vuex';
-import { MutationTypes, StoreState } from '@/store';
+import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
 import { useRouter } from 'vue-router';
 import { API } from '@/api';
@@ -48,13 +48,6 @@ export default defineComponent({
     const store = useStore<StoreState>();
     const router = useRouter();
     store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'regions')} - AIOJ`);
-
-    const result = await API.getRegions();
-    if (result.status === 200) {
-      store.commit(MutationTypes.FETCH_REGION_LIST, result.regions);
-    } else {
-      handleNetworkRequestError(store, result);
-    }
 
     const region = ref('');
     const title = ref('');
@@ -68,6 +61,10 @@ export default defineComponent({
         handleNetworkRequestError(store, result);
       }
     };
+
+    if (preventSSRFetchTwice()) {
+      await store.dispatch(ActionTypes.FETCH_REGIONS_DATA);
+    }
 
     return {
       translate,

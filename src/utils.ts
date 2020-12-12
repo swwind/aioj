@@ -3,7 +3,7 @@ import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { APIResponse } from './api/utils';
 import { ElNotification as notify } from 'element-plus';
 import { translate } from './i18n/translate';
-import { Store } from 'vuex';
+import { Commit, Store } from 'vuex';
 import { MutationTypes, StoreState } from './store';
 import marked from 'marked';
 import insane from 'insane';
@@ -22,7 +22,7 @@ export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   return ret ? `?redirect=${encodeURIComponent(ret)}` : '';
 }
 
-export function handleNetworkRequestError(store: Store<StoreState>, result: APIResponse) {
+export function handleNetworkRequestError(store: { state: StoreState, commit: Commit }, result: APIResponse) {
   if (result.status >= 400) {
     notify({
       title: translate(store.state.i18n.lang, 'error'),
@@ -79,4 +79,12 @@ export function santinizeMarked(mkd: string) {
       'tbody', 'td', 'th', 'thead', 'tr', 'u', 'ul', 'video', 'audio',
     ],
   });
+}
+
+let isSSR = '__INITIAL_STATE__' in globalThis;
+export const preventSSRFetchTwice = () => {
+  return !isSSR;
+}
+export const closeSSRFetchPrevention = () => {
+  isSSR = false;
 }

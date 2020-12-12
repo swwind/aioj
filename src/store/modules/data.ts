@@ -1,6 +1,10 @@
 import { CommentDetail, FileDetail, PostDetail, RegionDetail, UserDetail } from '../../../app/types';
-import { Mutation } from 'vuex';
+import { Action, Mutation } from 'vuex';
 import * as MutationTypes from '../mutation-types';
+import { Store } from 'element-plus/lib/el-table/src/table.type';
+import { ActionTypes, StoreState } from '..';
+import { API } from '@/api';
+import { translate } from '@/i18n/translate';
 
 export type State = {
   regions: RegionDetail[];
@@ -84,7 +88,60 @@ const mutations: { [key: string]: Mutation<State> } = {
   },
 };
 
+const actions: { [key: string]: Action<StoreState, any> } = {
+  async [ActionTypes.FETCH_POST_DATA]({ commit, dispatch }, payload: { region: string; pid: string; }) {
+    const result = await API.getPostDetail(payload.region, payload.pid);
+    if (result.status === 200) {
+      commit(MutationTypes.FETCH_POST_DETAIL, result.post);
+      commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
+      commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
+      commit(MutationTypes.CHANGE_SSR_TITLE, `${result.post.title} - AIOJ`);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.FETCH_REGIONS_DATA]({ commit, dispatch }) {
+    const result = await API.getRegions();
+    if (result.status === 200) {
+      commit(MutationTypes.FETCH_REGION_LIST, result.regions);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.FETCH_REGION_DATA]({ rootState: state, commit, dispatch }, payload: string) {
+    const result = await API.getPostsList(payload);
+    if (result.status === 200) {
+      commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
+      commit(MutationTypes.FETCH_POST_LIST, result.posts);
+      commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(state.i18n.lang, 'region')}: ${result.region.title} - AIOJ`);
+      commit(MutationTypes.CHANGE_SSR_META, {
+        description: result.region.description,
+      });
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.FETCH_USER_DATA]({ rootState: state, commit, dispatch }, payload: string) {
+    const result = await API.getUserDetail(payload);
+    if (result.status === 200) {
+      commit(MutationTypes.FETCH_USER_DETAIL, result.user);
+      commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(state.i18n.lang, 'user')}: ${result.user.username} - AIOJ`);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.FETCH_USER_FILES]({ commit, dispatch }, payload: string) {
+    const result = await API.getUserUploadedFiles(payload);
+    if (result.status === 200) {
+      commit(MutationTypes.FETCH_FILE_LIST, result.files);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  }
+}
+
 export default {
   state,
   mutations,
+  actions,
 };

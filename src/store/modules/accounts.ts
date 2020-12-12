@@ -1,6 +1,8 @@
 import { UserDetail } from '../../../app/types';
-import { Mutation } from 'vuex';
+import { Action, Mutation } from 'vuex';
 import * as MutationTypes from '../mutation-types';
+import { ActionTypes } from '..';
+import { API } from '@/api';
 
 export type State = {
   username: string;
@@ -34,7 +36,26 @@ const mutations: { [key: string]: Mutation<State> } = {
   },
 };
 
+const actions: { [key: string]: Action<State, any> } = {
+  async [ActionTypes.FETCH_ACCOUNT_DATA]({ commit, dispatch }) {
+    const result = await API.whoami();
+    if (result.status === 200) {
+      commit(MutationTypes.LOGIN, result.user);
+      await dispatch(ActionTypes.FETCH_FRIEND_DATA);
+    }
+  },
+  async [ActionTypes.FETCH_FRIEND_DATA]({ commit, dispatch }) {
+    const result = await API.getMyFriends();
+    if (result.status === 200) {
+      commit(MutationTypes.FETCH_USER_FRIENDS, result.friends);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  }
+}
+
 export default {
   state,
   mutations,
+  actions,
 };
