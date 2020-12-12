@@ -19,7 +19,7 @@ export function createVueApp(ssr: boolean) {
       : createWebHistory(),
     routes,
   });
-  const store = createStore();
+  const store = createStore(router);
   app.use(ElementPlus);
   app.use(store);
   app.use(router);

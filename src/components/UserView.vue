@@ -67,7 +67,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs, watch } from 'vue';
-import { chooseFile, handleNetworkRequestError, toSizeString, msgbox, notify, preventSSRFetchTwice } from '@/utils';
+import { chooseFile, handleNetworkRequestError, toSizeString, msgbox, notify, preventSSRFetchTwice, confirm } from '@/utils';
 import { useStore } from 'vuex';
 import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
@@ -85,81 +85,28 @@ export default defineComponent({
     const { username } = toRefs(props);
     const store = useStore<StoreState>();
 
-    const handleRemoveFriend = async () => {
-      const result = await API.removeFriend(username.value);
-      if (result.status === 200) {
-        store.commit(MutationTypes.REMOVE_FRIEND, username.value);
-      } else {
-        handleNetworkRequestError(store, result);
-      }
-    };
-    const handleAddFriend = async () => {
-      const result = await API.addFriend(username.value);
-      if (result.status === 200) {
-        store.commit(MutationTypes.ADD_NEW_FRIEND, username.value);
-      } else {
-        handleNetworkRequestError(store, result);
-      }
-    };
-
     const handleToggleFriend = async () => {
       if (store.state.accounts.friends.indexOf(username.value) > -1) {
-        await handleRemoveFriend();
+        await store.dispatch(ActionTypes.REMOVE_FRIEND, username.value);
       } else {
-        await handleAddFriend();
+        await store.dispatch(ActionTypes.ADD_FRIEND, username.value);
       }
     };
 
     const handleUpload = async () => {
-      const file = await chooseFile();
-      if (!file) return;
-      store.commit(MutationTypes.UPLOAD_START);
-      const result = await API.uploadFile(file, (e) => {
-        store.commit(MutationTypes.UPLOAD_PROGRESS, e.loaded / e.total);
-      });
-      store.commit(MutationTypes.UPLOAD_END);
-      if (result.status === 200) {
-        store.commit(MutationTypes.CREATED_FILE, result.file);
-      } else {
-        handleNetworkRequestError(store, result);
-      }
+      await store.dispatch(ActionTypes.UPLOAD_FILE);
     };
 
     const handleDeleteFile = async (file: FileDetail) => {
-      try {
-        await msgbox.confirm(
-          translate(store.state.i18n.lang, 'confirm_delete', file.filename),
-          translate(store.state.i18n.lang, 'warning'),
-          {
-            type: 'warning',
-            confirmButtonText: translate(store.state.i18n.lang, 'ok'),
-            cancelButtonText: translate(store.state.i18n.lang, 'cancel'),
-          },
-        );
-      } catch (e) {
+      if (!await confirm(store.state.i18n.lang, translate(store.state.i18n.lang, 'confirm_delete', file.filename))) {
         return;
       }
 
-      const result = await API.deleteFile(file.fid);
-      if (result.status === 200) {
-        store.commit(MutationTypes.DELETED_FILE, file.fid);
-        notify({
-          title: translate(store.state.i18n.lang, 'success'),
-          type: 'success',
-          message: translate(store.state.i18n.lang, 'delete_success'),
-        });
-      } else {
-        handleNetworkRequestError(store, result);
-      }
+      await store.dispatch(ActionTypes.DELETE_FILE, file);
     };
 
     const handleLogout = async () => {
-      const result = await API.logoutAttempt();
-      if (result.status === 200) {
-        store.commit(MutationTypes.LOGOUT);
-      } else {
-        handleNetworkRequestError(store, result);
-      }
+      await store.dispatch(ActionTypes.LOGOUT);
     };
 
     const loadUser = async () => {

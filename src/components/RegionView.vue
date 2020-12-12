@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
-import { handleNetworkRequestError, msgbox, notify, preventSSRFetchTwice } from '@/utils';
+import { confirm, handleNetworkRequestError, msgbox, notify, preventSSRFetchTwice } from '@/utils';
 import { useStore } from 'vuex';
 import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
@@ -67,40 +67,19 @@ export default defineComponent({
     const title = ref('');
     const content = ref('');
     const handleSendPost = async () => {
-      const result = await API.createPost(region.value, title.value, content.value);
-      if (result.status === 200) {
-        router.push(`/r/${region.value}/${result.pid}`);
-      } else {
-        handleNetworkRequestError(store, result);
-      }
+      await store.dispatch(ActionTypes.CREATE_POST, {
+        region,
+        title,
+        content,
+      });
     };
 
     const handleDeleteRegion = async () => {
-      try {
-        await msgbox.confirm(
-          translate(store.state.i18n.lang, 'confirm_delete_region'),
-          translate(store.state.i18n.lang, 'warning'),
-          {
-            type: 'warning',
-            confirmButtonText: translate(store.state.i18n.lang, 'ok'),
-            cancelButtonText: translate(store.state.i18n.lang, 'cancel'),
-          },
-        );
-      } catch (e) {
-        // cancel
+      if (!await confirm(store.state.i18n.lang, translate(store.state.i18n.lang, 'confirm_delete_region'))) {
         return;
       }
 
-      const result = await API.deleteRegion(region.value);
-      if (result.status === 200) {
-        notify({
-          title: translate(store.state.i18n.lang, 'success'),
-          type: 'success',
-          message: translate(store.state.i18n.lang, 'delete_success'),
-        });
-      } else {
-        handleNetworkRequestError(store, result);
-      }
+      await store.dispatch(ActionTypes.DELETE_REGION, region.value);
     };
 
     if (preventSSRFetchTwice()) {

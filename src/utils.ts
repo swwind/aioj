@@ -1,12 +1,16 @@
 import { Ref } from 'vue';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { APIResponse } from './api/utils';
-import { ElNotification as notify } from 'element-plus';
 import { translate } from './i18n/translate';
-import { Commit, Store } from 'vuex';
+import { Commit } from 'vuex';
 import { MutationTypes, StoreState } from './store';
 import marked from 'marked';
 import insane from 'insane';
+
+import {
+  ElNotification as notify,
+  ElMessageBox as msgbox,
+} from 'element-plus';
 
 export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   let ret = '';
@@ -35,11 +39,24 @@ export function handleNetworkRequestError(store: { state: StoreState, commit: Co
   }
 }
 
-export {
-  ElNotification as notify,
-  ElMessageBox as msgbox,
-  ElPopconfirm as confirm,
-} from 'element-plus';
+export { notify, msgbox };
+
+export const confirm = async (lang: string, message: string) => {
+  try {
+    await msgbox.confirm(
+      message,
+      translate(lang, 'warning'),
+      {
+        type: 'warning',
+        confirmButtonText: translate(lang, 'ok'),
+        cancelButtonText: translate(lang, 'cancel'),
+      },
+    );
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 export function toSizeString(size: number) {
   if (size < 0.9 * (2 ** 10)) return `${size}B`;

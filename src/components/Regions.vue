@@ -54,12 +54,11 @@ export default defineComponent({
     const description = ref('');
 
     const handleCreateRegion = async () => {
-      const result = await API.createRegion(region.value, title.value, description.value);
-      if (result.status === 200) {
-        router.push(`/r/${region.value}`);
-      } else {
-        handleNetworkRequestError(store, result);
-      }
+      await store.dispatch(ActionTypes.CREATE_REGION, {
+        region,
+        title,
+        description,
+      });
     };
 
     if (preventSSRFetchTwice()) {

@@ -5,6 +5,8 @@ import { Store } from 'element-plus/lib/el-table/src/table.type';
 import { ActionTypes, StoreState } from '..';
 import { API } from '@/api';
 import { translate } from '@/i18n/translate';
+import { chooseFile, notify } from '@/utils';
+import { Ref } from 'vue';
 
 export type State = {
   regions: RegionDetail[];
@@ -55,11 +57,11 @@ const mutations: { [key: string]: Mutation<State> } = {
   [MutationTypes.DELETED_REGION](state, payload: string) {
     state.regions = state.regions.filter((s) => s.region !== payload);
   },
-  [MutationTypes.DELETED_POST](state, payload: number) {
-    state.posts = state.posts.filter((s) => s.pid !== payload);
+  [MutationTypes.DELETED_POST](state, payload: string) {
+    state.posts = state.posts.filter((s) => String(s.pid) !== payload);
   },
-  [MutationTypes.DELETED_COMMENT](state, payload: number) {
-    state.comments = state.comments.filter((s) => s.cid !== payload);
+  [MutationTypes.DELETED_COMMENT](state, payload: string) {
+    state.comments = state.comments.filter((s) => String(s.cid) !== payload);
   },
   [MutationTypes.DELETED_FILE](state, payload: string) {
     state.files = state.files.filter((s) => s.fid !== payload);
@@ -134,6 +136,102 @@ const actions: { [key: string]: Action<StoreState, any> } = {
     const result = await API.getUserUploadedFiles(payload);
     if (result.status === 200) {
       commit(MutationTypes.FETCH_FILE_LIST, result.files);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.DELETE_FILE]({ commit, dispatch }, file: FileDetail) {
+    const result = await API.deleteFile(file.fid);
+    if (result.status === 200) {
+      commit(MutationTypes.DELETED_FILE, file.fid);
+      dispatch(ActionTypes.NOTIFY_DELETE_SUCCESS);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.UPLOAD_FILE]({ commit, dispatch }) {
+    const file = await chooseFile();
+    if (!file) return;
+    commit(MutationTypes.UPLOAD_START);
+    const result = await API.uploadFile(file, (e) => {
+      commit(MutationTypes.UPLOAD_PROGRESS, e.loaded / e.total);
+    });
+    commit(MutationTypes.UPLOAD_END);
+    if (result.status === 200) {
+      commit(MutationTypes.CREATED_FILE, result.file);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.DELETE_REGION]({ commit, dispatch }, region: string) {
+    const result = await API.deleteRegion(region);
+    if (result.status === 200) {
+      commit(MutationTypes.DELETED_REGION, region);
+      dispatch(ActionTypes.NOTIFY_DELETE_SUCCESS);
+      dispatch(ActionTypes.ROUTER_PUSH, '/r');
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.DELETE_POST]({ commit, dispatch }, payload: {
+    region: Ref<string>;
+    pid: Ref<string>;
+  }) {
+    const result = await API.deletePost(payload.region.value, payload.pid.value);
+    if (result.status === 200) {
+      dispatch(ActionTypes.NOTIFY_DELETE_SUCCESS);
+      dispatch(ActionTypes.ROUTER_PUSH, `/r/${payload.region.value}`);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.DELETE_COMMENT]({ commit, dispatch }, payload: {
+    region: Ref<string>;
+    pid: Ref<string>;
+    cid: string;
+  }) {
+    const result = await API.deleteComment(payload.region.value, payload.pid.value, payload.cid);
+    if (result.status === 200) {
+      commit(MutationTypes.DELETED_COMMENT, payload.cid);
+      dispatch(ActionTypes.NOTIFY_DELETE_SUCCESS);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.CREATE_REGION]({ commit, dispatch }, payload: {
+    region: Ref<string>;
+    title: Ref<string>;
+    description: Ref<string>;
+  }) {
+    const result = await API.createRegion(payload.region.value, payload.title.value, payload.description.value);
+    if (result.status === 200) {
+      dispatch(ActionTypes.ROUTER_PUSH, `/r/${payload.region.value}`);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.CREATE_POST]({ commit, dispatch }, payload: {
+    region: Ref<string>;
+    title: Ref<string>;
+    content: Ref<string>;
+  }) {
+    const result = await API.createPost(payload.region.value, payload.title.value, payload.content.value);
+    if (result.status === 200) {
+      dispatch(ActionTypes.ROUTER_PUSH, `/r/${payload.region.value}/${result.pid}`);
+    } else {
+      dispatch(ActionTypes.HANDLE_ERROR, result);
+    }
+  },
+  async [ActionTypes.CREATE_COMMENT]({ commit, dispatch }, payload: {
+    region: Ref<string>;
+    pid: Ref<string>;
+    content: Ref<string>;
+  }) {
+    const result = await API.sendReply(payload.region.value, payload.pid.value, payload.content.value);
+    if (result.status === 200) {
+      dispatch(ActionTypes.NOTIFY_REPLY_SUCCESS);
+      commit(MutationTypes.CREATED_COMMENT, result.comment);
+      payload.content.value = '';
     } else {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }

@@ -20,7 +20,7 @@
   </div>
   <div class="reply" v-if="accounts.username">
     <h2>{{ translate(i18n.lang, 'reply') }}</h2>
-    <el-input type="textarea" v-model="reply" />
+    <el-input type="textarea" v-model="content" />
     <div class="buttons">
       <el-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'reply') }}</el-button>
     </div>
@@ -32,7 +32,7 @@ import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
-import { preventSSRFetchTwice, handleNetworkRequestError, msgbox, notify, santinizeMarked } from '@/utils';
+import { preventSSRFetchTwice, handleNetworkRequestError, msgbox, notify, santinizeMarked, confirm } from '@/utils';
 import { useRouter } from 'vue-router';
 import { API } from '@/api';
 
@@ -48,87 +48,41 @@ export default defineComponent({
     },
   },
   async setup(props) {
-    const reply = ref('');
+    const content = ref('');
     const { region, pid } = toRefs(props);
 
     const store = useStore<StoreState>();
     const router = useRouter();
 
     const handleReply = async () => {
-      const result = await API.sendReply(region.value, pid.value, reply.value);
-      if (result.status === 200) {
-        reply.value = '';
-        notify({
-          type: 'success',
-          title: translate(store.state.i18n.lang, 'success'),
-          message: translate(store.state.i18n.lang, 'reply_success'),
-        });
-        store.commit(MutationTypes.CREATED_COMMENT, result.comment);
-      } else {
-        handleNetworkRequestError(store, result);
-      }
+      await store.dispatch(ActionTypes.CREATE_COMMENT, {
+        region,
+        pid,
+        content,
+      });
     };
 
     const handleDeletePost = async () => {
-      try {
-        await msgbox.confirm(
-          translate(store.state.i18n.lang, 'confirm_delete_post'),
-          translate(store.state.i18n.lang, 'warning'),
-          {
-            type: 'warning',
-            confirmButtonText: translate(store.state.i18n.lang, 'ok'),
-            cancelButtonText: translate(store.state.i18n.lang, 'cancel'),
-          },
-        );
-      } catch (e) {
-        // cancel
-        return;
-      }
-
-      const result = await API.deletePost(region.value, pid.value);
-      if (result.status === 200) {
-        notify({
-          title: translate(store.state.i18n.lang, 'success'),
-          type: 'success',
-          message: translate(store.state.i18n.lang, 'delete_success'),
-        });
-        router.push(`/r/${region.value}`);
-      } else {
-        handleNetworkRequestError(store, result);
-      }
     };
 
     const handleDeleteComment = async (cid: number) => {
       if (cid === 1) {
-        await handleDeletePost();
-        return;
-      }
-
-      try {
-        await msgbox.confirm(
-          translate(store.state.i18n.lang, 'confirm_delete_comment'),
-          translate(store.state.i18n.lang, 'warning'),
-          {
-            type: 'warning',
-            confirmButtonText: translate(store.state.i18n.lang, 'ok'),
-            cancelButtonText: translate(store.state.i18n.lang, 'cancel'),
-          },
-        );
-      } catch (e) {
-        // cancel
-        return;
-      }
-
-      const result = await API.deleteComment(region.value, pid.value, String(cid));
-      if (result.status === 200) {
-        notify({
-          title: translate(store.state.i18n.lang, 'success'),
-          type: 'success',
-          message: translate(store.state.i18n.lang, 'delete_success'),
+        if (!await confirm(store.state.i18n.lang, translate(store.state.i18n.lang, 'confirm_delete_post'))) {
+          return;
+        }
+        await store.dispatch(ActionTypes.DELETE_POST, {
+          region,
+          pid,
         });
-        store.commit(MutationTypes.DELETED_COMMENT, cid);
       } else {
-        handleNetworkRequestError(store, result);
+        if (!await confirm(store.state.i18n.lang, translate(store.state.i18n.lang, 'confirm_delete_comment'))) {
+          return;
+        }
+        await store.dispatch(ActionTypes.DELETE_COMMENT, {
+          region,
+          pid,
+          cid: String(cid),
+        });
       }
     };
 
@@ -145,7 +99,7 @@ export default defineComponent({
 
     return {
       translate,
-      reply,
+      content,
       handleReply,
       handleEditComment,
       handleDeleteComment,

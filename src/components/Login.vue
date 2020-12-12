@@ -31,7 +31,7 @@
 import { defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { MutationTypes, StoreState } from '@/store';
+import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { handleNetworkRequestError } from '@/utils';
 import { translate } from '@/i18n/translate';
 import { API } from '@/api';
@@ -48,21 +48,11 @@ export default defineComponent({
     store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'login')} - AIOJ`);
 
     const handleLogin = async () => {
-      const result = await API.loginAttempt(username.value, password.value);
-      if (result.status === 200) {
-        store.commit(MutationTypes.LOGIN, result.user);
-      } else {
-        handleNetworkRequestError(store, result);
-        return;
-      }
-
-      const frires = await API.getMyFriends();
-      if (frires.status === 200) {
-        store.commit(MutationTypes.FETCH_USER_FRIENDS, frires.friends);
-      } else {
-        handleNetworkRequestError(store, result);
-      }
-      router.push(redirect);
+      await store.dispatch(ActionTypes.LOGIN, {
+        username,
+        password,
+        redirect,
+      });
     };
     const handleKeydown = (key: string) => {
       if (key === 'Enter') {
