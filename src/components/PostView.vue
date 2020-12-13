@@ -4,7 +4,6 @@
     class="comment"
     v-for="comment of data.comments"
     :key="comment.cid"
-    :body-style="{ padding: '0 20px' }"
     shadow="hover">
     <template #header>
       <a :href="`#${comment.cid}`" class="level" :id="comment.cid"># {{ comment.cid }}</a>
@@ -25,19 +24,19 @@
   </el-card>
   <el-card class="reply" v-if="accounts.username" shadow="hover">
     <template #header>
-      <h2 class="reply-title">{{ translate(i18n.lang, 'reply') }}</h2>
+      <h2>{{ translate(i18n.lang, 'reply') }}</h2>
     </template>
     <div class="reply-warn">
-      欢迎大家留下<b>邮箱</b>求资源，将随机挑选幸运儿永久封号。
+      {{ translate(i18n.lang, 'reply_warning') }}
     </div>
     <el-input
       type="textarea"
       v-model="content"
       :autosize="{ minRows: 6 }"
-      placeholder="你留下了评论，这使得作者充满了决心。"
+      :placeholder="translate(i18n.lang, 'reply_placeholder')"
       class="reply-content" />
     <div class="buttons">
-      <el-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'reply') }}</el-button>
+      <el-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'submit') }}</el-button>
     </div>
   </el-card>
 </template>
@@ -174,6 +173,7 @@ export default defineComponent({
   margin-top: 20px;
 
   .reply-warn {
+    margin-top: 20px;
     color: red;
   }
 
@@ -186,7 +186,7 @@ export default defineComponent({
   }
 
   .buttons {
-    margin-top: 20px;
+    margin: 20px 0;
   }
 }
 

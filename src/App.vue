@@ -151,6 +151,18 @@ textarea {
   font-family: sans-serif;
 }
 
+.el-card {
+  .el-card__header {
+    h1, h2, h3, h4, h5, h6 {
+      margin: 0;
+    }
+  }
+
+  .el-card__body {
+    padding: 0 20px;
+  }
+}
+
 .background-image {
   position: fixed;
   z-index: -1;

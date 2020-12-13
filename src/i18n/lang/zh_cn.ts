@@ -20,6 +20,9 @@ const zh_cn: InternationalizationLanguage = {
   cancel: '取消',
   not_found: '404 NOT FOUND',
   description: 'AIOJ 是一个 AI 在线对战平台。',
+  submit: '提交',
+  reply_warning: '欢迎大家留下邮箱求资源，将随机挑选幸运儿永久封号。',
+  reply_placeholder: '你留下了评论，这使得作者充满了决心。',
 
   no_posts: '还没有帖子',
   no_regions: '还没有模块',

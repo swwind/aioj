@@ -20,6 +20,9 @@ const en_us: InternationalizationLanguage = {
   cancel: 'Cancel',
   not_found: 'Not Found',
   description: 'AIOJ is an AI online judging platform.',
+  submit: 'Submit',
+  reply_warning: 'Welcome to leave your email for resources, will randomly select the lucky ones permanently ban.',
+  reply_placeholder: 'You left a comment, which made the author full of determination.',
 
   no_posts: 'No posts yet',
   no_regions: 'No regions yet',

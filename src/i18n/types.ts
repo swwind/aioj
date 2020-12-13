@@ -20,6 +20,9 @@ export type InternationalizationLanguage = {
   cancel: string;
   not_found: string;
   description: string;
+  submit: string;
+  reply_warning: string;
+  reply_placeholder: string;
 
   no_posts: string;
   no_regions: string;
