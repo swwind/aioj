@@ -1,7 +1,11 @@
 <template>
-  <div class="home">
-    <h1>Hello {{ accounts.username || 'weird guest' }}!</h1>
-  </div>
+  <el-card shadow="hover">
+    <template #header>
+      <h1 v-if="accounts.username">Hello {{ accounts.username }}</h1>
+      <h1 v-else>Welcome to AIOJ!</h1>
+    </template>
+    <p>Read the document <a href="/about">here</a>, this website is still WIP.</p>
+  </el-card>
 </template>
 
 <script lang="ts">

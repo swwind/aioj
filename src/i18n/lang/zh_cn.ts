@@ -44,6 +44,7 @@ const zh_cn: InternationalizationLanguage = {
   upload: '上传',
   my_accounts: '账户相关',
 
+  confirm_logout: '确认要退出登录吗？',
   confirm_delete: '确认要删除 {} 吗？',
   confirm_delete_file: '确认要删除该文件吗？',
   confirm_delete_comment: '确认要删除该评论吗？',

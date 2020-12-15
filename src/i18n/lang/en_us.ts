@@ -44,6 +44,7 @@ const en_us: InternationalizationLanguage = {
   upload: 'Upload',
   my_accounts: 'My accounts',
 
+  confirm_logout: 'Are you sure you want to logout?',
   confirm_delete: 'Are you sure you want to delete {}?',
   confirm_delete_file: 'Are you sure you want to delete file?',
   confirm_delete_comment: 'Are you sure you want to delete this comment?',

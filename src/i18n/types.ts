@@ -44,6 +44,7 @@ export type InternationalizationLanguage = {
   upload: string;
   my_accounts: string;
 
+  confirm_logout: string;
   confirm_delete: string;
   confirm_delete_file: string;
   confirm_delete_comment: string;

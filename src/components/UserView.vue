@@ -1,18 +1,24 @@
 <template>
-  <div v-if="data.user.username">
-    <h1>
-      {{ data.user.username }}
-      <i
-        v-if="accounts.username && accounts.username !== data.user.username"
-        class="button"
-        :class="accounts.friends.indexOf(data.user.username) > -1 ? 'el-icon-star-on' : 'el-icon-star-off'"
-        @click="handleToggleFriend"/>
-    </h1>
-    <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
-    <p>Email: {{ data.user.email }}</p>
-    <p>Desc: {{ data.user.desc }}</p>
-    <div v-if="accounts.username === data.user.username || accounts.admin">
-      <h2>{{ translate(i18n.lang, 'my_files') }}</h2>
+  <div v-if="data.user.username" class="userview">
+    <el-card shadow="hover">
+      <template #header>
+        <h1>
+          {{ data.user.username }}
+          <i
+            v-if="accounts.username && accounts.username !== data.user.username"
+            class="button"
+            :class="accounts.friends.indexOf(data.user.username) > -1 ? 'el-icon-star-on' : 'el-icon-star-off'"
+            @click="handleToggleFriend"/>
+        </h1>
+      </template>
+      <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
+      <p>Email: {{ data.user.email }}</p>
+      <p>Desc: {{ data.user.desc }}</p>
+    </el-card>
+    <el-card shadow="hover" v-if="accounts.username === data.user.username || accounts.admin" class="files">
+      <template #header>
+        <h2>{{ translate(i18n.lang, 'my_files') }}</h2>
+      </template>
       <el-button
         v-if="accounts.username === data.user.username"
         type="primary"
@@ -49,19 +55,25 @@
           </span>
         </div>
       </div>
-    </div>
-    <div v-if="accounts.username === data.user.username">
-      <h2>{{ translate(i18n.lang, 'my_accounts') }}</h2>
+    </el-card>
+    <el-card shadow="hover" v-if="accounts.username === data.user.username" class="actions">
+      <template #header>
+        <h2>{{ translate(i18n.lang, 'my_accounts') }}</h2>
+      </template>
       <el-button
         type="danger"
         size="small"
         @click="handleLogout">
         {{ translate(i18n.lang, 'logout') }}
       </el-button>
-    </div>
+    </el-card>
   </div>
   <div v-else>
-    <h1>{{ translate(i18n.lang, 'user_not_exists') }}</h1>
+    <el-card shadow="hover">
+      <template #header>
+        <h1>{{ translate(i18n.lang, 'user_not_exists') }}</h1>
+      </template>
+    </el-card>
   </div>
 </template>
 
@@ -106,6 +118,10 @@ export default defineComponent({
     };
 
     const handleLogout = async () => {
+      if (!await confirm(store.state.i18n.lang, translate(store.state.i18n.lang, 'confirm_logout'))) {
+        return;
+      }
+
       await store.dispatch(ActionTypes.LOGOUT);
     };
 
@@ -134,6 +150,14 @@ export default defineComponent({
 
 </script>
 
+<style lang="less">
+.userview {
+  .el-card__body {
+    margin: 20px 0;
+  }
+}
+</style>
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 
@@ -143,6 +167,10 @@ export default defineComponent({
 
 .button {
   cursor: pointer;
+}
+
+.files, .actions {
+  margin-top: 20px;
 }
 
 .progress {

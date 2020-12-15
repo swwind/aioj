@@ -163,6 +163,17 @@ textarea {
   }
 }
 
+.el-menu-item {
+
+  &.is-active {
+    background-color: #0000000c !important;
+  }
+
+  &:hover {
+    background-color: #00000020 !important;
+  }
+}
+
 .background-image {
   position: fixed;
   z-index: -1;
@@ -182,13 +193,9 @@ textarea {
 }
 
 a, .clickable {
-  text-decoration: none;
+  text-decoration: underline;
   color: #2c3e50;
   cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
 
   &.disabled {
     cursor: default;
@@ -232,7 +239,7 @@ a, .clickable {
   background-color: transparent;
 }
 
-.el-card, .el-header {
+.el-card, .el-header, .el-footer {
   background-color: #ffffffc0 !important;
 }
 

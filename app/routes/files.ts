@@ -35,7 +35,12 @@ export const getFileSource: Middleware = async (ctx) => {
   }
 
   const file = result.result();
-  const contentType = file.mimetype || 'application/octet-stream';
+  let contentType = file.mimetype || 'application/octet-stream';
+  // prevent HTML and JS attack
+  // FIXME: maybe you can host me on cdn with another domain?
+  if (contentType.startsWith('text/')) {
+    contentType = 'text/plain';
+  }
   if (ctx.get('Range')) {
     const range = [0, file.size - 1, file.size];
     const rg = ctx.get('Range');

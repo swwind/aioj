@@ -1,11 +1,11 @@
 <template>
-  <h1 class="title">{{ data.post.title }}</h1>
   <el-card
     class="comment"
     v-for="comment of data.comments"
     :key="comment.cid"
     shadow="hover">
     <template #header>
+      <h1 v-if="comment.cid === 1" class="post-title">{{ data.post.title }}</h1>
       <a :href="`#${comment.cid}`" class="level" :id="comment.cid"># {{ comment.cid }}</a>
       <router-link class="author" :to="`/u/${comment.author}`"><i class="el-icon-user"></i>{{ comment.author }}</router-link>
       <time class="time"><i class="el-icon-date"></i>{{ new Date(comment.date).toLocaleString() }}</time>
@@ -125,10 +125,8 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 
-.title {
-  background-color: #ffffffc0;
-  padding: 10px 20px;
-  margin: 0;
+.post-title {
+  margin-bottom: 10px !important;
 }
 
 .comment {

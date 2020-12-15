@@ -1,46 +1,56 @@
 <template>
-  <h1>{{ data.region.title }}</h1>
-  <p>{{ data.region.description }}</p>
-  <div class="operations" v-if="accounts.admin">
-    <i class="el-icon-delete" @click="handleDeleteRegion"></i>
-    <i class="el-icon-edit"></i>
-  </div>
-  <div class="posts-list">
-    <el-alert type="warning" v-if="!data.posts.length">{{ translate(i18n.lang, 'no_posts') }}</el-alert>
-    <div class="post-item" v-for="post of data.posts" :key="post.pid">
-      <div class="title">
-        <router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link>
+  <el-card shadow="hover">
+    <template #header>
+      <h1>{{ data.region.title }}</h1>
+      <p class="desc">
+        {{ data.region.description }}
+        <div class="operations" v-if="accounts.admin">
+          <i class="el-icon-delete" @click="handleDeleteRegion"></i>
+          <i class="el-icon-edit"></i>
+        </div>
+      </p>
+    </template>
+    <div class="posts-list">
+      <el-alert type="warning" v-if="!data.posts.length">{{ translate(i18n.lang, 'no_posts') }}</el-alert>
+      <div class="post-item" v-for="post of data.posts" :key="post.pid">
+        <div class="title">
+          <router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link>
+        </div>
+        <router-link class="author" :to="`/u/${post.author}`">
+          <i class="el-icon-user-solid"></i>
+          {{ post.author }}
+        </router-link>
+        <time class="time">
+          <i class="el-icon-date"></i>
+          {{ new Date(post.date).toLocaleString() }}
+        </time>
       </div>
-      <router-link class="author" :to="`/u/${post.author}`">
-        <i class="el-icon-user-solid"></i>
-        {{ post.author }}
-      </router-link>
-      <time class="time">
-        <i class="el-icon-date"></i>
-        {{ new Date(post.date).toLocaleString() }}
-      </time>
     </div>
-  </div>
-  <div class="create" v-if="accounts.username">
-    <h2>{{ translate(i18n.lang, 'create_new_post') }}</h2>
-    <el-input
-      type="text"
-      v-model="title"
-      class="title"
-      :placeholder="translate(i18n.lang, 'post_title')" />
-    <el-input
-      type="textarea"
-      v-model="content"
-      class="content"
-      :placeholder="translate(i18n.lang, 'post_content')" />
-    <div class="buttonset">
-      <el-button
-        type="primary"
-        @click="handleSendPost">
-        {{ translate(i18n.lang, 'post') }}
-      </el-button>
+  </el-card>
+  <el-card class="create" v-if="accounts.username">
+    <template #header>
+      <h2>{{ translate(i18n.lang, 'create_new_post') }}</h2>
+    </template>
+    <div class="form">
+      <el-input
+        type="text"
+        v-model="title"
+        class="title"
+        :placeholder="translate(i18n.lang, 'post_title')" />
+      <el-input
+        type="textarea"
+        v-model="content"
+        class="content"
+        :placeholder="translate(i18n.lang, 'post_content')" />
+      <div class="buttonset">
+        <el-button
+          type="primary"
+          @click="handleSendPost">
+          {{ translate(i18n.lang, 'post') }}
+        </el-button>
+      </div>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts">
@@ -103,14 +113,22 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 
-.operations {
-  margin: 20px 0;
-  font-size: 1.2rem;
+.desc {
+  margin: 20px 0 0 0;
 
-  i {
-    margin-right: 5px;
-    cursor: pointer;
+  .operations {
+    float: right;
+    font-size: 1.2rem;
+
+    i {
+      margin-right: 5px;
+      cursor: pointer;
+    }
   }
+}
+
+.posts-list {
+  margin: 20px 0;
 }
 
 .post-item {
@@ -128,6 +146,11 @@ export default defineComponent({
 }
 
 .create {
+  margin-top: 20px;
+
+  .form {
+    margin: 20px 0;
+  }
 
   .title, .content {
     margin-bottom: 20px;

@@ -1,30 +1,35 @@
 <template>
-  <el-form class="login">
-    <el-form-item prop="username">
-      <el-input
-        type="text"
-        v-model="username"
-        autocomplete="off"
-        prefix-icon="el-icon-user"
-        :placeholder="translate(i18n.lang, 'username')" />
-    </el-form-item>
-    <el-form-item prop="password">
-      <el-input
-        type="password"
-        v-model="password"
-        autocomplete="off"
-        prefix-icon="el-icon-lock"
-        :placeholder="translate(i18n.lang, 'password')"
-        @keydown="handleKeydown($event.key)" />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="handleLogin">{{ translate(i18n.lang, 'login') }}</el-button>
-      <router-link :to="`/register${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="register">{{ translate(i18n.lang, 'register') }}</router-link>
-    </el-form-item>
-    <el-alert type="warning" v-if="accounts.username">
-      Please logout first, {{ accounts.username }}.
-    </el-alert>
-  </el-form>
+  <el-card>
+    <template #header>
+      <h1>{{ translate(i18n.lang, 'login') }}</h1>
+    </template>
+    <el-form class="login">
+      <el-form-item prop="username">
+        <el-input
+          type="text"
+          v-model="username"
+          autocomplete="off"
+          prefix-icon="el-icon-user"
+          :placeholder="translate(i18n.lang, 'username')" />
+      </el-form-item>
+      <el-form-item prop="password">
+        <el-input
+          type="password"
+          v-model="password"
+          autocomplete="off"
+          prefix-icon="el-icon-lock"
+          :placeholder="translate(i18n.lang, 'password')"
+          @keydown="handleKeydown($event.key)" />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="handleLogin">{{ translate(i18n.lang, 'login') }}</el-button>
+        <router-link :to="`/register${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="register">{{ translate(i18n.lang, 'register') }}</router-link>
+      </el-form-item>
+      <el-alert type="warning" v-if="accounts.username">
+        Please logout first, {{ accounts.username }}.
+      </el-alert>
+    </el-form>
+  </el-card>
 </template>
 
 <script lang="ts">
@@ -78,7 +83,7 @@ export default defineComponent({
 <style scoped lang="less">
 .login {
   width: 300px;
-  margin: 150px auto 0;
+  margin: 20px 0;
 }
 .register {
   margin-left: 20px;
