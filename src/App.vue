@@ -98,23 +98,6 @@ export default defineComponent({
 
     onMounted(() => {
       closeSSRFetchPrevention();
-
-      const fuck = (bg: string) => {
-        const bgdiv = document.createElement('div');
-        bgdiv.classList.add('background-image');
-        bgdiv.style.backgroundImage = `url(${bg})`;
-        document.body.appendChild(bgdiv);
-        return bgdiv;
-      };
-      const divs = configs.backgrounds.map(fuck);
-
-      let cnt = 0;
-      divs[cnt].classList.add('show');
-      setInterval(() => {
-        divs[cnt].classList.remove('show');
-        cnt = (cnt + 1) % configs.backgrounds.length;
-        divs[cnt].classList.add('show');
-      }, 5000);
     });
 
     if (preventSSRFetchTwice()) {

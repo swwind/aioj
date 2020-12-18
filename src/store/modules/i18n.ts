@@ -1,3 +1,4 @@
+import { API } from '@/api';
 import { languages } from '@/i18n';
 import { MutationTypes } from '../mutation-types';
 
@@ -11,6 +12,8 @@ export type Mutations<S = State> = {
 
 export type Actions = { };
 
+export const createI18nModule = (api: API) => {
+
 const state = (): State => ({
   lang: 'en_us',
 });
@@ -21,7 +24,9 @@ const mutations: Mutations = {
   },
 };
 
-export default {
+return {
   state,
   mutations,
 };
+
+}

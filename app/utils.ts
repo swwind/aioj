@@ -30,29 +30,3 @@ export const neq = <T> (x: T) => (y: T) => x !== y;
 export const generateRandomBytes = (n: number) => {
   return crypto.randomBytes(n).toString('hex');
 };
-
-let locked = false;
-const pendings: Function[] = [];
-const updateQueue = () => {
-  if (locked) {
-    return;
-  }
-  const top = pendings.shift();
-  if (!top) {
-    return;
-  }
-  locked = true;
-  top();
-};
-
-export const lock = () => {
-  return new Promise((resolve) => {
-    pendings.push(resolve);
-    updateQueue();
-  });
-};
-
-export const unlock = () => {
-  locked = false;
-  updateQueue();
-};

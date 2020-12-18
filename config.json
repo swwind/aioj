@@ -10,10 +10,5 @@
     "cert": "localhost.pem"
   },
   "host": "https://aioj.ac",
-  "backgrounds": [
-    "/f/a623e43e4393cf45b44651334417f636",
-    "/f/732ff1c83e11ebc5d829868a5c5055ea",
-    "/f/18c6dc552697a4e3f5677e24d366ab7c",
-    "/f/09c3c8b0e53b99585ec8647b9a40fe08"
-  ]
+  "cdn": "cdn.aioj.ac"
 }

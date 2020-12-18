@@ -1,30 +1,37 @@
-import accounts, {
+import {
   State as AccountState,
   Mutations as AccountMutations,
   Actions as AccountActions,
+  createAccountsModule,
 } from './accounts';
-import i18n, {
+import {
   State as I18nState,
   Mutations as I18nMutations,
   Actions as I18nActions,
+  createI18nModule,
 } from './i18n';
-import data, {
+import {
   State as DataState,
   Mutations as DataMutations,
   Actions as DataActions,
+  createDataModule,
 } from './data';
-import ssr, {
+import {
   State as SSRState,
   Mutations as SSRMutations,
   Actions as SSRActions,
+  createSSRModule,
 } from './ssr';
+import { API } from '@/api';
 
-export default {
-  accounts,
-  i18n,
-  data,
-  ssr,
-};
+export const createModules = (api: API) => {
+  return {
+    accounts: createAccountsModule(api),
+    data: createDataModule(api),
+    i18n: createI18nModule(api),
+    ssr: createSSRModule(api),
+  }
+}
 
 export type ModuleState = {
   accounts: AccountState,

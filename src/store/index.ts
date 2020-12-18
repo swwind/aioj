@@ -1,10 +1,13 @@
+import { API } from '@/api';
 import { Router } from 'vue-router';
-import { ActionContext, createStore, Store } from 'vuex';
+import { ActionContext, createStore as createVuexStore, Store } from 'vuex';
 import createActions, { RootActions } from './actions';
-import modules, { ModuleMutations as RootMutations, ModuleState as RootState } from './modules';
+import { createModules, ModuleMutations as RootMutations, ModuleState } from './modules';
 
-const store = (router: Router) => createStore<RootState>({
-  modules,
+export type RootState = ModuleState;
+
+export const createStore = (router: Router, api: API) => createVuexStore<RootState>({
+  modules: createModules(api),
   actions: createActions(router),
 });
 
@@ -35,6 +38,3 @@ export type MyStore =
       ...payload: OptionalSpread<Parameters<RootActions[K]>[1]>
     ): ReturnType<RootActions[K]>;
   }
-
-export type { RootState };
-export default store;

@@ -1,11 +1,12 @@
 import { createApp, createSSRApp, defineComponent } from 'vue';
 import App from '@/App.vue';
 import routes from './router';
-import createStore from './store';
+import { createStore } from './store';
 import ElementPlus from 'element-plus';
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router';
+import { createAPI } from './api';
 
-export function createVueApp(ssr: boolean) {
+export function createVueApp(ssr: boolean, cookie?: string) {
   const SuspenseApp = defineComponent({
     template: '<Suspense><App/></Suspense>',
     components: { App },
@@ -19,12 +20,11 @@ export function createVueApp(ssr: boolean) {
       : createWebHistory(),
     routes,
   });
-  const store = createStore(router);
+  const api = createAPI(cookie);
+  const store = createStore(router, api);
   app.use(ElementPlus);
   app.use(store);
   app.use(router);
 
   return { app, router, store };
 }
-
-export { setMockingCookie } from '@/api';

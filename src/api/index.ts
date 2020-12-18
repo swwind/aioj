@@ -1,13 +1,19 @@
-import * as AccountsAPI from './accounts';
-import * as ForumAPI from './forum';
-import * as FriendsAPI from './friends';
-import * as FilesAPI from './files';
+import { createAccountsAPI } from './accounts';
+import { createForumAPI } from './forum';
+import { createFriendsAPI } from './friends';
+import { createFilesAPI } from './files';
+import { createAPICore } from './utils';
 
-export const API = {
-  ...AccountsAPI,
-  ...ForumAPI,
-  ...FriendsAPI,
-  ...FilesAPI,
-};
+export const createAPI = (cookie?: string) => {
+  const apicore = createAPICore(cookie);
 
-export { setMockingCookie } from './utils';
+  return {
+    ...createAccountsAPI(apicore),
+    ...createForumAPI(apicore),
+    ...createFriendsAPI(apicore),
+    ...createFilesAPI(apicore),
+  }
+}
+
+export type API = ReturnType<typeof createAPI>;
+

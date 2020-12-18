@@ -1,3 +1,4 @@
+import { API } from '@/api';
 import { MutationTypes } from '../mutation-types';
 
 export type State = {
@@ -13,6 +14,8 @@ export type Mutations<S = State> = {
 }
 
 export type Actions = { };
+
+export const createSSRModule = (api: API) => {
 
 const state = (): State => ({
   status: 200,
@@ -35,7 +38,9 @@ const mutations: Mutations = {
   },
 };
 
-export default {
+return {
   state,
   mutations,
 };
+
+}

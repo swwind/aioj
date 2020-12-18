@@ -1,10 +1,10 @@
 import { UserDetail } from '../../../app/types';
 import { ActionTypes } from '../action-types';
-import { API } from '@/api';
 import { MutationTypes } from '../mutation-types';
 import { ArgumentedActionContext } from '..';
 import { Argument, Arguments, unwarpArguments } from '@/utils';
 import { unref } from 'vue';
+import { API } from '@/api';
 
 export type State = {
   username: string;
@@ -38,6 +38,8 @@ export type Actions<S = State> = {
   }>): Promise<void>;
 }
 
+export const createAccountsModule = (api: API) => {
+
 const state = (): State => ({
   username: '',
   friends: [],
@@ -66,14 +68,14 @@ const mutations: Mutations = {
 
 const actions: Actions = {
   async [ActionTypes.FETCH_ACCOUNT_DATA]({ commit, dispatch }) {
-    const result = await API.whoami();
+    const result = await api.whoami();
     if (result.status === 200) {
       commit(MutationTypes.LOGIN, result.user);
       await dispatch(ActionTypes.FETCH_FRIEND_DATA);
     }
   },
   async [ActionTypes.FETCH_FRIEND_DATA]({ commit, dispatch }) {
-    const result = await API.getMyFriends();
+    const result = await api.getMyFriends();
     if (result.status === 200) {
       commit(MutationTypes.FETCH_USER_FRIENDS, result.friends);
     } else {
@@ -81,7 +83,7 @@ const actions: Actions = {
     }
   },
   async [ActionTypes.LOGOUT]({ commit, dispatch }) {
-    const result = await API.logoutAttempt();
+    const result = await api.logoutAttempt();
     if (result.status === 200) {
       commit(MutationTypes.LOGOUT);
     } else {
@@ -90,7 +92,7 @@ const actions: Actions = {
   },
   async [ActionTypes.ADD_FRIEND]({ commit, dispatch }, payload) {
     const username = unref(payload);
-    const result = await API.addFriend(username);
+    const result = await api.addFriend(username);
     if (result.status === 200) {
       commit(MutationTypes.ADD_NEW_FRIEND, username);
     } else {
@@ -99,7 +101,7 @@ const actions: Actions = {
   },
   async [ActionTypes.REMOVE_FRIEND]({ commit, dispatch }, payload) {
     const username = unref(payload);
-    const result = await API.removeFriend(username);
+    const result = await api.removeFriend(username);
     if (result.status === 200) {
       commit(MutationTypes.REMOVE_FRIEND, username);
     } else {
@@ -108,7 +110,7 @@ const actions: Actions = {
   },
   async [ActionTypes.LOGIN]({ commit, dispatch }, payload) {
     const { username, password, redirect } = unwarpArguments(payload);
-    const result = await API.loginAttempt(username, password);
+    const result = await api.loginAttempt(username, password);
     if (result.status === 200) {
       commit(MutationTypes.LOGIN, result.user);
       await dispatch(ActionTypes.FETCH_FRIEND_DATA);
@@ -119,7 +121,7 @@ const actions: Actions = {
   },
   async [ActionTypes.REGISTER]({ commit, dispatch }, payload) {
     const { username, password, redirect } = unwarpArguments(payload);
-    const result = await API.registerAttempt(username, password);
+    const result = await api.registerAttempt(username, password);
     if (result.status === 200) {
       commit(MutationTypes.LOGIN, result.user);
       dispatch(ActionTypes.ROUTER_PUSH, redirect);
@@ -129,8 +131,10 @@ const actions: Actions = {
   },
 };
 
-export default {
+return {
   state,
   mutations,
   actions,
-};
+}
+  
+}

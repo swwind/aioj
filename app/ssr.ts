@@ -3,13 +3,11 @@
 // 因为我找不到 @vue/server-renderer 的文档
 
 import { renderToString } from '@vue/server-renderer';
-import { createVueApp, setMockingCookie } from '../build/ssr/js/app.js';
+import { createVueApp } from '../build/ssr/js/app.js';
 import { promises as fs } from 'fs';
-import { RouteMeta } from 'vue-router';
-import { lock, unlock } from './utils';
 
 const template = await fs.readFile('dist/index.html', 'utf-8');
-const gentemp = (title: string, meta: RouteMeta, rendered: string, statestr: string) => {
+const gentemp = (title: string, meta: Record<string, string>, rendered: string, statestr: string) => {
   const metastr = `<title>${title}</title>` + Object.keys(meta).map((key) => {
     return `<meta name="${key}" content="${meta[key]}">`;
   }).join('');
@@ -20,19 +18,13 @@ const gentemp = (title: string, meta: RouteMeta, rendered: string, statestr: str
     .replace('</head>', `<script>window.__INITIAL_STATE__=${statestr};</script></head>`);
 };
 
-export default async (url: string, lang: string, cookie: string) => {
-  const { app, router, store } = createVueApp(true);
+export const renderToHTML = async (url: string, lang: string, cookie?: string) => {
+  const { app, router, store } = createVueApp(true, cookie);
   store.commit('update_language', lang);
 
-  await lock(); // sync lock
   router.push(url);
   await router.isReady();
-  if (cookie) {
-    setMockingCookie(cookie);
-  }
-  const html = await renderToString(app);
-  setMockingCookie('');
-  unlock(); // sync unlock
+  const apphtml = await renderToString(app);
 
   const statestr = JSON.stringify(store.state)
     // xss: </script>
@@ -40,6 +32,6 @@ export default async (url: string, lang: string, cookie: string) => {
 
   return {
     code: store.state.ssr.status,
-    html: gentemp(store.state.ssr.title, store.state.ssr.meta, html, statestr),
+    html: gentemp(store.state.ssr.title, store.state.ssr.meta, apphtml, statestr),
   };
 };

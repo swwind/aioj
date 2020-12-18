@@ -9,73 +9,80 @@ const getNodeURL = () => {
 };
 
 const getBrowserURL = () => {
-  if (!('__VUE_HMR_RUNTIME__' in window)) {
-    return '/api';
-  } else {
+  if ('__VUE_HMR_RUNTIME__' in window) {
+    // debugging
     return `http://localhost:${config.port}/api`;
+  } else {
+    // production
+    return '/api';
   }
 };
-
-export const request = axios.create({
-  baseURL: typeof global.window === 'undefined'
-    ? getNodeURL() : getBrowserURL(),
-  validateStatus() { return true; },
-});
 
 export type APIResponse = {
   status: number;
   error: string;
 }
 
-let mockingCookie = '';
-export const setMockingCookie = (cookie: string) => {
-  mockingCookie = cookie;
-};
+export const createAPICore = (cookie?: string) => {
 
-export const makeRequest = async <T = {}> (response: Promise<AxiosResponse>): Promise<APIResponse & T> => {
-  try {
-    const res = await response;
-    if (typeof res.data === 'object') {
-      return res.data;
+  const request = axios.create({
+    baseURL: typeof window === 'undefined'
+      ? getNodeURL() : getBrowserURL(),
+    validateStatus() { return true; },
+    headers: cookie ? { Cookie: cookie } : { },
+  });
+
+  const makeRequest = async <T = {}> (response: Promise<AxiosResponse>): Promise<APIResponse & T> => {
+    try {
+      const res = await response;
+      if (typeof res.data === 'object') {
+        return res.data;
+      }
+      return {
+        status: res.status,
+        error: INTERNAL_SERVER_ERROR,
+      } as any;
+    } catch (e) {
+      return {
+        status: 500,
+        error: INTERNAL_SERVER_ERROR,
+      } as any;
     }
-    return {
-      status: res.status,
-      error: INTERNAL_SERVER_ERROR,
-    } as any;
-  } catch (e) {
-    return {
-      status: 500,
-      error: INTERNAL_SERVER_ERROR,
-    } as any;
+  };
+
+  const makeJSONRequest = (method: Method) => <T = {}> (url: string, data?: object, headers?: object) => {
+    return makeRequest<T>(request.request({
+      url,
+      method,
+      data: data ? JSON.stringify(data) : '',
+      headers: {
+        ...(data && { 'Content-Type': 'application/json' }),
+        ...headers,
+      },
+    }));
+  };
+
+  const makeMultipartRequest = <T = {}> (url: string, formdata: FormData, onUploadProgress: (progressEvent: any) => void) => {
+    return makeRequest<T>(request.request({
+      method: 'post',
+      url,
+      data: formdata,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      onUploadProgress,
+    }));
+  };
+
+  return {
+    makeGETRequest: makeJSONRequest('GET'),
+    makePOSTRequest: makeJSONRequest('POST'),
+    makePUTRequest: makeJSONRequest('PUT'),
+    makeDELETERequest: makeJSONRequest('DELETE'),
+    makeMultipartRequest,
+    makeJSONRequest,
   }
-};
 
-export const makeJSONRequest = (method: Method) => <T = {}> (url: string, data?: object, headers?: object) => {
-  return makeRequest<T>(request.request({
-    url,
-    method,
-    data: data ? JSON.stringify(data) : '',
-    headers: {
-      ...(data && { 'Content-Type': 'application/json' }),
-      ...headers,
-      ...(mockingCookie && { Cookie: mockingCookie }),
-    },
-  }));
-};
+}
 
-export const makeMultipartRequest = <T = {}> (url: string, formdata: FormData, onUploadProgress: (progressEvent: any) => void) => {
-  return makeRequest<T>(request.request({
-    method: 'post',
-    url,
-    data: formdata,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-    onUploadProgress,
-  }));
-};
-
-export const makeGETRequest = makeJSONRequest('GET');
-export const makePOSTRequest = makeJSONRequest('POST');
-export const makePUTRequest = makeJSONRequest('PUT');
-export const makeDELETERequest = makeJSONRequest('DELETE');
+export type APICore = ReturnType<typeof createAPICore>;

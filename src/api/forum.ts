@@ -1,46 +1,53 @@
 import { CommentDetail, PostDetail, RegionDetail } from '../../app/types';
-import { makeDELETERequest, makeGETRequest, makePOSTRequest } from './utils';
+import { APICore } from './utils';
 
-export async function getRegions() {
-  return await makeGETRequest<{ regions: RegionDetail[]; }>('/regions');
+export const createForumAPI = (api: APICore) => {
+  const { makeDELETERequest, makeGETRequest, makePOSTRequest } = api;
+
+  return {
+    getRegions() {
+      return makeGETRequest<{ regions: RegionDetail[]; }>('/regions');
+    },
+
+    getPostsList(region: string) {
+      return makeGETRequest<{ region: RegionDetail; posts: PostDetail[]; }>(`/r/${region}`);
+    },
+
+    getPostDetail(region: string, post: string) {
+      return makeGETRequest<{ post: PostDetail; comments: CommentDetail[]; region: RegionDetail; }>(`/r/${region}/${post}`);
+    },
+
+    sendReply(region: string, post: string, content: string) {
+      return makePOSTRequest<{ comment: CommentDetail }>(`/r/${region}/${post}/comment`, {
+        content,
+      });
+    },
+
+    createPost(region: string, title: string, content: string) {
+      return makePOSTRequest<{ pid: string }>(`/r/${region}/post`, {
+        title,
+        content,
+      });
+    },
+
+    createRegion(region: string, title: string, description: string) {
+      return makePOSTRequest(`/r/${region}`, {
+        title,
+        description,
+      });
+    },
+
+    deleteRegion(region: string) {
+      return makeDELETERequest(`/r/${region}`);
+    },
+
+    deletePost(region: string, pid: string) {
+      return makeDELETERequest(`/r/${region}/${pid}`);
+    },
+
+    deleteComment(region: string, pid: string, cid: string) {
+      return makeDELETERequest(`/r/${region}/${pid}/${cid}`);
+    }
 }
-
-export async function getPostsList(region: string) {
-  return await makeGETRequest<{ region: RegionDetail; posts: PostDetail[]; }>(`/r/${region}`);
-}
-
-export async function getPostDetail(region: string, post: string) {
-  return await makeGETRequest<{ post: PostDetail; comments: CommentDetail[]; region: RegionDetail; }>(`/r/${region}/${post}`);
-}
-
-export async function sendReply(region: string, post: string, content: string) {
-  return await makePOSTRequest<{ comment: CommentDetail }>(`/r/${region}/${post}/comment`, {
-    content,
-  });
-}
-
-export async function createPost(region: string, title: string, content: string) {
-  return await makePOSTRequest<{ pid: string }>(`/r/${region}/post`, {
-    title,
-    content,
-  });
-}
-
-export async function createRegion(region: string, title: string, description: string) {
-  return await makePOSTRequest(`/r/${region}`, {
-    title,
-    description,
-  });
-}
-
-export async function deleteRegion(region: string) {
-  return await makeDELETERequest(`/r/${region}`);
-}
-
-export async function deletePost(region: string, pid: string) {
-  return await makeDELETERequest(`/r/${region}/${pid}`);
-}
-
-export async function deleteComment(region: string, pid: string, cid: string) {
-  return await makeDELETERequest(`/r/${region}/${pid}/${cid}`);
+    
 }

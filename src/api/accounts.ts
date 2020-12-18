@@ -1,32 +1,40 @@
 import { UserDetail } from '../../app/types';
 import md5 from 'md5';
-import { makeGETRequest, makePOSTRequest } from './utils';
+import { APICore } from './utils';
 
 export function passwordHash(psw: string) {
   return md5(`attack_ak_world_final_round_${psw}`);
 }
 
-export async function loginAttempt(username: string, password: string) {
-  return await makePOSTRequest<{ user: UserDetail }>('/login', {
-    username,
-    password: passwordHash(password),
-  });
-}
+export const createAccountsAPI = (api: APICore) => {
 
-export async function registerAttempt(username: string, password: string) {
-  return await makePOSTRequest<{ user: UserDetail }>('/register', {
-    username,
-    password: passwordHash(password),
-  });
-}
-export async function whoami() {
-  return await makeGETRequest<{ user: UserDetail }>('/whoami');
-}
+  const { makePOSTRequest, makeGETRequest } = api;
 
-export async function getUserDetail(username: string) {
-  return await makeGETRequest<{ user: UserDetail }>(`/u/${username}`);
-}
+  return {
+    loginAttempt(username: string, password: string) {
+      return makePOSTRequest<{ user: UserDetail }>('/login', {
+        username,
+        password: passwordHash(password),
+      });
+    },
 
-export async function logoutAttempt() {
-  return await makePOSTRequest('/logout');
+    registerAttempt(username: string, password: string) {
+      return makePOSTRequest<{ user: UserDetail }>('/register', {
+        username,
+        password: passwordHash(password),
+      });
+    },
+
+    whoami() {
+      return makeGETRequest<{ user: UserDetail }>('/whoami');
+    },
+
+    getUserDetail(username: string) {
+      return makeGETRequest<{ user: UserDetail }>(`/u/${username}`);
+    },
+
+    logoutAttempt() {
+      return makePOSTRequest('/logout');
+    }
+  }
 }
