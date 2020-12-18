@@ -24,7 +24,6 @@ export type APIResponse = {
 }
 
 export const createAPICore = (cookie?: string) => {
-
   const request = axios.create({
     baseURL: typeof window === 'undefined'
       ? getNodeURL() : getBrowserURL(),
@@ -81,8 +80,7 @@ export const createAPICore = (cookie?: string) => {
     makeDELETERequest: makeJSONRequest('DELETE'),
     makeMultipartRequest,
     makeJSONRequest,
-  }
-
-}
+  };
+};
 
 export type APICore = ReturnType<typeof createAPICore>;

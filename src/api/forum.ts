@@ -47,7 +47,6 @@ export const createForumAPI = (api: APICore) => {
 
     deleteComment(region: string, pid: string, cid: string) {
       return makeDELETERequest(`/r/${region}/${pid}/${cid}`);
-    }
-}
-    
-}
+    },
+  };
+};

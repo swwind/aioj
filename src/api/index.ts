@@ -12,8 +12,7 @@ export const createAPI = (cookie?: string) => {
     ...createForumAPI(apicore),
     ...createFriendsAPI(apicore),
     ...createFilesAPI(apicore),
-  }
-}
+  };
+};
 
 export type API = ReturnType<typeof createAPI>;
-

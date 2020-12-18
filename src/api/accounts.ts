@@ -7,7 +7,6 @@ export function passwordHash(psw: string) {
 }
 
 export const createAccountsAPI = (api: APICore) => {
-
   const { makePOSTRequest, makeGETRequest } = api;
 
   return {
@@ -35,6 +34,6 @@ export const createAccountsAPI = (api: APICore) => {
 
     logoutAttempt() {
       return makePOSTRequest('/logout');
-    }
-  }
-}
+    },
+  };
+};

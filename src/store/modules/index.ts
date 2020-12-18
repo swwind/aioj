@@ -30,8 +30,8 @@ export const createModules = (api: API) => {
     data: createDataModule(api),
     i18n: createI18nModule(api),
     ssr: createSSRModule(api),
-  }
-}
+  };
+};
 
 export type ModuleState = {
   accounts: AccountState,

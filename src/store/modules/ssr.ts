@@ -15,32 +15,31 @@ export type Mutations<S = State> = {
 
 export type Actions = { };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createSSRModule = (api: API) => {
+  const state = (): State => ({
+    status: 200,
+    title: '',
+    meta: {},
+  });
 
-const state = (): State => ({
-  status: 200,
-  title: '',
-  meta: {},
-});
+  const mutations: Mutations = {
+    [MutationTypes.CHANGE_SSR_STATUS](state, payload) {
+      state.status = payload;
+    },
+    [MutationTypes.CHANGE_SSR_TITLE](state, payload) {
+      if (typeof global.document !== 'undefined') {
+        document.title = payload;
+      }
+      state.title = payload;
+    },
+    [MutationTypes.CHANGE_SSR_META](state, payload) {
+      state.meta = payload;
+    },
+  };
 
-const mutations: Mutations = {
-  [MutationTypes.CHANGE_SSR_STATUS](state, payload) {
-    state.status = payload;
-  },
-  [MutationTypes.CHANGE_SSR_TITLE](state, payload) {
-    if (typeof global.document !== 'undefined') {
-      document.title = payload;
-    }
-    state.title = payload;
-  },
-  [MutationTypes.CHANGE_SSR_META](state, payload) {
-    state.meta = payload;
-  },
+  return {
+    state,
+    mutations,
+  };
 };
-
-return {
-  state,
-  mutations,
-};
-
-}

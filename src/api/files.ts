@@ -12,13 +12,13 @@ export const createFilesAPI = (api: APICore) => {
       formdata.append('file', file);
       return makeMultipartRequest<{ file: FileDetail }>('/upload', formdata, onProgress);
     },
-    
+
     getUserUploadedFiles(username: string) {
       return makeGETRequest<{ files: FileDetail[] }>(`/files/u/${username}`);
     },
-    
+
     deleteFile(fid: string) {
       return makeDELETERequest(`/files/${fid}`);
     },
-  }
-}
+  };
+};

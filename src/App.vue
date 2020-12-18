@@ -56,7 +56,6 @@ import { useStore } from 'vuex';
 import { closeSSRFetchPrevention, getRedirect, preventSSRFetchTwice } from './utils';
 import { translate } from '@/i18n/translate';
 import { defineComponent, onMounted, toRefs } from 'vue';
-import configs from '../config.json';
 import { MyStore } from './store';
 import { MutationTypes } from './store/mutation-types';
 import { ActionTypes } from './store/action-types';

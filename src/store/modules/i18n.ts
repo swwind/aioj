@@ -12,21 +12,20 @@ export type Mutations<S = State> = {
 
 export type Actions = { };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createI18nModule = (api: API) => {
+  const state = (): State => ({
+    lang: 'en_us',
+  });
 
-const state = (): State => ({
-  lang: 'en_us',
-});
+  const mutations: Mutations = {
+    [MutationTypes.UPDATE_LANGUAGE](state, payload: keyof typeof languages) {
+      state.lang = payload;
+    },
+  };
 
-const mutations: Mutations = {
-  [MutationTypes.UPDATE_LANGUAGE](state, payload: keyof typeof languages) {
-    state.lang = payload;
-  },
+  return {
+    state,
+    mutations,
+  };
 };
-
-return {
-  state,
-  mutations,
-};
-
-}
