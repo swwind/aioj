@@ -21,16 +21,16 @@ const state = (): State => ({
 });
 
 const mutations: Mutations = {
-  [MutationTypes.CHANGE_SSR_STATUS](state, payload: number) {
+  [MutationTypes.CHANGE_SSR_STATUS](state, payload) {
     state.status = payload;
   },
-  [MutationTypes.CHANGE_SSR_TITLE](state, payload: string) {
+  [MutationTypes.CHANGE_SSR_TITLE](state, payload) {
     if (typeof global.document !== 'undefined') {
       document.title = payload;
     }
     state.title = payload;
   },
-  [MutationTypes.CHANGE_SSR_META](state, payload: Record<string, string>) {
+  [MutationTypes.CHANGE_SSR_META](state, payload) {
     state.meta = payload;
   },
 };

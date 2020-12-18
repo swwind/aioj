@@ -45,9 +45,7 @@
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
-import { preventSSRFetchTwice, msgbox, notify, santinizeMarked, confirm } from '@/utils';
-import { useRouter } from 'vue-router';
-import { API } from '@/api';
+import { preventSSRFetchTwice, santinizeMarked, confirm } from '@/utils';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
 
@@ -67,14 +65,16 @@ export default defineComponent({
     const { region, pid } = toRefs(props);
 
     const store = useStore() as MyStore;
-    const router = useRouter();
 
     const handleReply = async () => {
-      await store.dispatch(ActionTypes.CREATE_COMMENT, {
+      const success = await store.dispatch(ActionTypes.CREATE_COMMENT, {
         region,
         pid,
         content,
       });
+      if (success) {
+        content.value = '';
+      }
     };
 
     const handleDeleteComment = async (cid: number) => {
@@ -179,7 +179,7 @@ export default defineComponent({
   .reply-content {
     margin-top: 20px;
   }
-  
+
   .reply-title {
     margin: 0;
   }

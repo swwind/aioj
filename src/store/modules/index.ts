@@ -1,7 +1,7 @@
 import accounts, {
   State as AccountState,
   Mutations as AccountMutations,
-  Actions as AccountActions
+  Actions as AccountActions,
 } from './accounts';
 import i18n, {
   State as I18nState,
@@ -35,4 +35,3 @@ export type ModuleState = {
 
 export type ModuleMutations = AccountMutations & DataMutations & I18nMutations & SSRMutations;
 export type ModuleActions = AccountActions & DataActions & I18nActions & SSRActions;
-

@@ -2,7 +2,7 @@ import { APIResponse } from '@/api/utils';
 import { translate } from '@/i18n/translate';
 import { notify } from '@/utils';
 import { Router } from 'vue-router';
-import type { ArgumentedActionContext, RootState } from ".";
+import type { ArgumentedActionContext, RootState } from '.';
 import { ActionTypes } from './action-types';
 import type { ModuleActions } from './modules';
 import { MutationTypes } from './mutation-types';
@@ -45,7 +45,7 @@ const createActions = (router: Router): Actions => ({
       title: translate(state.i18n.lang, 'success'),
       message: translate(state.i18n.lang, 'reply_success'),
     });
-  }
-})
+  },
+});
 
 export default createActions;

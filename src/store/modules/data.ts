@@ -1,12 +1,11 @@
 import { CommentDetail, FileDetail, PostDetail, RegionDetail, UserDetail } from '../../../app/types';
-import { Action, Mutation } from 'vuex';
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
 import { API } from '@/api';
 import { translate } from '@/i18n/translate';
-import { chooseFile } from '@/utils';
-import { Ref } from 'vue';
-import { ArgumentedActionContext, RootState } from '..';
+import { Argument, Arguments, chooseFile, unwarpArguments } from '@/utils';
+import { ArgumentedActionContext } from '..';
+import { unref } from 'vue';
 
 export type State = {
   regions: RegionDetail[];
@@ -42,38 +41,41 @@ export type Mutations<S = State> = {
 }
 
 export type Actions<S = State> = {
-  [ActionTypes.FETCH_POST_DATA](actx: ArgumentedActionContext<S>, payload: { region: string; pid: string; }): Promise<void>;
+  [ActionTypes.FETCH_POST_DATA](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    region: string;
+    pid: string;
+  }>): Promise<void>;
   [ActionTypes.FETCH_REGIONS_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
-  [ActionTypes.FETCH_REGION_DATA](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
-  [ActionTypes.FETCH_USER_DATA](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
-  [ActionTypes.FETCH_USER_FILES](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
+  [ActionTypes.FETCH_REGION_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
+  [ActionTypes.FETCH_USER_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
+  [ActionTypes.FETCH_USER_FILES](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.DELETE_FILE](actx: ArgumentedActionContext<S>, file: FileDetail): Promise<void>;
   [ActionTypes.UPLOAD_FILE](actx: ArgumentedActionContext<S>): Promise<void>;
-  [ActionTypes.DELETE_REGION](actx: ArgumentedActionContext<S>, region: string): Promise<void>;
-  [ActionTypes.DELETE_POST](actx: ArgumentedActionContext<S>, payload: {
-    region: Ref<string>;
-    pid: Ref<string>;
-  }): Promise<void>;
-  [ActionTypes.DELETE_COMMENT](actx: ArgumentedActionContext<S>, payload: {
-    region: Ref<string>;
-    pid: Ref<string>;
+  [ActionTypes.DELETE_REGION](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
+  [ActionTypes.DELETE_POST](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    region: string;
+    pid: string;
+  }>): Promise<void>;
+  [ActionTypes.DELETE_COMMENT](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    region: string;
+    pid: string;
     cid: string;
-  }): Promise<void>;
-  [ActionTypes.CREATE_REGION](actx: ArgumentedActionContext<S>, payload: {
-    region: Ref<string>;
-    title: Ref<string>;
-    description: Ref<string>;
-  }): Promise<void>;
-  [ActionTypes.CREATE_POST](actx: ArgumentedActionContext<S>, payload: {
-    region: Ref<string>;
-    title: Ref<string>;
-    content: Ref<string>;
-  }): Promise<void>;
-  [ActionTypes.CREATE_COMMENT](actx: ArgumentedActionContext<S>, payload: {
-    region: Ref<string>;
-    pid: Ref<string>;
-    content: Ref<string>;
-  }): Promise<void>;
+  }>): Promise<void>;
+  [ActionTypes.CREATE_REGION](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    region: string;
+    title: string;
+    description: string;
+  }>): Promise<void>;
+  [ActionTypes.CREATE_POST](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    region: string;
+    title: string;
+    content: string;
+  }>): Promise<void>;
+  [ActionTypes.CREATE_COMMENT](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    region: string;
+    pid: string;
+    content: string;
+  }>): Promise<boolean>;
 }
 
 const state = (): State => ({
@@ -89,56 +91,56 @@ const state = (): State => ({
 });
 
 const mutations: Mutations = {
-  [MutationTypes.FETCH_USER_DETAIL](state, payload: UserDetail) {
+  [MutationTypes.FETCH_USER_DETAIL](state, payload) {
     state.user = payload;
   },
-  [MutationTypes.FETCH_REGION_LIST](state, payload: RegionDetail[]) {
+  [MutationTypes.FETCH_REGION_LIST](state, payload) {
     state.regions = payload;
   },
-  [MutationTypes.FETCH_POST_LIST](state, payload: PostDetail[]) {
+  [MutationTypes.FETCH_POST_LIST](state, payload) {
     state.posts = payload;
   },
-  [MutationTypes.FETCH_REGION_DETAIL](state, payload: RegionDetail) {
+  [MutationTypes.FETCH_REGION_DETAIL](state, payload) {
     state.region = payload;
   },
-  [MutationTypes.FETCH_POST_DETAIL](state, payload: PostDetail) {
+  [MutationTypes.FETCH_POST_DETAIL](state, payload) {
     state.post = payload;
   },
-  [MutationTypes.FETCH_COMMENT_LIST](state, payload: CommentDetail[]) {
+  [MutationTypes.FETCH_COMMENT_LIST](state, payload) {
     state.comments = payload;
   },
-  [MutationTypes.FETCH_FILE_LIST](state, payload: FileDetail[]) {
+  [MutationTypes.FETCH_FILE_LIST](state, payload) {
     state.files = payload;
   },
-  [MutationTypes.DELETED_REGION](state, payload: string) {
+  [MutationTypes.DELETED_REGION](state, payload) {
     state.regions = state.regions.filter((s) => s.region !== payload);
   },
-  [MutationTypes.DELETED_POST](state, payload: string) {
+  [MutationTypes.DELETED_POST](state, payload) {
     state.posts = state.posts.filter((s) => String(s.pid) !== payload);
   },
-  [MutationTypes.DELETED_COMMENT](state, payload: string) {
+  [MutationTypes.DELETED_COMMENT](state, payload) {
     state.comments = state.comments.filter((s) => String(s.cid) !== payload);
   },
-  [MutationTypes.DELETED_FILE](state, payload: string) {
+  [MutationTypes.DELETED_FILE](state, payload) {
     state.files = state.files.filter((s) => s.fid !== payload);
   },
-  [MutationTypes.CREATED_REGION](state, payload: RegionDetail) {
+  [MutationTypes.CREATED_REGION](state, payload) {
     state.regions = state.regions.concat(payload);
   },
-  [MutationTypes.CREATED_POST](state, payload: PostDetail) {
+  [MutationTypes.CREATED_POST](state, payload) {
     state.posts = state.posts.concat(payload);
   },
-  [MutationTypes.CREATED_COMMENT](state, payload: CommentDetail) {
+  [MutationTypes.CREATED_COMMENT](state, payload) {
     state.comments = state.comments.concat(payload);
   },
-  [MutationTypes.CREATED_FILE](state, payload: FileDetail) {
+  [MutationTypes.CREATED_FILE](state, payload) {
     state.files = state.files.concat(payload);
   },
   [MutationTypes.UPLOAD_START](state) {
     state.uploading = true;
     state.progress = 0;
   },
-  [MutationTypes.UPLOAD_PROGRESS](state, progress: number) {
+  [MutationTypes.UPLOAD_PROGRESS](state, progress) {
     state.progress = progress;
   },
   [MutationTypes.UPLOAD_END](state) {
@@ -147,8 +149,9 @@ const mutations: Mutations = {
 };
 
 const actions: Actions = {
-  async [ActionTypes.FETCH_POST_DATA]({ commit, dispatch }, payload: { region: string; pid: string; }) {
-    const result = await API.getPostDetail(payload.region, payload.pid);
+  async [ActionTypes.FETCH_POST_DATA]({ commit, dispatch }, payload) {
+    const { region, pid } = unwarpArguments(payload);
+    const result = await API.getPostDetail(region, pid);
     if (result.status === 200) {
       commit(MutationTypes.FETCH_POST_DETAIL, result.post);
       commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
@@ -166,8 +169,9 @@ const actions: Actions = {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.FETCH_REGION_DATA]({ rootState: state, commit, dispatch }, payload: string) {
-    const result = await API.getPostsList(payload);
+  async [ActionTypes.FETCH_REGION_DATA]({ rootState: state, commit, dispatch }, payload) {
+    const region = unref(payload);
+    const result = await API.getPostsList(region);
     if (result.status === 200) {
       commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
       commit(MutationTypes.FETCH_POST_LIST, result.posts);
@@ -179,8 +183,9 @@ const actions: Actions = {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.FETCH_USER_DATA]({ rootState: state, commit, dispatch }, payload: string) {
-    const result = await API.getUserDetail(payload);
+  async [ActionTypes.FETCH_USER_DATA]({ rootState: state, commit, dispatch }, payload) {
+    const username = unref(payload);
+    const result = await API.getUserDetail(username);
     if (result.status === 200) {
       commit(MutationTypes.FETCH_USER_DETAIL, result.user);
       commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(state.i18n.lang, 'user')}: ${result.user.username} - AIOJ`);
@@ -188,15 +193,16 @@ const actions: Actions = {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.FETCH_USER_FILES]({ commit, dispatch }, payload: string) {
-    const result = await API.getUserUploadedFiles(payload);
+  async [ActionTypes.FETCH_USER_FILES]({ commit, dispatch }, payload) {
+    const username = unref(payload);
+    const result = await API.getUserUploadedFiles(username);
     if (result.status === 200) {
       commit(MutationTypes.FETCH_FILE_LIST, result.files);
     } else {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.DELETE_FILE]({ commit, dispatch }, file: FileDetail) {
+  async [ActionTypes.DELETE_FILE]({ commit, dispatch }, file) {
     const result = await API.deleteFile(file.fid);
     if (result.status === 200) {
       commit(MutationTypes.DELETED_FILE, file.fid);
@@ -219,7 +225,8 @@ const actions: Actions = {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.DELETE_REGION]({ commit, dispatch }, region: string) {
+  async [ActionTypes.DELETE_REGION]({ commit, dispatch }, payload) {
+    const region = unref(payload);
     const result = await API.deleteRegion(region);
     if (result.status === 200) {
       commit(MutationTypes.DELETED_REGION, region);
@@ -229,70 +236,57 @@ const actions: Actions = {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.DELETE_POST]({ dispatch }, payload: {
-    region: Ref<string>;
-    pid: Ref<string>;
-  }) {
-    const result = await API.deletePost(payload.region.value, payload.pid.value);
+  async [ActionTypes.DELETE_POST]({ dispatch }, payload) {
+    const { region, pid } = unwarpArguments(payload);
+    const result = await API.deletePost(region, pid);
     if (result.status === 200) {
       dispatch(ActionTypes.NOTIFY_DELETE_SUCCESS);
-      dispatch(ActionTypes.ROUTER_PUSH, `/r/${payload.region.value}`);
+      dispatch(ActionTypes.ROUTER_PUSH, `/r/${region}`);
     } else {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.DELETE_COMMENT]({ commit, dispatch }, payload: {
-    region: Ref<string>;
-    pid: Ref<string>;
-    cid: string;
-  }) {
-    const result = await API.deleteComment(payload.region.value, payload.pid.value, payload.cid);
+  async [ActionTypes.DELETE_COMMENT]({ commit, dispatch }, payload) {
+    const { region, pid, cid } = unwarpArguments(payload);
+    const result = await API.deleteComment(region, pid, cid);
     if (result.status === 200) {
-      commit(MutationTypes.DELETED_COMMENT, payload.cid);
+      commit(MutationTypes.DELETED_COMMENT, cid);
       dispatch(ActionTypes.NOTIFY_DELETE_SUCCESS);
     } else {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.CREATE_REGION]({ commit, dispatch }, payload: {
-    region: Ref<string>;
-    title: Ref<string>;
-    description: Ref<string>;
-  }) {
-    const result = await API.createRegion(payload.region.value, payload.title.value, payload.description.value);
+  async [ActionTypes.CREATE_REGION]({ dispatch }, payload) {
+    const { region, title, description } = unwarpArguments(payload);
+    const result = await API.createRegion(region, title, description);
     if (result.status === 200) {
-      dispatch(ActionTypes.ROUTER_PUSH, `/r/${payload.region.value}`);
+      dispatch(ActionTypes.ROUTER_PUSH, `/r/${region}`);
     } else {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.CREATE_POST]({ commit, dispatch }, payload: {
-    region: Ref<string>;
-    title: Ref<string>;
-    content: Ref<string>;
-  }) {
-    const result = await API.createPost(payload.region.value, payload.title.value, payload.content.value);
+  async [ActionTypes.CREATE_POST]({ dispatch }, payload) {
+    const { region, title, content } = unwarpArguments(payload);
+    const result = await API.createPost(region, title, content);
     if (result.status === 200) {
-      dispatch(ActionTypes.ROUTER_PUSH, `/r/${payload.region.value}/${result.pid}`);
+      dispatch(ActionTypes.ROUTER_PUSH, `/r/${region}/${result.pid}`);
     } else {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.CREATE_COMMENT]({ commit, dispatch }, payload: {
-    region: Ref<string>;
-    pid: Ref<string>;
-    content: Ref<string>;
-  }) {
-    const result = await API.sendReply(payload.region.value, payload.pid.value, payload.content.value);
+  async [ActionTypes.CREATE_COMMENT]({ commit, dispatch }, payload) {
+    const { region, pid, content } = unwarpArguments(payload);
+    const result = await API.sendReply(region, pid, content);
     if (result.status === 200) {
       dispatch(ActionTypes.NOTIFY_REPLY_SUCCESS);
       commit(MutationTypes.CREATED_COMMENT, result.comment);
-      payload.content.value = '';
+      return true;
     } else {
       dispatch(ActionTypes.HANDLE_ERROR, result);
+      return false;
     }
-  }
-}
+  },
+};
 
 export default {
   state,

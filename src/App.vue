@@ -56,7 +56,6 @@ import { useStore } from 'vuex';
 import { closeSSRFetchPrevention, getRedirect, preventSSRFetchTwice } from './utils';
 import { translate } from '@/i18n/translate';
 import { defineComponent, onMounted, toRefs } from 'vue';
-import { API } from './api';
 import configs from '../config.json';
 import { MyStore } from './store';
 import { MutationTypes } from './store/mutation-types';
@@ -106,7 +105,7 @@ export default defineComponent({
         bgdiv.style.backgroundImage = `url(${bg})`;
         document.body.appendChild(bgdiv);
         return bgdiv;
-      }
+      };
       const divs = configs.backgrounds.map(fuck);
 
       let cnt = 0;

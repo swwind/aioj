@@ -1,9 +1,10 @@
 import { UserDetail } from '../../../app/types';
 import { ActionTypes } from '../action-types';
 import { API } from '@/api';
-import { Ref } from 'vue';
 import { MutationTypes } from '../mutation-types';
-import { ArgumentedActionContext, RootState } from '..';
+import { ArgumentedActionContext } from '..';
+import { Argument, Arguments, unwarpArguments } from '@/utils';
+import { unref } from 'vue';
 
 export type State = {
   username: string;
@@ -23,18 +24,18 @@ export type Actions<S = State> = {
   [ActionTypes.FETCH_ACCOUNT_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.FETCH_FRIEND_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.LOGOUT](actx: ArgumentedActionContext<S>): Promise<void>;
-  [ActionTypes.ADD_FRIEND](actx: ArgumentedActionContext<S>, username: string): Promise<void>;
-  [ActionTypes.REMOVE_FRIEND](actx: ArgumentedActionContext<S>, username: string): Promise<void>;
-  [ActionTypes.LOGIN](actx: ArgumentedActionContext<S>, payload: {
-    username: Ref<string>;
-    password: Ref<string>;
+  [ActionTypes.ADD_FRIEND](actx: ArgumentedActionContext<S>, username: Argument<string>): Promise<void>;
+  [ActionTypes.REMOVE_FRIEND](actx: ArgumentedActionContext<S>, username: Argument<string>): Promise<void>;
+  [ActionTypes.LOGIN](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    username: string;
+    password: string;
     redirect: string;
-  }): Promise<void>;
-  [ActionTypes.REGISTER](actx: ArgumentedActionContext<S>, payload: {
-    username: Ref<string>;
-    password: Ref<string>;
+  }>): Promise<void>;
+  [ActionTypes.REGISTER](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    username: string;
+    password: string;
     redirect: string;
-  }): Promise<void>;
+  }>): Promise<void>;
 }
 
 const state = (): State => ({
@@ -44,7 +45,7 @@ const state = (): State => ({
 });
 
 const mutations: Mutations = {
-  [MutationTypes.LOGIN](state, payload: UserDetail) {
+  [MutationTypes.LOGIN](state, payload) {
     state.username = payload.username;
     state.admin = payload.admin;
   },
@@ -52,13 +53,13 @@ const mutations: Mutations = {
     state.username = '';
     state.admin = false;
   },
-  [MutationTypes.FETCH_USER_FRIENDS](state, payload: string[]) {
+  [MutationTypes.FETCH_USER_FRIENDS](state, payload) {
     state.friends = payload;
   },
-  [MutationTypes.ADD_NEW_FRIEND](state, payload: string) {
+  [MutationTypes.ADD_NEW_FRIEND](state, payload) {
     state.friends.push(payload);
   },
-  [MutationTypes.REMOVE_FRIEND](state, payload: string) {
+  [MutationTypes.REMOVE_FRIEND](state, payload) {
     state.friends = state.friends.filter((s) => s !== payload);
   },
 };
@@ -87,7 +88,8 @@ const actions: Actions = {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.ADD_FRIEND]({ commit, dispatch }, username: string) {
+  async [ActionTypes.ADD_FRIEND]({ commit, dispatch }, payload) {
+    const username = unref(payload);
     const result = await API.addFriend(username);
     if (result.status === 200) {
       commit(MutationTypes.ADD_NEW_FRIEND, username);
@@ -95,7 +97,8 @@ const actions: Actions = {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.REMOVE_FRIEND]({ commit, dispatch }, username: string) {
+  async [ActionTypes.REMOVE_FRIEND]({ commit, dispatch }, payload) {
+    const username = unref(payload);
     const result = await API.removeFriend(username);
     if (result.status === 200) {
       commit(MutationTypes.REMOVE_FRIEND, username);
@@ -103,37 +106,31 @@ const actions: Actions = {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.LOGIN]({ commit, dispatch }, payload: {
-    username: Ref<string>;
-    password: Ref<string>;
-    redirect: string;
-  }) {
-    const result = await API.loginAttempt(payload.username.value, payload.password.value);
+  async [ActionTypes.LOGIN]({ commit, dispatch }, payload) {
+    const { username, password, redirect } = unwarpArguments(payload);
+    const result = await API.loginAttempt(username, password);
     if (result.status === 200) {
       commit(MutationTypes.LOGIN, result.user);
       await dispatch(ActionTypes.FETCH_FRIEND_DATA);
-      dispatch(ActionTypes.ROUTER_PUSH, payload.redirect);
+      dispatch(ActionTypes.ROUTER_PUSH, redirect);
     } else {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.REGISTER]({ commit, dispatch }, payload: {
-    username: Ref<string>;
-    password: Ref<string>;
-    redirect: string;
-  }) {
-    const result = await API.registerAttempt(payload.username.value, payload.password.value);
+  async [ActionTypes.REGISTER]({ commit, dispatch }, payload) {
+    const { username, password, redirect } = unwarpArguments(payload);
+    const result = await API.registerAttempt(username, password);
     if (result.status === 200) {
       commit(MutationTypes.LOGIN, result.user);
-      dispatch(ActionTypes.ROUTER_PUSH, payload.redirect);
+      dispatch(ActionTypes.ROUTER_PUSH, redirect);
     } else {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-}
+};
 
 export default {
   state,
   mutations,
   actions,
-}
+};

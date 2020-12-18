@@ -37,7 +37,6 @@ import { defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
-import { API } from '@/api';
 import { MyStore } from '@/store';
 import { MutationTypes } from '@/store/mutation-types';
 import { ActionTypes } from '@/store/action-types';

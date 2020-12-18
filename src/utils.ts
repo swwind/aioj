@@ -1,8 +1,6 @@
-import { Ref } from 'vue';
+import { Ref, unref } from 'vue';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
-import { APIResponse } from './api/utils';
 import { translate } from './i18n/translate';
-import { Commit } from 'vuex';
 import marked from 'marked';
 import insane from 'insane';
 
@@ -10,8 +8,6 @@ import {
   ElNotification as notify,
   ElMessageBox as msgbox,
 } from 'element-plus';
-import { MyStore } from './store';
-import { MutationTypes } from './store/mutation-types';
 
 export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   let ret = '';
@@ -44,7 +40,7 @@ export const confirm = async (lang: string, message: string) => {
   } catch (e) {
     return false;
   }
-}
+};
 
 export function toSizeString(size: number) {
   if (size < 0.9 * (2 ** 10)) return `${size}B`;
@@ -89,7 +85,18 @@ export function santinizeMarked(mkd: string) {
 let isSSR = '__INITIAL_STATE__' in globalThis;
 export const preventSSRFetchTwice = () => {
   return !isSSR;
-}
+};
 export const closeSSRFetchPrevention = () => {
   isSSR = false;
+};
+
+export type Argument<S> = S | Ref<S>;
+export type Arguments<S = {}> = { [K in keyof S]: Argument<S[K]> };
+export function unwarpArguments<T>(arg: Arguments<T>): T;
+export function unwarpArguments(arg: any) {
+  const newobj = { } as any;
+  for (const key of Object.keys(arg)) {
+    newobj[key] = unref(arg[key]);
+  }
+  return newobj;
 }

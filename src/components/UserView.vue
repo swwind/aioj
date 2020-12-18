@@ -79,10 +79,9 @@
 
 <script lang="ts">
 import { defineComponent, toRefs, watch } from 'vue';
-import { chooseFile, toSizeString, msgbox, notify, preventSSRFetchTwice, confirm } from '@/utils';
+import { toSizeString, preventSSRFetchTwice, confirm } from '@/utils';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
-import { API } from '@/api';
 import { FileDetail } from 'app/types';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';

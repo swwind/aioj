@@ -55,11 +55,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
-import { confirm, msgbox, notify, preventSSRFetchTwice } from '@/utils';
+import { confirm, preventSSRFetchTwice } from '@/utils';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
-import { useRouter } from 'vue-router';
-import { API } from '@/api';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
 
@@ -73,7 +71,6 @@ export default defineComponent({
   async setup(props) {
     const { region } = toRefs(props);
     const store = useStore() as MyStore;
-    const router = useRouter();
 
     const title = ref('');
     const content = ref('');
