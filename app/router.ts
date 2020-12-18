@@ -63,8 +63,6 @@ router.use('/api',
   files.allowedMethods(),
 );
 
-router.get('/f/:fid', getFileSource);
-
 const supportedLanguages = ['en_us', 'zh_cn'];
 
 function getLanguage(acceptedLanguages: string) {
@@ -94,3 +92,6 @@ export const ssr: Middleware = async (ctx) => {
   ctx.set('Content-Type', 'text/html');
   ctx.response.body = html;
 };
+
+export const cdnRouter = new Router();
+cdnRouter.get('/f/:fid', getFileSource);

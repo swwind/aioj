@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import Koa from 'koa';
-import router, { ssr } from './app/router';
+import router, { cdnRouter, ssr } from './app/router';
 import body from 'koa-body';
 import serve from 'koa-static';
 import cors from '@koa/cors';
@@ -18,13 +18,31 @@ if (!isProd) {
   app.use(cors());
 } else if (config.port === 443) {
   console.log('CORS stricted to ' + config.host);
-  app.use(cors({ origin: config.host }));
+  // app.use(cors({ origin: config.host }));
+  app.use(cors());
 }
 
 app.on('error', () => {
   // ignore it
   // FIXME
 });
+
+if (config.port === 443) {
+  const middleware: any = cdnRouter.routes();
+  app.use(async (ctx, next) => {
+    // check if is cdn
+    if (ctx.host === config.cdn) {
+      await middleware(ctx, async () => {
+        ctx.response.status = 404;
+        ctx.response.body = '404 NOT FOUND XD';
+      });
+    } else {
+      await next();
+    }
+  });
+} else {
+  app.use(cdnRouter.routes());
+}
 
 app.use(body({ multipart: true }));
 app.use(serve('dist', { index: false }));

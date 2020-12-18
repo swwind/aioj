@@ -41,7 +41,7 @@
       <div class="file-list">
         <div class="file-item" v-for="file in data.files" :key="file.fid">
           <span class="file-name">
-            <a :href="`/f/${file.fid}`" target="_blank">{{ file.filename }}</a>
+            <a :href="`//${cdn}/f/${file.fid}`" target="_blank">{{ file.filename }}</a>
           </span>
           <span class="file-size">
             {{ toSizeString(file.size) }}
@@ -85,6 +85,7 @@ import { translate } from '@/i18n/translate';
 import { FileDetail } from 'app/types';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
+import configs from '../../config.json';
 
 export default defineComponent({
   props: {
@@ -144,6 +145,7 @@ export default defineComponent({
       handleUpload,
       handleDeleteFile,
       handleLogout,
+      cdn: configs.cdn,
     };
   },
 });

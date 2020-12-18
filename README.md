@@ -178,9 +178,8 @@ Content-Type: application/json
         + author: string;
         + size: number;
         + date: number;
-[x] GET    /files/:fid                  Fetch the uploaded file
+[x] GET    //cdn/f/:fid                 Fetch the uploaded file
     + ... (206 partical content support)
-    alias  //host/f/:fid
 [x] GET    /files/i/:fid                Get file's information
     + file: FileDetail
         + fid: string;

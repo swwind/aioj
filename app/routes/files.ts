@@ -36,11 +36,6 @@ export const getFileSource: Middleware = async (ctx) => {
 
   const file = result.result();
   let contentType = file.mimetype || 'application/octet-stream';
-  // prevent HTML and JS attack
-  // FIXME: maybe you can host me on cdn with another domain?
-  if (contentType.startsWith('text/')) {
-    contentType = 'text/plain';
-  }
   if (ctx.get('Range')) {
     const range = [0, file.size - 1, file.size];
     const rg = ctx.get('Range');
@@ -60,6 +55,7 @@ export const getFileSource: Middleware = async (ctx) => {
     ctx.set('Content-Type', contentType);
     ctx.set('Content-Length', String(range[1] - range[0] + 1));
     ctx.set('Accept-Ranges', 'bytes');
+    ctx.set('Cache-Control', 'max-age=31536000');
     ctx.set('Content-Range', `bytes ${range[0]}-${range[1]}/${range[2]}`);
     const buffer = await fs.readFile(file.filepath);
     ctx.response.body = buffer.slice(range[0], range[1] + 1);
@@ -68,12 +64,11 @@ export const getFileSource: Middleware = async (ctx) => {
     ctx.set('Content-Type', contentType);
     ctx.set('Content-Length', String(file.size));
     ctx.set('Accept-Ranges', 'bytes');
+    ctx.set('Cache-Control', 'max-age=31536000');
     ctx.set('Content-Disposition', `inline; filename=${JSON.stringify(encodeURIComponent(file.filename))}`);
     ctx.response.body = await fs.readFile(file.filepath);
   }
 };
-
-router.get('/files/:fid', getFileSource);
 
 router.get('/files/i/:fid', async (ctx) => {
   const result = await getFileDetail(ctx.params.fid);
