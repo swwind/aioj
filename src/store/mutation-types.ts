@@ -1,34 +1,36 @@
-export const LOGIN = 'login';
-export const LOGOUT = 'logout';
+export enum MutationTypes {
+  LOGIN = 'login',
+  LOGOUT = 'logout',
 
-export const UPDATE_LANGUAGE = 'update_language';
+  UPDATE_LANGUAGE = 'update_language',
 
-export const FETCH_REGION_LIST = 'fetch_region_list';
-export const FETCH_REGION_DETAIL = 'fetch_region_detail';
-export const FETCH_POST_LIST = 'fetch_post_list';
-export const FETCH_POST_DETAIL = 'fetch_post_detail';
-export const FETCH_COMMENT_LIST = 'fetch_comment_list';
-export const FETCH_USER_DETAIL = 'fetch_user_detail';
-export const FETCH_FILE_LIST = 'fetch_file_list';
+  FETCH_REGION_LIST = 'fetch_region_list',
+  FETCH_REGION_DETAIL = 'fetch_region_detail',
+  FETCH_POST_LIST = 'fetch_post_list',
+  FETCH_POST_DETAIL = 'fetch_post_detail',
+  FETCH_COMMENT_LIST = 'fetch_comment_list',
+  FETCH_USER_DETAIL = 'fetch_user_detail',
+  FETCH_FILE_LIST = 'fetch_file_list',
 
-export const DELETED_REGION = 'deleted_region';
-export const DELETED_POST = 'deleted_post';
-export const DELETED_COMMENT = 'deleted_comment';
-export const DELETED_FILE = 'deleted_file';
+  DELETED_REGION = 'deleted_region',
+  DELETED_POST = 'deleted_post',
+  DELETED_COMMENT = 'deleted_comment',
+  DELETED_FILE = 'deleted_file',
 
-export const CREATED_REGION = 'created_region';
-export const CREATED_POST = 'created_post';
-export const CREATED_COMMENT = 'created_comment';
-export const CREATED_FILE = 'created_file';
+  CREATED_REGION = 'created_region',
+  CREATED_POST = 'created_post',
+  CREATED_COMMENT = 'created_comment',
+  CREATED_FILE = 'created_file',
 
-export const CHANGE_SSR_STATUS = 'change_ssr_status';
-export const CHANGE_SSR_TITLE = 'change_ssr_title';
-export const CHANGE_SSR_META = 'change_ssr_meta';
+  CHANGE_SSR_STATUS = 'change_ssr_status',
+  CHANGE_SSR_TITLE = 'change_ssr_title',
+  CHANGE_SSR_META = 'change_ssr_meta',
 
-export const FETCH_USER_FRIENDS = 'fetch_user_friends';
-export const ADD_NEW_FRIEND = 'add_new_friend';
-export const REMOVE_FRIEND = 'remove_friend';
+  FETCH_USER_FRIENDS = 'fetch_user_friends',
+  ADD_NEW_FRIEND = 'add_new_friend',
+  REMOVE_FRIEND = 'remove_friend',
 
-export const UPLOAD_START = 'upload_start';
-export const UPLOAD_PROGRESS = 'upload_progress';
-export const UPLOAD_END = 'upload_end';
+  UPLOAD_START = 'upload_start',
+  UPLOAD_PROGRESS = 'upload_progress',
+  UPLOAD_END = 'upload_end',
+}

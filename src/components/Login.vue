@@ -36,10 +36,11 @@
 import { defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { ActionTypes, MutationTypes, StoreState } from '@/store';
-import { handleNetworkRequestError } from '@/utils';
 import { translate } from '@/i18n/translate';
 import { API } from '@/api';
+import { MyStore } from '@/store';
+import { MutationTypes } from '@/store/mutation-types';
+import { ActionTypes } from '@/store/action-types';
 
 export default defineComponent({
   setup() {
@@ -49,7 +50,7 @@ export default defineComponent({
     const router = useRouter();
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
-    const store = useStore<StoreState>();
+    const store = useStore() as MyStore;
     store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'login')} - AIOJ`);
 
     const handleLogin = async () => {

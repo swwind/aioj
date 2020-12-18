@@ -42,16 +42,18 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
-import { handleNetworkRequestError, preventSSRFetchTwice } from '@/utils';
+import { preventSSRFetchTwice } from '@/utils';
 import { useStore } from 'vuex';
-import { ActionTypes, MutationTypes, StoreState } from '@/store';
+import { MyStore } from '@/store';
 import { translate } from '@/i18n/translate';
 import { useRouter } from 'vue-router';
 import { API } from '@/api';
+import { MutationTypes } from '@/store/mutation-types';
+import { ActionTypes } from '@/store/action-types';
 
 export default defineComponent({
   async setup() {
-    const store = useStore<StoreState>();
+    const store = useStore() as MyStore;
     const router = useRouter();
     store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'regions')} - AIOJ`);
 

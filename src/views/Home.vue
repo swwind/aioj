@@ -10,13 +10,14 @@
 
 <script lang="ts">
 import { translate } from '@/i18n/translate';
-import { MutationTypes, StoreState } from '@/store';
+import { MyStore } from '@/store';
+import { MutationTypes } from '@/store/mutation-types';
 import { defineComponent, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
 export default defineComponent({
   setup() {
-    const store = useStore<StoreState>();
+    const store = useStore() as MyStore;
 
     store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'home')} - AIOJ`);
     store.commit(MutationTypes.CHANGE_SSR_META, {

@@ -1,14 +1,40 @@
 import { UserDetail } from '../../../app/types';
-import { Action, Mutation } from 'vuex';
-import * as MutationTypes from '../mutation-types';
-import * as ActionTypes from '../action-types';
+import { ActionTypes } from '../action-types';
 import { API } from '@/api';
 import { Ref } from 'vue';
+import { MutationTypes } from '../mutation-types';
+import { ArgumentedActionContext, RootState } from '..';
 
 export type State = {
   username: string;
   friends: string[];
   admin: boolean;
+}
+
+export type Mutations<S = State> = {
+  [MutationTypes.LOGIN](state: S, payload: UserDetail): void;
+  [MutationTypes.LOGOUT](state: S): void;
+  [MutationTypes.FETCH_USER_FRIENDS](state: S, payload: string[]): void;
+  [MutationTypes.ADD_NEW_FRIEND](state: S, payload: string): void;
+  [MutationTypes.REMOVE_FRIEND](state: S, payload: string): void;
+}
+
+export type Actions<S = State> = {
+  [ActionTypes.FETCH_ACCOUNT_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.FETCH_FRIEND_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.LOGOUT](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.ADD_FRIEND](actx: ArgumentedActionContext<S>, username: string): Promise<void>;
+  [ActionTypes.REMOVE_FRIEND](actx: ArgumentedActionContext<S>, username: string): Promise<void>;
+  [ActionTypes.LOGIN](actx: ArgumentedActionContext<S>, payload: {
+    username: Ref<string>;
+    password: Ref<string>;
+    redirect: string;
+  }): Promise<void>;
+  [ActionTypes.REGISTER](actx: ArgumentedActionContext<S>, payload: {
+    username: Ref<string>;
+    password: Ref<string>;
+    redirect: string;
+  }): Promise<void>;
 }
 
 const state = (): State => ({
@@ -17,7 +43,7 @@ const state = (): State => ({
   admin: false,
 });
 
-const mutations: { [key: string]: Mutation<State> } = {
+const mutations: Mutations = {
   [MutationTypes.LOGIN](state, payload: UserDetail) {
     state.username = payload.username;
     state.admin = payload.admin;
@@ -37,7 +63,7 @@ const mutations: { [key: string]: Mutation<State> } = {
   },
 };
 
-const actions: { [key: string]: Action<State, any> } = {
+const actions: Actions = {
   async [ActionTypes.FETCH_ACCOUNT_DATA]({ commit, dispatch }) {
     const result = await API.whoami();
     if (result.status === 200) {
@@ -110,4 +136,4 @@ export default {
   state,
   mutations,
   actions,
-};
+}

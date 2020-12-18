@@ -79,12 +79,13 @@
 
 <script lang="ts">
 import { defineComponent, toRefs, watch } from 'vue';
-import { chooseFile, handleNetworkRequestError, toSizeString, msgbox, notify, preventSSRFetchTwice, confirm } from '@/utils';
+import { chooseFile, toSizeString, msgbox, notify, preventSSRFetchTwice, confirm } from '@/utils';
 import { useStore } from 'vuex';
-import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
 import { API } from '@/api';
 import { FileDetail } from 'app/types';
+import { MyStore } from '@/store';
+import { ActionTypes } from '@/store/action-types';
 
 export default defineComponent({
   props: {
@@ -95,7 +96,7 @@ export default defineComponent({
   },
   async setup(props) {
     const { username } = toRefs(props);
-    const store = useStore<StoreState>();
+    const store = useStore() as MyStore;
 
     const handleToggleFriend = async () => {
       if (store.state.accounts.friends.indexOf(username.value) > -1) {

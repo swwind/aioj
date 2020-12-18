@@ -2,13 +2,13 @@
   <el-card shadow="hover">
     <template #header>
       <h1>{{ data.region.title }}</h1>
-      <p class="desc">
+      <div class="desc">
         {{ data.region.description }}
         <div class="operations" v-if="accounts.admin">
           <i class="el-icon-delete" @click="handleDeleteRegion"></i>
           <i class="el-icon-edit"></i>
         </div>
-      </p>
+      </div>
     </template>
     <div class="posts-list">
       <el-alert type="warning" v-if="!data.posts.length">{{ translate(i18n.lang, 'no_posts') }}</el-alert>
@@ -55,12 +55,13 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
-import { confirm, handleNetworkRequestError, msgbox, notify, preventSSRFetchTwice } from '@/utils';
+import { confirm, msgbox, notify, preventSSRFetchTwice } from '@/utils';
 import { useStore } from 'vuex';
-import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { translate } from '@/i18n/translate';
 import { useRouter } from 'vue-router';
 import { API } from '@/api';
+import { MyStore } from '@/store';
+import { ActionTypes } from '@/store/action-types';
 
 export default defineComponent({
   props: {
@@ -71,7 +72,7 @@ export default defineComponent({
   },
   async setup(props) {
     const { region } = toRefs(props);
-    const store = useStore<StoreState>();
+    const store = useStore() as MyStore;
     const router = useRouter();
 
     const title = ref('');

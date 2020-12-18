@@ -1,12 +1,12 @@
 import { CommentDetail, FileDetail, PostDetail, RegionDetail, UserDetail } from '../../../app/types';
 import { Action, Mutation } from 'vuex';
-import * as MutationTypes from '../mutation-types';
-import * as ActionTypes from '../action-types';
-import { StoreState } from '..';
+import { MutationTypes } from '../mutation-types';
+import { ActionTypes } from '../action-types';
 import { API } from '@/api';
 import { translate } from '@/i18n/translate';
-import { chooseFile, notify } from '@/utils';
+import { chooseFile } from '@/utils';
 import { Ref } from 'vue';
+import { ArgumentedActionContext, RootState } from '..';
 
 export type State = {
   regions: RegionDetail[];
@@ -18,6 +18,62 @@ export type State = {
   files: FileDetail[];
   uploading: boolean;
   progress: number; // range [0,1]
+}
+
+export type Mutations<S = State> = {
+  [MutationTypes.FETCH_USER_DETAIL](state: S, payload: UserDetail): void;
+  [MutationTypes.FETCH_REGION_LIST](state: S, payload: RegionDetail[]): void;
+  [MutationTypes.FETCH_POST_LIST](state: S, payload: PostDetail[]): void;
+  [MutationTypes.FETCH_REGION_DETAIL](state: S, payload: RegionDetail): void;
+  [MutationTypes.FETCH_POST_DETAIL](state: S, payload: PostDetail): void;
+  [MutationTypes.FETCH_COMMENT_LIST](state: S, payload: CommentDetail[]): void;
+  [MutationTypes.FETCH_FILE_LIST](state: S, payload: FileDetail[]): void;
+  [MutationTypes.DELETED_REGION](state: S, payload: string): void;
+  [MutationTypes.DELETED_POST](state: S, payload: string): void;
+  [MutationTypes.DELETED_COMMENT](state: S, payload: string): void;
+  [MutationTypes.DELETED_FILE](state: S, payload: string): void;
+  [MutationTypes.CREATED_REGION](state: S, payload: RegionDetail): void;
+  [MutationTypes.CREATED_POST](state: S, payload: PostDetail): void;
+  [MutationTypes.CREATED_COMMENT](state: S, payload: CommentDetail): void;
+  [MutationTypes.CREATED_FILE](state: S, payload: FileDetail): void;
+  [MutationTypes.UPLOAD_START](state: S): void;
+  [MutationTypes.UPLOAD_PROGRESS](state: S, progress: number): void;
+  [MutationTypes.UPLOAD_END](state: S): void;
+}
+
+export type Actions<S = State> = {
+  [ActionTypes.FETCH_POST_DATA](actx: ArgumentedActionContext<S>, payload: { region: string; pid: string; }): Promise<void>;
+  [ActionTypes.FETCH_REGIONS_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.FETCH_REGION_DATA](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
+  [ActionTypes.FETCH_USER_DATA](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
+  [ActionTypes.FETCH_USER_FILES](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
+  [ActionTypes.DELETE_FILE](actx: ArgumentedActionContext<S>, file: FileDetail): Promise<void>;
+  [ActionTypes.UPLOAD_FILE](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.DELETE_REGION](actx: ArgumentedActionContext<S>, region: string): Promise<void>;
+  [ActionTypes.DELETE_POST](actx: ArgumentedActionContext<S>, payload: {
+    region: Ref<string>;
+    pid: Ref<string>;
+  }): Promise<void>;
+  [ActionTypes.DELETE_COMMENT](actx: ArgumentedActionContext<S>, payload: {
+    region: Ref<string>;
+    pid: Ref<string>;
+    cid: string;
+  }): Promise<void>;
+  [ActionTypes.CREATE_REGION](actx: ArgumentedActionContext<S>, payload: {
+    region: Ref<string>;
+    title: Ref<string>;
+    description: Ref<string>;
+  }): Promise<void>;
+  [ActionTypes.CREATE_POST](actx: ArgumentedActionContext<S>, payload: {
+    region: Ref<string>;
+    title: Ref<string>;
+    content: Ref<string>;
+  }): Promise<void>;
+  [ActionTypes.CREATE_COMMENT](actx: ArgumentedActionContext<S>, payload: {
+    region: Ref<string>;
+    pid: Ref<string>;
+    content: Ref<string>;
+  }): Promise<void>;
 }
 
 const state = (): State => ({
@@ -32,7 +88,7 @@ const state = (): State => ({
   progress: 0,
 });
 
-const mutations: { [key: string]: Mutation<State> } = {
+const mutations: Mutations = {
   [MutationTypes.FETCH_USER_DETAIL](state, payload: UserDetail) {
     state.user = payload;
   },
@@ -90,7 +146,7 @@ const mutations: { [key: string]: Mutation<State> } = {
   },
 };
 
-const actions: { [key: string]: Action<StoreState, any> } = {
+const actions: Actions = {
   async [ActionTypes.FETCH_POST_DATA]({ commit, dispatch }, payload: { region: string; pid: string; }) {
     const result = await API.getPostDetail(payload.region, payload.pid);
     if (result.status === 200) {
@@ -173,7 +229,7 @@ const actions: { [key: string]: Action<StoreState, any> } = {
       dispatch(ActionTypes.HANDLE_ERROR, result);
     }
   },
-  async [ActionTypes.DELETE_POST]({ commit, dispatch }, payload: {
+  async [ActionTypes.DELETE_POST]({ dispatch }, payload: {
     region: Ref<string>;
     pid: Ref<string>;
   }) {

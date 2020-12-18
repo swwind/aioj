@@ -1,37 +1,40 @@
-import { translate } from '@/i18n/translate';
-import { handleNetworkRequestError, notify } from '@/utils';
 import { Router } from 'vue-router';
-import { createStore } from 'vuex';
-import { HANDLE_ERROR, NOTIFY_DELETE_SUCCESS, NOTIFY_REPLY_SUCCESS, ROUTER_PUSH } from './action-types';
-import modules, { StoreState } from './modules';
+import { ActionContext, createStore, Store } from 'vuex';
+import createActions, { RootActions } from './actions';
+import modules, { ModuleMutations as RootMutations, ModuleState as RootState } from './modules';
 
-const store = (router: Router) => createStore<StoreState>({
+const store = (router: Router) => createStore<RootState>({
   modules,
-  actions: {
-    async [HANDLE_ERROR](store, payload) {
-      handleNetworkRequestError(store, payload);
-    },
-    async [NOTIFY_DELETE_SUCCESS]({ state }) {
-      notify({
-        title: translate(state.i18n.lang, 'success'),
-        type: 'success',
-        message: translate(state.i18n.lang, 'delete_success'),
-      });
-    },
-    async [ROUTER_PUSH](store, payload: string) {
-      router.push(payload);
-    },
-    async [NOTIFY_REPLY_SUCCESS]({ state }) {
-      notify({
-        type: 'success',
-        title: translate(state.i18n.lang, 'success'),
-        message: translate(state.i18n.lang, 'reply_success'),
-      });
-    }
-  },
+  actions: createActions(router),
 });
 
+type OptionalSpread<T> = T extends undefined ? [] : [T];
+
+export type ArgumentedActionContext<S = RootState> =
+  Omit<ActionContext<S, RootState>, 'commit' | 'dispatch' | 'state' | 'rootState'> & {
+    commit<K extends keyof RootMutations>(
+      type: K,
+      ...payload: OptionalSpread<Parameters<RootMutations[K]>[1]>
+    ): ReturnType<RootMutations[K]>;
+    dispatch<K extends keyof RootActions>(
+      type: K,
+      ...payload: OptionalSpread<Parameters<RootActions[K]>[1]>
+    ): ReturnType<RootActions[K]>;
+    state: S;
+    rootState: RootState;
+  }
+
+export type MyStore =
+  Omit<Store<RootState>, 'commit' | 'dispatch'> & {
+    commit<K extends keyof RootMutations>(
+      type: K,
+      ...payload: OptionalSpread<Parameters<RootMutations[K]>[1]>
+    ): ReturnType<RootMutations[K]>;
+    dispatch<K extends keyof RootActions>(
+      type: K,
+      ...payload: OptionalSpread<Parameters<RootActions[K]>[1]>
+    ): ReturnType<RootActions[K]>;
+  }
+
+export type { RootState };
 export default store;
-export type { StoreState };
-export * as MutationTypes from './mutation-types';
-export * as ActionTypes from './action-types';

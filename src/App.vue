@@ -53,17 +53,19 @@
 <script lang="ts">
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { closeSSRFetchPrevention, getRedirect, handleNetworkRequestError, preventSSRFetchTwice } from './utils';
+import { closeSSRFetchPrevention, getRedirect, preventSSRFetchTwice } from './utils';
 import { translate } from '@/i18n/translate';
-import { StoreState, MutationTypes, ActionTypes } from './store';
 import { defineComponent, onMounted, toRefs } from 'vue';
 import { API } from './api';
 import configs from '../config.json';
+import { MyStore } from './store';
+import { MutationTypes } from './store/mutation-types';
+import { ActionTypes } from './store/action-types';
 
 export default defineComponent({
   async setup() {
     const router = useRouter();
-    const store = useStore<StoreState>();
+    const store = useStore() as MyStore;
 
     const menus = [{
       name: 'home',

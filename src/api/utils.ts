@@ -9,7 +9,7 @@ const getNodeURL = () => {
 };
 
 const getBrowserURL = () => {
-  if (typeof (window as any).__VUE_HMR_RUNTIME__ === 'undefined') {
+  if (!('__VUE_HMR_RUNTIME__' in window)) {
     return '/api';
   } else {
     return `http://localhost:${config.port}/api`;

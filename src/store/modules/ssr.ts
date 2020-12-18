@@ -1,5 +1,4 @@
-import { Mutation } from 'vuex';
-import * as MutationTypes from '../mutation-types';
+import { MutationTypes } from '../mutation-types';
 
 export type State = {
   status: number;
@@ -7,13 +6,21 @@ export type State = {
   meta: Record<string, string>;
 }
 
+export type Mutations<S = State> = {
+  [MutationTypes.CHANGE_SSR_STATUS](state: S, payload: number): void;
+  [MutationTypes.CHANGE_SSR_TITLE](state: S, payload: string): void;
+  [MutationTypes.CHANGE_SSR_META](state: S, payload: Record<string, string>): void;
+}
+
+export type Actions = { };
+
 const state = (): State => ({
   status: 200,
   title: '',
   meta: {},
 });
 
-const mutations: { [key: string]: Mutation<State> } = {
+const mutations: Mutations = {
   [MutationTypes.CHANGE_SSR_STATUS](state, payload: number) {
     state.status = payload;
   },

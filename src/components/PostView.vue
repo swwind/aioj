@@ -42,13 +42,14 @@
 </template>
 
 <script lang="ts">
-import { ActionTypes, MutationTypes, StoreState } from '@/store';
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
-import { preventSSRFetchTwice, handleNetworkRequestError, msgbox, notify, santinizeMarked, confirm } from '@/utils';
+import { preventSSRFetchTwice, msgbox, notify, santinizeMarked, confirm } from '@/utils';
 import { useRouter } from 'vue-router';
 import { API } from '@/api';
+import { MyStore } from '@/store';
+import { ActionTypes } from '@/store/action-types';
 
 export default defineComponent({
   props: {
@@ -65,7 +66,7 @@ export default defineComponent({
     const content = ref('');
     const { region, pid } = toRefs(props);
 
-    const store = useStore<StoreState>();
+    const store = useStore() as MyStore;
     const router = useRouter();
 
     const handleReply = async () => {

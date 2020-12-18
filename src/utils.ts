@@ -3,7 +3,6 @@ import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { APIResponse } from './api/utils';
 import { translate } from './i18n/translate';
 import { Commit } from 'vuex';
-import { MutationTypes, StoreState } from './store';
 import marked from 'marked';
 import insane from 'insane';
 
@@ -11,6 +10,8 @@ import {
   ElNotification as notify,
   ElMessageBox as msgbox,
 } from 'element-plus';
+import { MyStore } from './store';
+import { MutationTypes } from './store/mutation-types';
 
 export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   let ret = '';
@@ -24,19 +25,6 @@ export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   }
 
   return ret ? `?redirect=${encodeURIComponent(ret)}` : '';
-}
-
-export function handleNetworkRequestError(store: { state: StoreState, commit: Commit }, result: APIResponse) {
-  if (result.status >= 400) {
-    notify({
-      title: translate(store.state.i18n.lang, 'error'),
-      type: 'error',
-      message: translate(store.state.i18n.lang, result.error as any),
-    });
-
-    store.commit(MutationTypes.CHANGE_SSR_STATUS, 404);
-    store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'not_found')} - AIOJ`);
-  }
 }
 
 export { notify, msgbox };
