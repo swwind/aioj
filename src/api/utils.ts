@@ -49,7 +49,16 @@ export const createAPICore = (cookie?: string) => {
     }
   };
 
+  let blocking = '__INITIAL_STATE__' in globalThis;
+
+  const unblockSSR = () => {
+    blocking = false;
+  }
+
   const makeJSONRequest = (method: Method) => <T = {}> (url: string, data?: object, headers?: object) => {
+    if (blocking) {
+      return Promise.resolve<APIResponse & T>({ status: 0, error: '' } as any);
+    }
     return makeRequest<T>(request.request({
       url,
       method,
@@ -80,6 +89,7 @@ export const createAPICore = (cookie?: string) => {
     makeDELETERequest: makeJSONRequest('DELETE'),
     makeMultipartRequest,
     makeJSONRequest,
+    unblockSSR,
   };
 };
 

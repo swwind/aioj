@@ -45,7 +45,7 @@
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
-import { preventSSRFetchTwice, santinizeMarked, confirm } from '@/utils';
+import { santinizeMarked, confirm } from '@/utils';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
 
@@ -102,12 +102,10 @@ export default defineComponent({
       alert('Not implemented yet ' + cid);
     };
 
-    if (preventSSRFetchTwice()) {
-      await store.dispatch(ActionTypes.FETCH_POST_DATA, {
-        region: region.value,
-        pid: pid.value,
-      });
-    }
+    await store.dispatch(ActionTypes.FETCH_POST_DATA, {
+      region: region.value,
+      pid: pid.value,
+    });
 
     return {
       translate,

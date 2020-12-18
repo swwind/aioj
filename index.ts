@@ -18,8 +18,7 @@ if (!isProd) {
   app.use(cors());
 } else if (config.port === 443) {
   console.log('CORS stricted to ' + config.host);
-  // app.use(cors({ origin: config.host }));
-  app.use(cors());
+  app.use(cors({ origin: config.host }));
 }
 
 app.on('error', () => {

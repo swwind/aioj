@@ -41,7 +41,7 @@
       <div class="file-list">
         <div class="file-item" v-for="file in data.files" :key="file.fid">
           <span class="file-name">
-            <a :href="`//${cdn}/f/${file.fid}`" target="_blank">{{ file.filename }}</a>
+            <a :href="`${cdn}/f/${file.fid}`" target="_blank">{{ file.filename }}</a>
           </span>
           <span class="file-size">
             {{ toSizeString(file.size) }}
@@ -78,14 +78,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, watch } from 'vue';
-import { toSizeString, preventSSRFetchTwice, confirm } from '@/utils';
+import { defineComponent, toRefs, watch, watchEffect } from 'vue';
+import { toSizeString, confirm } from '@/utils';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
 import { FileDetail } from 'app/types';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
-import configs from '../../config.json';
+import config from '../../config.json';
 
 export default defineComponent({
   props: {
@@ -127,15 +127,13 @@ export default defineComponent({
     };
 
     const loadUser = async () => {
-      await store.dispatch(ActionTypes.FETCH_USER_DATA, username.value);
-      if (store.state.accounts.username === username.value || store.state.accounts.admin) {
-        await store.dispatch(ActionTypes.FETCH_USER_FILES, username.value);
+      await store.dispatch(ActionTypes.FETCH_USER_DATA, props.username);
+      if (store.state.accounts.username === props.username || store.state.accounts.admin) {
+        await store.dispatch(ActionTypes.FETCH_USER_FILES, props.username);
       }
     };
     watch(username, loadUser);
-    if (preventSSRFetchTwice()) {
-      await loadUser();
-    }
+    await loadUser();
 
     return {
       translate,
@@ -145,7 +143,7 @@ export default defineComponent({
       handleUpload,
       handleDeleteFile,
       handleLogout,
-      cdn: configs.cdn,
+      cdn: config.port === 443 ? '//' + config.cdn : '',
     };
   },
 });

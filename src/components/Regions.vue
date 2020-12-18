@@ -42,7 +42,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
-import { preventSSRFetchTwice } from '@/utils';
 import { useStore } from 'vuex';
 import { MyStore } from '@/store';
 import { translate } from '@/i18n/translate';
@@ -66,9 +65,7 @@ export default defineComponent({
       });
     };
 
-    if (preventSSRFetchTwice()) {
-      await store.dispatch(ActionTypes.FETCH_REGIONS_DATA);
-    }
+    await store.dispatch(ActionTypes.FETCH_REGIONS_DATA);
 
     return {
       translate,

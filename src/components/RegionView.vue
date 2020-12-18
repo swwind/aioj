@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
-import { confirm, preventSSRFetchTwice } from '@/utils';
+import { confirm } from '@/utils';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
 import { MyStore } from '@/store';
@@ -90,9 +90,7 @@ export default defineComponent({
       await store.dispatch(ActionTypes.DELETE_REGION, region.value);
     };
 
-    if (preventSSRFetchTwice()) {
-      await store.dispatch(ActionTypes.FETCH_REGION_DATA, region.value);
-    }
+    await store.dispatch(ActionTypes.FETCH_REGION_DATA, region.value);
 
     return {
       title,

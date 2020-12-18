@@ -82,14 +82,6 @@ export function santinizeMarked(mkd: string) {
   });
 }
 
-let isSSR = '__INITIAL_STATE__' in globalThis;
-export const preventSSRFetchTwice = () => {
-  return !isSSR;
-};
-export const closeSSRFetchPrevention = () => {
-  isSSR = false;
-};
-
 export type Argument<S> = S | Ref<S>;
 export type Arguments<S = {}> = { [K in keyof S]: Argument<S[K]> };
 export function unwarpArguments<T>(arg: Arguments<T>): T;

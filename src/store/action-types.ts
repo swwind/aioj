@@ -29,4 +29,6 @@ export enum ActionTypes {
 
   HANDLE_ERROR = 'handle_error',
   ROUTER_PUSH = 'router_push',
+
+  UNBLOCK_SSR = 'unblock_ssr',
 }

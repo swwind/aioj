@@ -53,7 +53,7 @@
 <script lang="ts">
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { closeSSRFetchPrevention, getRedirect, preventSSRFetchTwice } from './utils';
+import { getRedirect } from './utils';
 import { translate } from '@/i18n/translate';
 import { defineComponent, onMounted, toRefs } from 'vue';
 import { MyStore } from './store';
@@ -96,12 +96,10 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      closeSSRFetchPrevention();
+      store.dispatch(ActionTypes.UNBLOCK_SSR);
     });
 
-    if (preventSSRFetchTwice()) {
-      await store.dispatch(ActionTypes.FETCH_ACCOUNT_DATA);
-    }
+    await store.dispatch(ActionTypes.FETCH_ACCOUNT_DATA);
 
     return {
       handleMenuSelect,

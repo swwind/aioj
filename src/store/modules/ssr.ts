@@ -1,4 +1,6 @@
 import { API } from '@/api';
+import { ArgumentedActionContext } from '..';
+import { ActionTypes } from '../action-types';
 import { MutationTypes } from '../mutation-types';
 
 export type State = {
@@ -13,7 +15,9 @@ export type Mutations<S = State> = {
   [MutationTypes.CHANGE_SSR_META](state: S, payload: Record<string, string>): void;
 }
 
-export type Actions = { };
+export type Actions<S = State> = {
+  [ActionTypes.UNBLOCK_SSR](ctx: ArgumentedActionContext<S>): void;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createSSRModule = (api: API) => {
@@ -38,8 +42,15 @@ export const createSSRModule = (api: API) => {
     },
   };
 
+  const actions: Actions = {
+    [ActionTypes.UNBLOCK_SSR]() {
+      api.unblockSSR();
+    }
+  }
+
   return {
     state,
     mutations,
+    actions,
   };
 };
