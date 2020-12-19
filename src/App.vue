@@ -1,25 +1,33 @@
 <template>
-  <el-header class="header">
-    <div class="maxw">
-      <el-menu @select="handleMenuSelect" mode="horizontal" :default-active="activeMenu" class="nav">
-        <el-menu-item v-for="menuItem of menus"
-          :key="menuItem.url"
-          :index="menuItem.url">
-          {{ translate(i18n.lang, menuItem.name) }}
-        </el-menu-item>
-      </el-menu>
+  <ui-frame>
+    <template #fixed>
+      <ui-menu class="nav" :menus="menus"></ui-menu>
       <div class="buttonset" v-if="!accounts.username">
-        <el-button @click="jumpTo('/login')">{{ translate(i18n.lang, 'login') }}</el-button>
-        <el-button @click="jumpTo('/register')" type="primary">{{ translate(i18n.lang, 'register') }}</el-button>
+        <ui-button
+          @click="jumpTo('/login')">
+          {{ translate(i18n.lang, 'login') }}
+        </ui-button>
+        <ui-button
+          @click="jumpTo('/register')"
+          type="primary">
+          {{ translate(i18n.lang, 'register') }}
+        </ui-button>
       </div>
       <div class="userpanel" v-else>
         <router-link :to="`/u/${accounts.username}`" :class="{ admin: accounts.admin }">
           {{ accounts.username }}
         </router-link>
       </div>
-    </div>
-  </el-header>
-  <el-main class="main">
+    </template>
+    <template #header>
+      <p class="breadcrumbs">
+        <span class="breadcrumb" v-for="subtitle of ssr.title.slice(0, -1)" :key="subtitle.name">
+          <router-link v-if="subtitle.url" :to="subtitle.url">{{ subtitle.name }}</router-link>
+          <span v-else>{{ subtitle.name }}</span>
+        </span>
+      </p>
+      <h1 v-if="ssr.title.length" class="title">{{ ssr.title[ssr.title.length - 1].name }}</h1>
+    </template>
     <router-view v-slot="{ Component }">
       <suspense>
         <template #default>
@@ -33,21 +41,36 @@
         </template>
       </suspense>
     </router-view>
-  </el-main>
-  <el-footer class="footer">
-    <p>
-      Copyright (c) 2020<br/>
-      Made with ❤
-      <span
-        v-for="lang of langs"
-        @click="useLang(lang.name)"
-        :key="lang.name"
-        class="clickable"
-        :class="{ disabled: lang.name === i18n.lang }">
-        {{ lang.show }}
-      </span>
-    </p>
-  </el-footer>
+    <template #footer>
+      <div class="links">
+        <div class="row">
+          <div class="title">你们啊</div>
+          <div class="item"><span>不要总想着</span></div>
+          <div class="item"><span>就把我</span></div>
+        </div>
+        <div class="row">
+          <div class="title">还是太年轻了</div>
+          <div class="item"><span>搞个大新闻</span></div>
+          <div class="item"><span>批判一番</span></div>
+        </div>
+      </div>
+      <div class="copys">
+        <div class="left">
+          Copyright (c) 2020 swwind
+        </div>
+        <div class="right">
+          <span
+            v-for="lang of langs"
+            @click="useLang(lang.name)"
+            :key="lang.name"
+            class="language"
+            :class="{ disabled: lang.name === i18n.lang }">
+            {{ lang.show }}
+          </span>
+        </div>
+      </div>
+    </template>
+  </ui-frame>
 </template>
 
 <script lang="ts">
@@ -55,7 +78,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { getRedirect } from './utils';
 import { translate } from '@/i18n/translate';
-import { defineComponent, onMounted, toRefs } from 'vue';
+import { computed, defineComponent, onMounted, toRefs } from 'vue';
 import { MyStore } from './store';
 import { MutationTypes } from './store/mutation-types';
 import { ActionTypes } from './store/action-types';
@@ -75,10 +98,6 @@ export default defineComponent({
       name: 'forum',
       url: '/r',
     }];
-    const activeMenu = router.currentRoute.value.path;
-    const handleMenuSelect = (select: string) => {
-      router.push(select);
-    };
 
     const jumpTo = (url: string) => {
       router.push(`${url}${getRedirect(router.currentRoute)}`);
@@ -102,9 +121,7 @@ export default defineComponent({
     await store.dispatch(ActionTypes.FETCH_ACCOUNT_DATA);
 
     return {
-      handleMenuSelect,
       menus,
-      activeMenu,
       jumpTo,
       translate,
       langs,
@@ -117,140 +134,129 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+@import '@/plugins/ui/styles/colors.less';
+@import '@/plugins/ui/styles/vars.less';
+
 body, html {
   padding: 0;
   margin: 0;
-  height: 100%;
-  width: 100%;
 }
 
 body {
-  overflow-y: scroll !important;
+  height: 100%;
+  width: 100%;
+  background-color: @background-color;
+  color: @font-color;
+  overflow-y: scroll;
 }
 
-textarea {
-  font-family: sans-serif;
-}
-
-.el-card {
-  .el-card__header {
-    h1, h2, h3, h4, h5, h6 {
-      margin: 0;
-    }
-  }
-
-  .el-card__body {
-    padding: 0 20px;
-  }
-}
-
-.el-menu-item {
-
-  &.is-active {
-    background-color: #0000000c !important;
-  }
+a {
+  color: @theme-color;
+  text-decoration: none;
 
   &:hover {
-    background-color: #00000020 !important;
+    text-decoration: underline;
   }
 }
 
-.background-image {
-  position: fixed;
-  z-index: -1;
-  width: 100vw;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  opacity: 0;
-  transition: opacity .5s;
-
-  &.show {
-    opacity: 1;
-  }
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
 }
-
-a, .clickable {
-  text-decoration: underline;
-  color: #2c3e50;
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: @scrollbar-color;
+  border: none;
+  transition: all ease 0.1s;
   cursor: pointer;
-
-  &.disabled {
-    cursor: default;
-    font-weight: bold;
-    text-decoration: none;
-  }
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, 'WenQuanYi Micro Hei', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-@media only screen and (min-width: 1080px) {
-  .maxw, .main {
-    width: 1000px;
-    margin: 0 auto;
-  }
-}
-
-.maxw {
-  display: flex;
-
-  .nav {
-    flex: 1;
-  }
-}
-
-.marked {
-  img, audio, video {
-    max-width: 100%;
-  }
-}
-
-.el-menu {
-  background-color: transparent;
-}
-
-.el-card, .el-header, .el-footer {
-  background-color: #ffffffc0 !important;
 }
 
 </style>
 
 <style lang="less" scoped>
+@import '@/plugins/ui/styles/vars.less';
 
-.header {
-  background-color: white;
+.nav {
+  flex: 1;
 }
 
-.buttonset, .userpanel {
-  border-bottom: solid 1px #e6e6e6;
+.breadcrumbs {
+  margin-top: 70px;
+  margin-bottom: 5px;
+  height: 20px;
+
+  .breadcrumb {
+    &::after {
+      content: " / ";
+      margin: 0 5px;
+    }
+  }
+}
+
+.title {
+  font-weight: normal;
+  margin-top: 5px;
 }
 
 .buttonset {
-  padding-top: 11px;
+  margin: 0 20px;
+
+  &::after {
+    content: '';
+    width: 0;
+    height: 60px;
+    display: inline-block;
+    vertical-align: middle;
+  }
 }
 
-.userpanel {
-  line-height: 60px;
-  padding: 0 20px;
+.links {
+  flex: 1;
+
+  .row {
+    display: inline-block;
+
+    & + .row {
+      margin-left: 100px;
+    }
+
+    .title {
+      font-size: 1.5rem;
+    }
+
+    .item {
+      margin: 10px 0;
+
+      span {
+        color: @font-color-light;
+        cursor: pointer;
+  
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }
 
-.footer {
-  text-align: center;
-  font-size: .8rem;
+.copys {
+  display: flex;
 
-  .clickable {
-    margin: 0 5px;
+  .left {
+    flex: 1;
+    color: @font-color-light;
+  }
+
+  .language {
+    margin-left: 20px;
+    cursor: pointer;
+
+    &.disabled {
+      font-weight: bold;
+    }
   }
 }
 

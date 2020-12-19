@@ -150,14 +150,26 @@ export const createDataModule = (api: API) => {
   };
 
   const actions: Actions = {
-    async [ActionTypes.FETCH_POST_DATA]({ commit, dispatch }, payload) {
+    async [ActionTypes.FETCH_POST_DATA]({ rootState, commit, dispatch }, payload) {
       const { region, pid } = unwarpArguments(payload);
       const result = await api.getPostDetail(region, pid);
       if (result.status === 200) {
         commit(MutationTypes.FETCH_POST_DETAIL, result.post);
         commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
         commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
-        commit(MutationTypes.CHANGE_SSR_TITLE, `${result.post.title} - AIOJ`);
+        commit(MutationTypes.CHANGE_SSR_TITLE, [{
+          name: translate(rootState.i18n.lang, 'region'),
+          url: `/r`,
+          show: false,
+        }, {
+          name: result.region.title,
+          url: `/r/${region}`,
+          show: false,
+        }, {
+          name: result.post.title,
+          url: '',
+          show: true,
+        }]);
       } else {
         dispatch(ActionTypes.HANDLE_ERROR, result);
       }
@@ -176,7 +188,14 @@ export const createDataModule = (api: API) => {
       if (result.status === 200) {
         commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
         commit(MutationTypes.FETCH_POST_LIST, result.posts);
-        commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(state.i18n.lang, 'region')}: ${result.region.title} - AIOJ`);
+        commit(MutationTypes.CHANGE_SSR_TITLE, [
+          {
+            name: translate(state.i18n.lang, 'region'),
+            url: '/r',
+            show: true,
+          },
+          result.region.title
+        ]);
         commit(MutationTypes.CHANGE_SSR_META, {
           description: result.region.description,
         });
@@ -189,7 +208,7 @@ export const createDataModule = (api: API) => {
       const result = await api.getUserDetail(username);
       if (result.status === 200) {
         commit(MutationTypes.FETCH_USER_DETAIL, result.user);
-        commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(state.i18n.lang, 'user')}: ${result.user.username} - AIOJ`);
+        commit(MutationTypes.CHANGE_SSR_TITLE, [translate(state.i18n.lang, 'user'), result.user.username]);
       } else {
         dispatch(ActionTypes.HANDLE_ERROR, result);
       }

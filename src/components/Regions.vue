@@ -1,17 +1,14 @@
 <template>
-  <el-card shadow="hover">
-    <template #header>
-      <h1>{{ translate(i18n.lang, 'regions') }}</h1>
-    </template>
+  <ui-card notitle>
     <el-alert type="warning" v-if="!data.regions.length">{{ translate(i18n.lang, 'no_regions') }}</el-alert>
     <div class="region-item" v-for="region of data.regions" :key="region.region">
       <router-link :to="`/r/${region.region}`" class="title">{{ region.title }}</router-link>
       <p class="desc">{{ region.description }}</p>
     </div>
-  </el-card>
-  <el-card class="create" v-if="accounts.admin" shadow="hover">
+  </ui-card>
+  <ui-card class="create" v-if="accounts.admin">
     <template #header>
-      <h2>{{ translate(i18n.lang, 'create_new_region') }}</h2>
+      {{ translate(i18n.lang, 'create_new_region') }}
     </template>
     <div class="form">
       <el-input
@@ -37,7 +34,7 @@
         </el-button>
       </div>
     </div>
-  </el-card>
+  </ui-card>
 </template>
 
 <script lang="ts">
@@ -51,7 +48,7 @@ import { ActionTypes } from '@/store/action-types';
 export default defineComponent({
   async setup() {
     const store = useStore() as MyStore;
-    store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'regions')} - AIOJ`);
+    store.commit(MutationTypes.CHANGE_SSR_TITLE, translate(store.state.i18n.lang, 'regions'));
 
     const region = ref('');
     const title = ref('');

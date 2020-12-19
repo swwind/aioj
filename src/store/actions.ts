@@ -26,7 +26,7 @@ const createActions = (router: Router): Actions => ({
       });
 
       commit(MutationTypes.CHANGE_SSR_STATUS, 404);
-      commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(state.i18n.lang, 'not_found')} - AIOJ`);
+      commit(MutationTypes.CHANGE_SSR_TITLE, translate(state.i18n.lang, 'not_found'));
     }
   },
   async [ActionTypes.NOTIFY_DELETE_SUCCESS]({ state }) {

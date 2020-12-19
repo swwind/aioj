@@ -16,7 +16,7 @@ export default defineComponent({
     const store = useStore() as MyStore;
 
     store.commit(MutationTypes.CHANGE_SSR_STATUS, 404);
-    store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'not_found')} - AIOJ`);
+    store.commit(MutationTypes.CHANGE_SSR_TITLE, translate(store.state.i18n.lang, 'not_found'));
   },
 });
 </script>

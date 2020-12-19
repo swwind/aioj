@@ -1,12 +1,12 @@
 <template>
-  <el-card class="about" shadow="hover">
+  <ui-card class="about">
     <template #header>
-      <h1>Welcome to aioj.ac!</h1>
+      Welcome to aioj.ac!
     </template>
     <p>This is a very good AI online judging system.</p>
     <p>You can write code, send post, or fuck anything else here without any limitation.</p>
-    <p>More about this project: <a href="https://github.com/attack204/AIFuckingSystem">github</a></p>
-  </el-card>
+    <p>More about this project: <a href="https://github.com/swwind/aioj" target="_blank">github</a></p>
+  </ui-card>
 </template>
 
 <script lang="ts">
@@ -20,7 +20,7 @@ export default defineComponent({
   setup() {
     const store = useStore() as MyStore;
 
-    store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'about')} - AIOJ`);
+    store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'about')}`);
   },
 });
 </script>

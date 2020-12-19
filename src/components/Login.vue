@@ -1,8 +1,5 @@
 <template>
-  <el-card>
-    <template #header>
-      <h1>{{ translate(i18n.lang, 'login') }}</h1>
-    </template>
+  <ui-card notitle>
     <el-form class="login">
       <el-form-item prop="username">
         <el-input
@@ -29,7 +26,7 @@
         Please logout first, {{ accounts.username }}.
       </el-alert>
     </el-form>
-  </el-card>
+  </ui-card>
 </template>
 
 <script lang="ts">
@@ -50,7 +47,7 @@ export default defineComponent({
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
     const store = useStore() as MyStore;
-    store.commit(MutationTypes.CHANGE_SSR_TITLE, `${translate(store.state.i18n.lang, 'login')} - AIOJ`);
+    store.commit(MutationTypes.CHANGE_SSR_TITLE, translate(store.state.i18n.lang, 'login'));
 
     const handleLogin = async () => {
       await store.dispatch(ActionTypes.LOGIN, {

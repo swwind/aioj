@@ -1,12 +1,10 @@
 <template>
-  <el-card
+  <ui-card notitle
     class="comment"
     v-for="comment of data.comments"
-    :key="comment.cid"
-    shadow="hover">
-    <template #header>
-      <h1 v-if="comment.cid === 1" class="post-title">{{ data.post.title }}</h1>
-      <a :href="`#${comment.cid}`" class="level" :id="comment.cid"># {{ comment.cid }}</a>
+    :key="comment.cid">
+    <div class="infos">
+      <a :href="`#${comment.cid}`" class="level" :id="comment.cid">#{{ comment.cid }}</a>
       <router-link class="author" :to="`/u/${comment.author}`"><i class="el-icon-user"></i>{{ comment.author }}</router-link>
       <time class="time"><i class="el-icon-date"></i>{{ new Date(comment.date).toLocaleString() }}</time>
       <span class="edited" v-if="comment.edited">
@@ -19,10 +17,11 @@
         <i class="edit el-icon-edit"
           @click="handleEditComment(comment.cid)" />
       </span>
-    </template>
-    <div class="content marked" v-html="santinizeMarked(comment.content)"></div>
-  </el-card>
-  <el-card class="reply" v-if="accounts.username" shadow="hover">
+    </div>
+    <div class="content marked" v-if="comment.markdown" v-html="santinizeMarked(comment.content)"></div>
+    <div class="content raw" v-else>{{ comment.content }}</div>
+  </ui-card>
+  <ui-card class="reply" v-if="accounts.username" shadow="hover">
     <template #header>
       <h2>{{ translate(i18n.lang, 'reply') }}</h2>
     </template>
@@ -38,7 +37,7 @@
     <div class="buttons">
       <el-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'submit') }}</el-button>
     </div>
-  </el-card>
+  </ui-card>
 </template>
 
 <script lang="ts">
@@ -129,9 +128,8 @@ export default defineComponent({
 }
 
 .comment {
-  margin-top: 20px;
 
-  .el-card__header {
+  .infos {
 
     i {
       margin-right: 5px;
@@ -158,7 +156,15 @@ export default defineComponent({
   }
 
   .content {
-    word-wrap: break-word;
+    margin-top: 20px;
+
+    &.marked {
+      word-wrap: break-word;
+    }
+
+    &.raw {
+      white-space: pre-wrap;
+    }
   }
 
   &:hover .operations {

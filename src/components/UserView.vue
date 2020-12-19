@@ -1,23 +1,21 @@
 <template>
   <div v-if="data.user.username" class="userview">
-    <el-card shadow="hover">
+    <ui-card>
       <template #header>
-        <h1>
-          {{ data.user.username }}
-          <i
-            v-if="accounts.username && accounts.username !== data.user.username"
-            class="button"
-            :class="accounts.friends.indexOf(data.user.username) > -1 ? 'el-icon-star-on' : 'el-icon-star-off'"
-            @click="handleToggleFriend"/>
-        </h1>
+        {{ data.user.username }}
+        <i
+          v-if="accounts.username && accounts.username !== data.user.username"
+          class="button"
+          :class="accounts.friends.indexOf(data.user.username) > -1 ? 'el-icon-star-on' : 'el-icon-star-off'"
+          @click="handleToggleFriend"/>
       </template>
       <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
       <p>Email: {{ data.user.email }}</p>
       <p>Desc: {{ data.user.desc }}</p>
-    </el-card>
-    <el-card shadow="hover" v-if="accounts.username === data.user.username || accounts.admin" class="files">
+    </ui-card>
+    <ui-card v-if="accounts.username === data.user.username || accounts.admin" class="files">
       <template #header>
-        <h2>{{ translate(i18n.lang, 'my_files') }}</h2>
+        {{ translate(i18n.lang, 'my_files') }}
       </template>
       <el-button
         v-if="accounts.username === data.user.username"
@@ -55,10 +53,10 @@
           </span>
         </div>
       </div>
-    </el-card>
-    <el-card shadow="hover" v-if="accounts.username === data.user.username" class="actions">
+    </ui-card>
+    <ui-card v-if="accounts.username === data.user.username" class="actions">
       <template #header>
-        <h2>{{ translate(i18n.lang, 'my_accounts') }}</h2>
+        {{ translate(i18n.lang, 'my_accounts') }}
       </template>
       <el-button
         type="danger"
@@ -66,14 +64,14 @@
         @click="handleLogout">
         {{ translate(i18n.lang, 'logout') }}
       </el-button>
-    </el-card>
+    </ui-card>
   </div>
   <div v-else>
-    <el-card shadow="hover">
+    <ui-card>
       <template #header>
-        <h1>{{ translate(i18n.lang, 'user_not_exists') }}</h1>
+        {{ translate(i18n.lang, 'user_not_exists') }}
       </template>
-    </el-card>
+    </ui-card>
   </div>
 </template>
 
@@ -152,7 +150,7 @@ export default defineComponent({
 
 <style lang="less">
 .userview {
-  .el-card__body {
+  .ui-card__body {
     margin: 20px 0;
   }
 }

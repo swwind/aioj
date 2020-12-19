@@ -8,7 +8,7 @@ import { promises as fs } from 'fs';
 
 const template = await fs.readFile('dist/index.html', 'utf-8');
 const gentemp = (title: string, meta: Record<string, string>, rendered: string, statestr: string) => {
-  const metastr = `<title>${title}</title>` + Object.keys(meta).map((key) => {
+  const metastr = `<title>${title} - AIOJ</title>` + Object.keys(meta).map((key) => {
     return `<meta name="${key}" content="${meta[key]}">`;
   }).join('');
 
@@ -32,6 +32,14 @@ export const renderToHTML = async (url: string, lang: string, cookie?: string) =
 
   return {
     code: store.state.ssr.status,
-    html: gentemp(store.state.ssr.title, store.state.ssr.meta, apphtml, statestr),
+    html: gentemp(
+      store.state.ssr.title
+        .filter((x: any) => x.show)
+        .map((x: any) => x.name)
+        .join(' :: '),
+      store.state.ssr.meta,
+      apphtml,
+      statestr
+    ),
   };
 };

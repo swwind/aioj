@@ -1,15 +1,12 @@
 <template>
-  <el-card shadow="hover">
-    <template #header>
-      <h1>{{ data.region.title }}</h1>
-      <div class="desc">
-        {{ data.region.description }}
-        <div class="operations" v-if="accounts.admin">
-          <i class="el-icon-delete" @click="handleDeleteRegion"></i>
-          <i class="el-icon-edit"></i>
-        </div>
+  <ui-card notitle>
+    <div class="desc">
+      {{ data.region.description }}
+      <div class="operations" v-if="accounts.admin">
+        <i class="el-icon-delete" @click="handleDeleteRegion"></i>
+        <i class="el-icon-edit"></i>
       </div>
-    </template>
+    </div>
     <div class="posts-list">
       <el-alert type="warning" v-if="!data.posts.length">{{ translate(i18n.lang, 'no_posts') }}</el-alert>
       <div class="post-item" v-for="post of data.posts" :key="post.pid">
@@ -26,10 +23,10 @@
         </time>
       </div>
     </div>
-  </el-card>
-  <el-card class="create" v-if="accounts.username">
+  </ui-card>
+  <ui-card class="create" v-if="accounts.username">
     <template #header>
-      <h2>{{ translate(i18n.lang, 'create_new_post') }}</h2>
+      {{ translate(i18n.lang, 'create_new_post') }}
     </template>
     <div class="form">
       <el-input
@@ -50,7 +47,7 @@
         </el-button>
       </div>
     </div>
-  </el-card>
+  </ui-card>
 </template>
 
 <script lang="ts">
