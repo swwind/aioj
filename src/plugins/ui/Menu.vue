@@ -63,7 +63,7 @@
 
 <script lang="ts">
 import { useRouter } from 'vue-router';
-import { computed, defineComponent, ref, toRefs } from 'vue';
+import { computed, defineComponent, toRefs } from 'vue';
 import { translate } from '@/i18n/translate';
 import { useStore } from 'vuex';
 import { MyStore } from '@/store';
@@ -87,7 +87,7 @@ export default defineComponent({
 
     const jumpTo = (item: MenuItem) => {
       router.push(item.url);
-    }
+    };
 
     const activeUrl = computed(() => {
       for (const item of props.menus) {
@@ -107,7 +107,7 @@ export default defineComponent({
       activeUrl,
       translate,
       ...toRefs(store.state),
-    }
-  }
-})
+    };
+  },
+});
 </script>

@@ -159,7 +159,7 @@ export const createDataModule = (api: API) => {
         commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
         commit(MutationTypes.CHANGE_SSR_TITLE, [{
           name: translate(rootState.i18n.lang, 'region'),
-          url: `/r`,
+          url: '/r',
           show: false,
         }, {
           name: result.region.title,
@@ -194,7 +194,7 @@ export const createDataModule = (api: API) => {
             url: '/r',
             show: true,
           },
-          result.region.title
+          result.region.title,
         ]);
         commit(MutationTypes.CHANGE_SSR_META, {
           description: result.region.description,

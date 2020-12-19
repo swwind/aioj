@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, watch, watchEffect } from 'vue';
+import { defineComponent, toRefs, watch } from 'vue';
 import { toSizeString, confirm } from '@/utils';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';

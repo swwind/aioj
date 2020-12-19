@@ -78,7 +78,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { getRedirect } from './utils';
 import { translate } from '@/i18n/translate';
-import { computed, defineComponent, onMounted, toRefs } from 'vue';
+import { defineComponent, onMounted, toRefs } from 'vue';
 import { MyStore } from './store';
 import { MutationTypes } from './store/mutation-types';
 import { ActionTypes } from './store/action-types';
@@ -233,7 +233,7 @@ a {
       span {
         color: @font-color-light;
         cursor: pointer;
-  
+
         &:hover {
           text-decoration: underline;
         }

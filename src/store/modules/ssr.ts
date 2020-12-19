@@ -38,13 +38,13 @@ export const createSSRModule = (api: API) => {
       state.status = payload;
     },
     [MutationTypes.CHANGE_SSR_TITLE](state, payload) {
-      const title = (Array.isArray(payload) ? payload : [ payload ]).map((x): Breadcrumb => {
+      const title = (Array.isArray(payload) ? payload : [payload]).map((x): Breadcrumb => {
         if (typeof x === 'string') {
           return {
             name: x,
             url: '',
             show: true,
-          }
+          };
         }
         return x;
       });
@@ -61,8 +61,8 @@ export const createSSRModule = (api: API) => {
   const actions: Actions = {
     [ActionTypes.UNBLOCK_SSR]() {
       api.unblockSSR();
-    }
-  }
+    },
+  };
 
   return {
     state,

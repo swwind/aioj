@@ -1,4 +1,4 @@
-import { Middleware } from "koa";
+import { Middleware } from 'koa';
 
 declare module 'koa-subdomain' {
   class Subdomain {

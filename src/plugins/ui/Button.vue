@@ -10,8 +10,8 @@ export default {
     type: String,
     text: Boolean,
     small: Boolean,
-  }
-}
+  },
+};
 </script>
 
 <style scoped lang="less">

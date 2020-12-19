@@ -35,7 +35,7 @@ export const getFileSource: Middleware = async (ctx) => {
   }
 
   const file = result.result();
-  let contentType = file.mimetype || 'application/octet-stream';
+  const contentType = file.mimetype || 'application/octet-stream';
   if (ctx.get('Range')) {
     const range = [0, file.size - 1, file.size];
     const rg = ctx.get('Range');

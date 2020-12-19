@@ -53,7 +53,7 @@ export const createAPICore = (cookie?: string) => {
 
   const unblockSSR = () => {
     blocking = false;
-  }
+  };
 
   const makeJSONRequest = (method: Method) => <T = {}> (url: string, data?: object, headers?: object) => {
     if (blocking) {

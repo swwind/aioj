@@ -39,7 +39,7 @@ export const renderToHTML = async (url: string, lang: string, cookie?: string) =
         .join(' :: '),
       store.state.ssr.meta,
       apphtml,
-      statestr
+      statestr,
     ),
   };
 };

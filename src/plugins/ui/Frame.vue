@@ -37,7 +37,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  
+
   .header {
     padding-top: 60px;
     height: 220px;

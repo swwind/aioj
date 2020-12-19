@@ -1,4 +1,4 @@
-import { App } from "vue"
+import { App } from 'vue';
 
 import Card from './Card.vue';
 import Button from './Button.vue';
@@ -11,5 +11,5 @@ export default {
     app.component('ui-button', Button);
     app.component('ui-frame', Frame);
     app.component('ui-menu', Menu);
-  }
-}
+  },
+};

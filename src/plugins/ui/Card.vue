@@ -50,6 +50,6 @@ export default {
   props: {
     notitle: Boolean,
     nopadding: Boolean,
-  }
-}
+  },
+};
 </script>
