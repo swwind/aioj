@@ -12,6 +12,7 @@ import { promises as fs } from 'fs';
 const app = new Koa();
 
 const isProd = !process.env.TEST;
+const disableSSR = !!process.env.NO_SSR;
 
 if (!isProd) {
   console.log('CORS diabled');
@@ -52,7 +53,7 @@ app.use(router.allowedMethods());
 
 if (isProd) {
   console.log('Server Side Rendering enabled');
-  app.use(ssr);
+  app.use(ssr(disableSSR));
 }
 
 if (config.port === 443) {

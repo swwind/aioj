@@ -31,6 +31,14 @@
   flex-direction: row;
 
   background-color: @card-background-color;
+
+  box-shadow: rgb(200, 200, 200) 0 0 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .fixed-header {
+    box-shadow: none;
+  }
 }
 
 .container {
@@ -48,13 +56,13 @@
     flex: 1;
     background-color: @background-color;
     padding-top: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 60px;
   }
 
   .footer {
     padding-top: 20px;
     padding-bottom: 20px;
-    height: 300px;
+    height: 250px;
     background-color: @card-background-color;
     display: flex;
     flex-direction: column;

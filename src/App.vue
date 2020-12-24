@@ -14,9 +14,9 @@
         </ui-button>
       </div>
       <div class="userpanel" v-else>
-        <router-link :to="`/u/${accounts.username}`" :class="{ admin: accounts.admin }">
+        <div class="username">
           {{ accounts.username }}
-        </router-link>
+        </div>
       </div>
     </template>
     <template #header>
@@ -213,6 +213,19 @@ a {
   }
 }
 
+.userpanel {
+  cursor: pointer;
+  padding: 0 20px;
+
+  .username {
+    line-height: 60px;
+  }
+
+  &:hover {
+    background-color: @hover-color;
+  }
+}
+
 .links {
   flex: 1;
 
@@ -256,6 +269,7 @@ a {
 
     &.disabled {
       font-weight: bold;
+      cursor: default;
     }
   }
 }

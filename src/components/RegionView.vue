@@ -7,21 +7,23 @@
         <i class="el-icon-edit"></i>
       </div>
     </div>
-    <div class="posts-list">
-      <el-alert type="warning" v-if="!data.posts.length">{{ translate(i18n.lang, 'no_posts') }}</el-alert>
-      <div class="post-item" v-for="post of data.posts" :key="post.pid">
-        <div class="title">
-          <router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link>
-        </div>
-        <router-link class="author" :to="`/u/${post.author}`">
-          <i class="el-icon-user-solid"></i>
-          {{ post.author }}
-        </router-link>
-        <time class="time">
-          <i class="el-icon-date"></i>
-          {{ new Date(post.date).toLocaleString() }}
-        </time>
+    <ui-icon
+      v-if="!data.posts.length"
+      name="unarchive"
+      :text="translate(i18n.lang, 'no_posts')"
+    />
+    <div class="post-item" v-for="post of data.posts" :key="post.pid" v-else>
+      <div class="title">
+        <router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link>
       </div>
+      <router-link class="author" :to="`/u/${post.author}`">
+        <i class="el-icon-user-solid"></i>
+        {{ post.author }}
+      </router-link>
+      <time class="time">
+        <i class="el-icon-date"></i>
+        {{ new Date(post.date).toLocaleString() }}
+      </time>
     </div>
   </ui-card>
   <ui-card class="create" v-if="accounts.username">
@@ -106,8 +108,11 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 
+@import "@/plugins/ui/styles/vars.less";
+
 .desc {
-  margin: 20px 0 0 0;
+  margin-bottom: 20px;
+  color: @font-color-light;
 
   .operations {
     float: right;
@@ -118,10 +123,6 @@ export default defineComponent({
       cursor: pointer;
     }
   }
-}
-
-.posts-list {
-  margin: 20px 0;
 }
 
 .post-item {

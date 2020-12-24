@@ -6,10 +6,20 @@ import { renderToString } from '@vue/server-renderer';
 import { createVueApp } from '../build/ssr/js/app.js';
 import { promises as fs } from 'fs';
 
-const template = await fs.readFile('dist/index.html', 'utf-8');
+// https://stackoverflow.com/questions/6234773/can-i-escape-html-special-chars-in-javascript
+function escapeHtml(unsafe: string) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+export const template = await fs.readFile('dist/index.html', 'utf-8');
 const gentemp = (title: string, meta: Record<string, string>, rendered: string, statestr: string) => {
-  const metastr = `<title>${title} - AIOJ</title>` + Object.keys(meta).map((key) => {
-    return `<meta name="${key}" content="${meta[key]}">`;
+  const metastr = `<title>${escapeHtml(title)} - AIOJ</title>` + Object.keys(meta).map((key) => {
+    return `<meta name=${JSON.stringify(key)} content=${JSON.stringify(meta[key])}>`;
   }).join('');
 
   return '<!-- attack204 AK world final -->\n' + template

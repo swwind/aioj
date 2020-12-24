@@ -1,36 +1,29 @@
 <template>
   <ui-card notitle>
-    <el-form class="login">
-      <el-form-item prop="username">
-        <el-input
-          type="text"
-          v-model="username"
-          autocomplete="off"
-          prefix-icon="el-icon-user"
-          :placeholder="translate(i18n.lang, 'username')" />
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input
-          type="password"
-          v-model="password"
-          autocomplete="off"
-          prefix-icon="el-icon-lock"
-          :placeholder="translate(i18n.lang, 'password')"
-          @keydown="handleKeydown($event.key)" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="handleLogin">{{ translate(i18n.lang, 'login') }}</el-button>
-        <router-link :to="`/register${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="register">{{ translate(i18n.lang, 'register') }}</router-link>
-      </el-form-item>
-      <el-alert type="warning" v-if="accounts.username">
-        Please logout first, {{ accounts.username }}.
-      </el-alert>
-    </el-form>
+    <ui-input
+      type="text"
+      icon="perm_identity"
+      v-model="username"
+      :placeholder="translate(i18n.lang, 'username')"
+      class="item"
+    />
+    <ui-input
+      type="password"
+      icon="lock"
+      v-model="password"
+      :placeholder="translate(i18n.lang, 'password')"
+      @keydown="handleKeydown"
+      class="item"
+    />
+    <div class="actions item">
+      <ui-button type="primary" @click="handleLogin">{{ translate(i18n.lang, 'login') }}</ui-button>
+      <router-link :to="`/register${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="register">{{ translate(i18n.lang, 'register') }}</router-link>
+    </div>
   </ui-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRefs } from 'vue';
+import { defineComponent, ref, toRefs, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
@@ -56,8 +49,8 @@ export default defineComponent({
         redirect,
       });
     };
-    const handleKeydown = (key: string) => {
-      if (key === 'Enter') {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
         handleLogin();
       }
     };
@@ -84,5 +77,10 @@ export default defineComponent({
 }
 .register {
   margin-left: 20px;
+}
+
+.item {
+  width: 300px;
+  margin-top: 20px;
 }
 </style>

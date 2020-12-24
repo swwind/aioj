@@ -23,7 +23,7 @@
   </ui-card>
   <ui-card class="reply" v-if="accounts.username" shadow="hover">
     <template #header>
-      <h2>{{ translate(i18n.lang, 'reply') }}</h2>
+      {{ translate(i18n.lang, 'reply') }}
     </template>
     <div class="reply-warn">
       {{ translate(i18n.lang, 'reply_warning') }}

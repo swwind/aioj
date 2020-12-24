@@ -1,7 +1,11 @@
 <template>
   <ui-card notitle>
-    <el-alert type="warning" v-if="!data.regions.length">{{ translate(i18n.lang, 'no_regions') }}</el-alert>
-    <div class="region-item" v-for="region of data.regions" :key="region.region">
+    <ui-icon
+      v-if="!data.regions.length"
+      name="unarchive"
+      :text="translate(i18n.lang, 'no_regions')"
+    />
+    <div class="region-item" v-for="region of data.regions" :key="region.region" v-else>
       <router-link :to="`/r/${region.region}`" class="title">{{ region.title }}</router-link>
       <p class="desc">{{ region.description }}</p>
     </div>

@@ -20,6 +20,14 @@
   background-color: @card-background-color;
   border-radius: 5px;
 
+  opacity: 0;
+  transform: translate(0, 20px);
+  animation-name: fade-up-in;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+
+  box-shadow: rgb(200, 200, 200) 0 0 20px;
+
   .title {
     font-weight: normal;
     padding: 20px 5px 5px 20px;
@@ -40,6 +48,32 @@
 
   & + .card {
     margin-top: 20px;
+    animation-delay: .1s;
+
+    & + .card {
+      animation-delay: .2s;
+
+      & + .card {
+        animation-delay: .3s;
+
+        & + .card {
+          animation-delay: .4s;
+        }
+      }
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .card {
+    box-shadow: none;
+  }
+}
+
+@keyframes fade-up-in {
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
   }
 }
 

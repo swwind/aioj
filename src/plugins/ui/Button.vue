@@ -27,6 +27,7 @@ export default {
   color: @font-color;
   display: inline-block;
   cursor: pointer;
+  border-radius: 5px;
   font-size: .9rem;
   transition: background-color .2s, color .2s;
 

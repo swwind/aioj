@@ -8,7 +8,7 @@ import friends from './routes/friends';
 import forum from './routes/forum';
 import users from './routes/users';
 import files, { getFileSource } from './routes/files';
-import { renderToHTML } from './ssr';
+import { renderToHTML, template } from './ssr';
 import { Middleware } from 'koa';
 
 const router = new Router<State, Tools>();
@@ -84,7 +84,14 @@ function getLanguage(acceptedLanguages: string) {
 
 export default router;
 
-export const ssr: Middleware = async (ctx) => {
+export const ssr = (disable: boolean): Middleware => async (ctx) => {
+  // disable ssr
+  if (disable) {
+    ctx.response.status = 200;
+    ctx.set('Content-Type', 'text/html');
+    ctx.response.body = template;
+    return;
+  }
   const lang = getLanguage(ctx.get('Accept-Language'));
   const cookie = ctx.get('Cookie');
   const { code, html } = await renderToHTML(ctx.url, lang, cookie);

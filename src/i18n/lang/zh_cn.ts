@@ -6,7 +6,7 @@ const zh_cn: InternationalizationLanguage = {
   forum: '论坛',
   login: '登录',
   register: '注册',
-  logout: '注销',
+  logout: '退出登录',
   error: '错误',
   warning: '警告',
   success: '成功',

@@ -1,39 +1,31 @@
 <template>
   <ui-card notitle>
-    <el-form class="register">
-      <el-form-item prop="username">
-        <el-input
-          type="text"
-          v-model="username"
-          autocomplete="off"
-          prefix-icon="el-icon-user"
-          :placeholder="translate(i18n.lang, 'username')" />
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input
-          type="password"
-          v-model="password"
-          autocomplete="off"
-          prefix-icon="el-icon-lock"
-          :placeholder="translate(i18n.lang, 'password')" />
-      </el-form-item>
-      <el-form-item prop="reptpass">
-        <el-input
-          type="password"
-          v-model="reptpass"
-          autocomplete="off"
-          prefix-icon="el-icon-lock"
-          :placeholder="translate(i18n.lang, 'repeat_password')"
-          @keydown="handleKeydown($event.key)" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="handleRegister">{{ translate(i18n.lang, 'register') }}</el-button>
-        <router-link :to="`/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="login">{{ translate(i18n.lang, 'login') }}</router-link>
-      </el-form-item>
-      <el-alert type="warning" v-if="accounts.username">
-        Please logout first, {{ accounts.username }}.
-      </el-alert>
-    </el-form>
+    <ui-input
+      type="text"
+      v-model="username"
+      icon="perm_identity"
+      :placeholder="translate(i18n.lang, 'username')"
+      class="item"
+    />
+    <ui-input
+      type="password"
+      v-model="password"
+      icon="lock"
+      :placeholder="translate(i18n.lang, 'password')"
+      class="item"
+    />
+    <ui-input
+      type="password"
+      v-model="reptpass"
+      icon="lock"
+      :placeholder="translate(i18n.lang, 'repeat_password')"
+      @keydown="handleKeydown"
+      class="item"
+    />
+    <div class="actions item">
+      <el-button type="primary" @click="handleRegister">{{ translate(i18n.lang, 'register') }}</el-button>
+      <router-link :to="`/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="login">{{ translate(i18n.lang, 'login') }}</router-link>
+    </div>
   </ui-card>
 </template>
 
@@ -68,8 +60,8 @@ export default defineComponent({
         redirect,
       });
     };
-    const handleKeydown = (key: string) => {
-      if (key === 'Enter') {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
         handleRegister();
       }
     };
@@ -97,5 +89,10 @@ export default defineComponent({
 }
 .login {
   margin-left: 20px;
+}
+
+.item {
+  width: 300px;
+  margin-top: 20px;
 }
 </style>

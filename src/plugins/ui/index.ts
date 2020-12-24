@@ -4,6 +4,8 @@ import Card from './Card.vue';
 import Button from './Button.vue';
 import Frame from './Frame.vue';
 import Menu from './Menu.vue';
+import Icon from './Icon.vue';
+import Input from './Input.vue';
 
 export default {
   install(app: App) {
@@ -11,5 +13,7 @@ export default {
     app.component('ui-button', Button);
     app.component('ui-frame', Frame);
     app.component('ui-menu', Menu);
+    app.component('ui-icon', Icon);
+    app.component('ui-input', Input);
   },
 };
