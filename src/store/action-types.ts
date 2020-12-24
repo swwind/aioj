@@ -28,6 +28,7 @@ export enum ActionTypes {
   NOTIFY_REPLY_SUCCESS = 'notify_reply_success',
 
   HANDLE_ERROR = 'handle_error',
+  HANDLE_RENDER_ERROR = 'handle_render_error',
   ROUTER_PUSH = 'router_push',
 
   UNBLOCK_SSR = 'unblock_ssr',

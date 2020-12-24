@@ -58,7 +58,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch } from 'vue';
 export default defineComponent({
   props: {
     icon: String,
@@ -76,17 +76,17 @@ export default defineComponent({
 
     const handleFocus = () => {
       active.value = true;
-    }
+    };
     const handleBlur = () => {
       active.value = false;
-    }
+    };
     const handleChange = () => {
       ctx.emit('change');
-    }
+    };
 
     const handleKeydown = (e: KeyboardEvent) => {
       ctx.emit('keydown', e);
-    }
+    };
 
     return {
       value,
@@ -95,7 +95,7 @@ export default defineComponent({
       handleBlur,
       handleChange,
       handleKeydown,
-    }
-  }
-})
+    };
+  },
+});
 </script>

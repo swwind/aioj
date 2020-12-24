@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRefs, watch } from 'vue';
+import { defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';

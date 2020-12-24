@@ -171,7 +171,7 @@ export const createDataModule = (api: API) => {
           show: true,
         }]);
       } else {
-        dispatch(ActionTypes.HANDLE_ERROR, result);
+        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
     },
     async [ActionTypes.FETCH_REGIONS_DATA]({ commit, dispatch }) {
@@ -179,7 +179,7 @@ export const createDataModule = (api: API) => {
       if (result.status === 200) {
         commit(MutationTypes.FETCH_REGION_LIST, result.regions);
       } else {
-        dispatch(ActionTypes.HANDLE_ERROR, result);
+        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
     },
     async [ActionTypes.FETCH_REGION_DATA]({ rootState: state, commit, dispatch }, payload) {
@@ -200,7 +200,7 @@ export const createDataModule = (api: API) => {
           description: result.region.description,
         });
       } else {
-        dispatch(ActionTypes.HANDLE_ERROR, result);
+        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
     },
     async [ActionTypes.FETCH_USER_DATA]({ rootState: state, commit, dispatch }, payload) {
@@ -210,7 +210,7 @@ export const createDataModule = (api: API) => {
         commit(MutationTypes.FETCH_USER_DETAIL, result.user);
         commit(MutationTypes.CHANGE_SSR_TITLE, [translate(state.i18n.lang, 'user'), result.user.username]);
       } else {
-        dispatch(ActionTypes.HANDLE_ERROR, result);
+        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
     },
     async [ActionTypes.FETCH_USER_FILES]({ commit, dispatch }, payload) {

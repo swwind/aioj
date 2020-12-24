@@ -9,6 +9,7 @@ import { MutationTypes } from './mutation-types';
 
 type Actions<S = RootState> = {
   [ActionTypes.HANDLE_ERROR](actx: ArgumentedActionContext<S>, payload: APIResponse): Promise<void>;
+  [ActionTypes.HANDLE_RENDER_ERROR](actx: ArgumentedActionContext<S>, payload: APIResponse): Promise<void>;
   [ActionTypes.NOTIFY_DELETE_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.ROUTER_PUSH](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
   [ActionTypes.NOTIFY_REPLY_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
@@ -17,14 +18,18 @@ type Actions<S = RootState> = {
 export type RootActions = Actions & ModuleActions;
 
 const createActions = (router: Router): Actions => ({
-  async [ActionTypes.HANDLE_ERROR]({ commit, state }, payload) {
+  async [ActionTypes.HANDLE_ERROR]({ state }, payload) {
     if (payload.status >= 400) {
       notify({
         title: translate(state.i18n.lang, 'error'),
         type: 'error',
         message: translate(state.i18n.lang, payload.error as any),
       });
-
+    }
+  },
+  async [ActionTypes.HANDLE_RENDER_ERROR]({ commit, state, dispatch }, payload) {
+    if (payload.status >= 400) {
+      dispatch(ActionTypes.HANDLE_ERROR, payload);
       commit(MutationTypes.CHANGE_SSR_STATUS, 404);
       commit(MutationTypes.CHANGE_SSR_TITLE, translate(state.i18n.lang, 'not_found'));
     }

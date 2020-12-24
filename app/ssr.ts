@@ -9,11 +9,11 @@ import { promises as fs } from 'fs';
 // https://stackoverflow.com/questions/6234773/can-i-escape-html-special-chars-in-javascript
 function escapeHtml(unsafe: string) {
   return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 export const template = await fs.readFile('dist/index.html', 'utf-8');
