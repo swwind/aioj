@@ -103,7 +103,7 @@
 
 <script lang="ts">
 import { santinizeMarked } from '@/utils';
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch } from 'vue';
 export default defineComponent({
   props: {
     placeholder: String,
@@ -120,13 +120,13 @@ export default defineComponent({
 
     const handleFocus = () => {
       active.value = true;
-    }
+    };
     const handleBlur = () => {
       active.value = false;
-    }
+    };
     const handleSwitch = (c: number) => {
       choose.value = c;
-    }
+    };
 
     return {
       value,
@@ -136,7 +136,7 @@ export default defineComponent({
       santinizeMarked,
       handleFocus,
       handleBlur,
-    }
-  }
+    };
+  },
 });
 </script>
