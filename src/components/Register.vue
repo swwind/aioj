@@ -10,20 +10,20 @@
     <ui-input
       type="password"
       v-model="password"
-      icon="lock"
+      icon="lock_outline"
       :placeholder="translate(i18n.lang, 'password')"
       class="item"
     />
     <ui-input
       type="password"
       v-model="reptpass"
-      icon="lock"
+      icon="lock_outline"
       :placeholder="translate(i18n.lang, 'repeat_password')"
       @keydown="handleKeydown"
       class="item"
     />
     <div class="actions item">
-      <el-button type="primary" @click="handleRegister">{{ translate(i18n.lang, 'register') }}</el-button>
+      <ui-button type="primary" @click="handleRegister">{{ translate(i18n.lang, 'register') }}</ui-button>
       <router-link :to="`/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="login">{{ translate(i18n.lang, 'login') }}</router-link>
     </div>
   </ui-card>

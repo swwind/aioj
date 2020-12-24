@@ -29,7 +29,7 @@
   .icon {
     line-height: 40px;
     font-size: 1rem;
-    margin: 0 7px;
+    margin-left: 7px;
     color: @font-color-lighter;
   }
 
@@ -41,7 +41,7 @@
     border: none;
     outline: none;
     background-color: transparent;
-    padding: 0;
+    padding: 0 7px;
     margin: 0;
     color: @font-color-light;
 

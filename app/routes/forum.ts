@@ -10,7 +10,7 @@ router.post('/r/:region/:pid/comment', async (ctx) => {
     return ctx.end(401, LOGIN_REQUIRE);
   }
 
-  if (!ctx.verifyBody(['content'])) {
+  if (!ctx.verifyBody(['content', 'markdown'])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
@@ -18,7 +18,8 @@ router.post('/r/:region/:pid/comment', async (ctx) => {
     ctx.params.region,
     Number(ctx.params.pid),
     ctx.state.username,
-    ctx.request.body.content);
+    ctx.request.body.content,
+    ctx.request.body.markdown);
   if (!result.ok) {
     return ctx.end(400, result.error());
   }
@@ -31,12 +32,12 @@ router.post('/r/:region/post', async (ctx) => {
     return ctx.end(401, LOGIN_REQUIRE);
   }
 
-  if (!ctx.verifyBody(['title', 'content'])) {
+  if (!ctx.verifyBody(['title', 'content', 'markdown'])) {
     return ctx.end(400, PARAMS_MISSING);
   }
-  const { title, content } = ctx.request.body;
+  const { title, content, markdown } = ctx.request.body;
 
-  const result = await createPost(ctx.params.region, title, ctx.state.username, content);
+  const result = await createPost(ctx.params.region, title, ctx.state.username, content, markdown);
   if (!result.ok) {
     return ctx.end(400, result.error());
   }

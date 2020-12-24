@@ -17,16 +17,18 @@ export const createForumAPI = (api: APICore) => {
       return makeGETRequest<{ post: PostDetail; comments: CommentDetail[]; region: RegionDetail; }>(`/r/${region}/${post}`);
     },
 
-    sendReply(region: string, post: string, content: string) {
+    sendReply(region: string, post: string, content: string, markdown: boolean) {
       return makePOSTRequest<{ comment: CommentDetail }>(`/r/${region}/${post}/comment`, {
         content,
+        markdown,
       });
     },
 
-    createPost(region: string, title: string, content: string) {
+    createPost(region: string, title: string, content: string, markdown: boolean) {
       return makePOSTRequest<{ pid: string }>(`/r/${region}/post`, {
         title,
         content,
+        markdown,
       });
     },
 

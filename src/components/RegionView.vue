@@ -3,8 +3,8 @@
     <div class="desc">
       {{ data.region.description }}
       <div class="operations" v-if="accounts.admin">
-        <i class="el-icon-delete" @click="handleDeleteRegion"></i>
-        <i class="el-icon-edit"></i>
+        <ui-icon name="delete_outline" @click="handleDeleteRegion" />
+        <ui-icon name="edit" />
       </div>
     </div>
     <ui-icon
@@ -17,11 +17,11 @@
         <router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link>
       </div>
       <router-link class="author" :to="`/u/${post.author}`">
-        <i class="el-icon-user-solid"></i>
+        <ui-icon name="perm_identity" />
         {{ post.author }}
       </router-link>
       <time class="time">
-        <i class="el-icon-date"></i>
+        <ui-icon name="access_time" />
         {{ new Date(post.date).toLocaleString() }}
       </time>
     </div>
@@ -31,22 +31,24 @@
       {{ translate(i18n.lang, 'create_new_post') }}
     </template>
     <div class="form">
-      <el-input
+      <ui-input
         type="text"
         v-model="title"
         class="title"
-        :placeholder="translate(i18n.lang, 'post_title')" />
-      <el-input
-        type="textarea"
+        icon="emoji_objects"
+        :placeholder="translate(i18n.lang, 'post_title')"
+      />
+      <ui-editor
         v-model="content"
         class="content"
-        :placeholder="translate(i18n.lang, 'post_content')" />
+        :placeholder="translate(i18n.lang, 'post_content')"
+      />
       <div class="buttonset">
-        <el-button
+        <ui-button
           type="primary"
           @click="handleSendPost">
           {{ translate(i18n.lang, 'post') }}
-        </el-button>
+        </ui-button>
       </div>
     </div>
   </ui-card>
@@ -78,6 +80,7 @@ export default defineComponent({
         region,
         title,
         content,
+        markdown: true,
       });
     };
 
@@ -132,10 +135,6 @@ export default defineComponent({
 
   .title {
     word-break: break-word;
-  }
-
-  i {
-    margin-right: 5px;
   }
 }
 

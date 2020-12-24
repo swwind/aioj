@@ -19,7 +19,7 @@ export async function createRegion(region: string, title: string, description: s
   return Result.ok();
 }
 
-export async function createPost(region: string, title: string, author: string, content: string): Promise<Result<number, string>> {
+export async function createPost(region: string, title: string, author: string, content: string, markdown: boolean): Promise<Result<number, string>> {
   const res = await regions.findOne({
     region,
   });
@@ -49,12 +49,13 @@ export async function createPost(region: string, title: string, author: string, 
     date,
     pid,
     region,
+    markdown,
   });
 
   return Result.ok(pid);
 }
 
-export async function createComment(region: string, pid: number, author: string, content: string): Promise<Result<CommentDetail, string>> {
+export async function createComment(region: string, pid: number, author: string, content: string, markdown: boolean): Promise<Result<CommentDetail, string>> {
   const res = await posts.findOne({
     region,
     pid,
@@ -72,6 +73,7 @@ export async function createComment(region: string, pid: number, author: string,
     date: Date.now(),
     pid,
     region,
+    markdown,
   };
 
   await comments.insertOne(data);

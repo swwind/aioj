@@ -15,27 +15,28 @@
       {{ translate(i18n.lang, 'create_new_region') }}
     </template>
     <div class="form">
-      <el-input
+      <ui-input
         type="text"
         class="form-item"
+        icon="code"
         v-model="region"
         :placeholder="translate(i18n.lang, 'region_url')" />
-      <el-input
+      <ui-input
         type="text"
+        icon="emoji_objects"
         class="form-item"
         v-model="title"
         :placeholder="translate(i18n.lang, 'region_title')" />
-      <el-input
-        type="textarea"
+      <ui-editor
         class="form-item"
         v-model="description"
         :placeholder="translate(i18n.lang, 'region_desc')" />
       <div class="buttonset">
-        <el-button
+        <ui-button
           type="primary"
           @click="handleCreateRegion">
           {{ translate(i18n.lang, 'post') }}
-        </el-button>
+        </ui-button>
       </div>
     </div>
   </ui-card>

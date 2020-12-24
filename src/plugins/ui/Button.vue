@@ -1,17 +1,32 @@
 <template>
-  <button class="button" :class="{ [type]: true, text, small }" >
+  <button class="button" :class="{ [type]: true, text, small, disabled }" @click="handleClick($event)">
     <slot></slot>
   </button>
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue"
+
+export default defineComponent({
   props: {
     type: String,
     text: Boolean,
     small: Boolean,
+    disabled: Boolean,
   },
-};
+  emits: ['click'],
+  setup(props, ctx) {
+    const handleClick = (e: MouseEvent) => {
+      if (!props.disabled) {
+        ctx.emit('click', e);
+      }
+    }
+
+    return {
+      handleClick,
+    }
+  }
+});
 </script>
 
 <style scoped lang="less">
@@ -36,7 +51,14 @@ export default {
   }
 
   &.small {
-    padding: 5px 10px;
+    padding: 9px 15px;
+    font-size: 12px;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    background-color: grey !important;
+    border-color: grey !important;
   }
 
   &.primary {

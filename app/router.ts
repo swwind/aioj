@@ -26,9 +26,19 @@ router.use('/', async (ctx, next) => {
   };
   ctx.verifyBody = (keys: string[]) => {
     for (const key of keys) {
-      if (!ctx.request.body[key] && !(ctx.request.files && ctx.request.files[key])) {
-        return false;
+      if (ctx.request.files && key in ctx.request.files) {
+        continue;
       }
+      if (key in ctx.request.body) {
+        const value = ctx.request.body[key];
+        if (typeof value === 'boolean' || typeof value === 'number') {
+          continue;
+        }
+        if (value) {
+          continue;
+        }
+      }
+      return false;
     }
     return true;
   };

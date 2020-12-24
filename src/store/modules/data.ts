@@ -70,11 +70,13 @@ export type Actions<S = State> = {
     region: string;
     title: string;
     content: string;
+    markdown: boolean;
   }>): Promise<void>;
   [ActionTypes.CREATE_COMMENT](actx: ArgumentedActionContext<S>, payload: Arguments<{
     region: string;
     pid: string;
     content: string;
+    markdown: boolean;
   }>): Promise<boolean>;
 }
 
@@ -286,8 +288,8 @@ export const createDataModule = (api: API) => {
       }
     },
     async [ActionTypes.CREATE_POST]({ dispatch }, payload) {
-      const { region, title, content } = unwarpArguments(payload);
-      const result = await api.createPost(region, title, content);
+      const { region, title, content, markdown } = unwarpArguments(payload);
+      const result = await api.createPost(region, title, content, markdown);
       if (result.status === 200) {
         dispatch(ActionTypes.ROUTER_PUSH, `/r/${region}/${result.pid}`);
       } else {
@@ -295,8 +297,8 @@ export const createDataModule = (api: API) => {
       }
     },
     async [ActionTypes.CREATE_COMMENT]({ commit, dispatch }, payload) {
-      const { region, pid, content } = unwarpArguments(payload);
-      const result = await api.sendReply(region, pid, content);
+      const { region, pid, content, markdown } = unwarpArguments(payload);
+      const result = await api.sendReply(region, pid, content, markdown);
       if (result.status === 200) {
         dispatch(ActionTypes.NOTIFY_REPLY_SUCCESS);
         commit(MutationTypes.CREATED_COMMENT, result.comment);

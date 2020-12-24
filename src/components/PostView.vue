@@ -5,16 +5,16 @@
     :key="comment.cid">
     <div class="infos">
       <a :href="`#${comment.cid}`" class="level" :id="comment.cid">#{{ comment.cid }}</a>
-      <router-link class="author" :to="`/u/${comment.author}`"><i class="el-icon-user"></i>{{ comment.author }}</router-link>
-      <time class="time"><i class="el-icon-date"></i>{{ new Date(comment.date).toLocaleString() }}</time>
+      <router-link class="author" :to="`/u/${comment.author}`"><ui-icon name="perm_identity"/>{{ comment.author }}</router-link>
+      <time class="time"><ui-icon name="access_time" />{{ new Date(comment.date).toLocaleString() }}</time>
       <span class="edited" v-if="comment.edited">
-        <i class="el-icon-edit"></i>
+        <ui-icon name="edit" />
         Edited
       </span>
       <span class="operations" v-if="accounts.admin || accounts.username === comment.author">
-        <i class="delete el-icon-delete"
+        <ui-icon class="delete" name="delete_outline"
           @click="handleDeleteComment(comment.cid)" />
-        <i class="edit el-icon-edit"
+        <ui-icon class="edit" name="edit"
           @click="handleEditComment(comment.cid)" />
       </span>
     </div>
@@ -28,14 +28,13 @@
     <div class="reply-warn">
       {{ translate(i18n.lang, 'reply_warning') }}
     </div>
-    <el-input
-      type="textarea"
+    <ui-editor
       v-model="content"
-      :autosize="{ minRows: 6 }"
       :placeholder="translate(i18n.lang, 'reply_placeholder')"
-      class="reply-content" />
+      class="reply-content"
+    />
     <div class="buttons">
-      <el-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'submit') }}</el-button>
+      <ui-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'submit') }}</ui-button>
     </div>
   </ui-card>
 </template>
@@ -70,6 +69,7 @@ export default defineComponent({
         region,
         pid,
         content,
+        markdown: true,
       });
       if (success) {
         content.value = '';
@@ -123,6 +123,8 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 
+@import "@/plugins/ui/styles/vars.less";
+
 .post-title {
   margin-bottom: 10px !important;
 }
@@ -133,6 +135,7 @@ export default defineComponent({
 
     i {
       margin-right: 5px;
+      font-size: 1.125rem;
     }
 
     .level, .author, .time {
@@ -145,7 +148,7 @@ export default defineComponent({
       transition: opacity .2s;
 
       .delete {
-        color: red;
+        color: @red;
         cursor: pointer;
       }
 

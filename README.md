@@ -119,9 +119,11 @@ Content-Type: application/json
 [x] POST   /r/:region/post              Create a new post in region
     - title: string;
     - content: string;
+    - markdown: boolean;
     + pid: string;
 [x] POST   /r/:region/:pid/comment      Create a comment to a post
     - content: string;
+    - markdown: boolean;
     + comment: CommentDetail
         + cid: number;
         + author: string;

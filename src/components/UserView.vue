@@ -3,10 +3,11 @@
     <ui-card>
       <template #header>
         {{ data.user.username }}
-        <i
+        <ui-icon
           v-if="accounts.username && accounts.username !== data.user.username"
-          class="button"
-          :class="accounts.friends.indexOf(data.user.username) > -1 ? 'el-icon-star-on' : 'el-icon-star-off'"
+          class="star"
+          :name="accounts.friends.indexOf(data.user.username) > -1 ? 'star' : 'star_outline'"
+          :class="{ on: accounts.friends.indexOf(data.user.username) > -1 }"
           @click="handleToggleFriend"/>
       </template>
       <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
@@ -17,23 +18,22 @@
       <template #header>
         {{ translate(i18n.lang, 'my_files') }}
       </template>
-      <el-button
+      <ui-button
         v-if="accounts.username === data.user.username"
         type="primary"
-        size="small"
+        small
         :disabled="data.uploading"
         @click="handleUpload">
         {{ translate(i18n.lang, 'upload') }}
-      </el-button>
-      <el-progress
-        class="progress"
+      </ui-button>
+      <span
         v-if="data.uploading"
-        :text-inside="true"
-        :stroke-width="16"
-        :percentage="Math.round(data.progress * 100)" />
+        class="progress">
+        {{ (data.progress * 100).toFixed(2) + '%' }}
+      </span>
       <div
         v-if="accounts.username === data.user.username"
-        class="el-upload__tip">
+        class="tips">
         {{ translate(i18n.lang, 'upload_tips') }}
       </div>
       <div class="file-list">
@@ -45,11 +45,11 @@
             {{ toSizeString(file.size) }}
           </span>
           <span class="file-date">
-            <i class="el-icon-date"></i>
+            <ui-icon name="access_time" />
             {{ new Date(file.date).toLocaleString() }}
           </span>
           <span class="file-operations">
-            <i class="button el-icon-delete" @click="handleDeleteFile(file)"></i>
+            <ui-icon name="delete_outline" @click="handleDeleteFile(file)" />
           </span>
         </div>
       </div>
@@ -58,12 +58,12 @@
       <template #header>
         {{ translate(i18n.lang, 'my_accounts') }}
       </template>
-      <el-button
+      <ui-button
         type="danger"
-        size="small"
+        small
         @click="handleLogout">
         {{ translate(i18n.lang, 'logout') }}
-      </el-button>
+      </ui-button>
     </ui-card>
   </div>
   <div v-else>
@@ -148,23 +148,18 @@ export default defineComponent({
 
 </script>
 
-<style lang="less">
-.userview {
-  .ui-card__body {
-    margin: 20px 0;
-  }
-}
-</style>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 
-.el-icon-star-on {
-  color: #ffd200;
-}
+@import "@/plugins/ui/styles/vars.less";
 
-.button {
+.star {
   cursor: pointer;
+  vertical-align: middle !important;
+
+  &.on {
+    color: @yellow;
+  }
 }
 
 .files, .actions {
@@ -177,6 +172,12 @@ export default defineComponent({
   width: 200px;
 }
 
+.tips {
+  color: @font-color-light;
+  font-size: .9rem;
+  margin: 5px 0;
+}
+
 .file-list {
 
   .file-item {
@@ -186,6 +187,10 @@ export default defineComponent({
 
     .file-name {
       word-break: break-word;
+    }
+
+    .file-operations {
+      cursor: pointer;
     }
   }
 }

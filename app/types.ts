@@ -54,6 +54,7 @@ export type CommentDetail = {
   edited: boolean;
   content: string;
   date: number;
+  markdown: boolean;
 }
 
 export type CommentData = {

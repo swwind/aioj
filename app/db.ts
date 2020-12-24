@@ -50,6 +50,7 @@ export function extractCommentDetail(cd: CommentData): CommentDetail {
     edited: cd.edited,
     content: cd.content,
     date: cd.date,
+    markdown: cd.markdown,
   };
 }
 export function extractFileDetail(fd: FileData): FileDetail {

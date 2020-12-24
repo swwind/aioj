@@ -9,7 +9,7 @@
     />
     <ui-input
       type="password"
-      icon="lock"
+      icon="lock_outline"
       v-model="password"
       :placeholder="translate(i18n.lang, 'password')"
       @keydown="handleKeydown"
