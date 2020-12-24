@@ -73,6 +73,7 @@
       background-color: transparent;
       border: none;
       outline: none;
+      color: @font-color;
     }
 
     .preview {
