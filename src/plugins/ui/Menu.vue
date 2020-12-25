@@ -4,9 +4,8 @@
       class="item"
       v-for="item of menus"
       :key="item.url"
-      @click="jumpTo(item)"
       :class="{ active: item.url === activeUrl }">
-      {{ translate(i18n.lang, item.name) }}
+      <router-link :to="item.url" class="link">{{ translate(i18n.lang, item.name) }}</router-link>
     </li>
   </ul>
 </template>
@@ -20,40 +19,46 @@
   margin: 0;
 
   .item {
-    margin: 0;
     display: inline-block;
-    height: 100%;
-    padding: 0 20px;
-    line-height: 60px;
-    cursor: pointer;
-    position: relative;
-    background-color: transparent;
-    transition: background-color .2s;
 
-    &::before {
-      content: '';
-      width: 100%;
-      height: 3px;
-      background-color: transparent;
-      box-shadow: 0 0 20px transparent;
+    .link {
       display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      transition: background-color .2s, box-shadow .2s;
-    }
-
-    &.active::before {
-      background-color: @theme-color;
-      box-shadow: 0 0 20px @theme-color;
-    }
-
-    &:hover {
-      background-color: @hover-color;
+      margin: 0;
+      height: 100%;
+      padding: 0 20px;
+      line-height: 60px;
+      cursor: pointer;
+      position: relative;
+      background-color: transparent;
+      text-decoration: none;
+      color: @font-color;
+      transition: background-color .2s;
 
       &::before {
-        background-color: violet;
-        box-shadow: 0 0 20px violet;
+        content: '';
+        width: 100%;
+        height: 3px;
+        background-color: transparent;
+        box-shadow: 0 0 20px transparent;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: background-color .2s, box-shadow .2s;
+      }
+
+      &.active::before {
+        background-color: @theme-color;
+        box-shadow: 0 0 20px @theme-color;
+      }
+
+      &:hover {
+        background-color: @hover-color;
+
+        &::before {
+          background-color: violet;
+          box-shadow: 0 0 20px violet;
+        }
       }
     }
   }
@@ -85,16 +90,12 @@ export default defineComponent({
     const store = useStore() as MyStore;
     const route = router.currentRoute;
 
-    const jumpTo = (item: MenuItem) => {
-      router.push(item.url);
-    };
-
     const activeUrl = computed(() => {
       for (const item of props.menus) {
         if (route.value.fullPath === item.url) {
           return item.url;
         }
-        if (item.url.length > 1 && route.value.fullPath.startsWith(item.url)) {
+        if (route.value.fullPath.startsWith(item.url + '/')) {
           return item.url;
         }
       }
@@ -102,7 +103,6 @@ export default defineComponent({
     });
 
     return {
-      jumpTo,
       route,
       activeUrl,
       translate,

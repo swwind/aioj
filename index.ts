@@ -28,6 +28,7 @@ app.on('error', () => {
 });
 
 if (config.port === 443) {
+  console.log(`cdn stricted to ${config.cdn}`);
   const middleware: any = cdnRouter.routes();
   app.use(async (ctx, next) => {
     // check if is cdn
@@ -52,7 +53,7 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 if (isProd) {
-  console.log('Server Side Rendering enabled');
+  console.log(`Server Side Rendering ${disableSSR ? 'disabled' : 'enabled'}`);
   app.use(ssr(disableSSR));
 }
 

@@ -14,9 +14,9 @@
         </ui-button>
       </div>
       <div class="userpanel" v-else>
-        <div class="username">
+        <router-link class="username" :to="`/u/${accounts.username}`">
           {{ accounts.username }}
-        </div>
+        </router-link>
       </div>
     </template>
     <template #header>

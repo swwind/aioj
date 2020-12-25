@@ -61,7 +61,7 @@ export const getFileSource: Middleware = async (ctx) => {
     ctx.response.body = buffer.slice(range[0], range[1] + 1);
   } else {
     ctx.response.status = 200;
-    ctx.set('Content-Type', contentType);
+    ctx.set('Content-Type', `${contentType}; charset=utf-8`);
     ctx.set('Content-Length', String(file.size));
     ctx.set('Accept-Ranges', 'bytes');
     ctx.set('Cache-Control', 'max-age=31536000');
