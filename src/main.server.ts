@@ -2,7 +2,6 @@ import { createApp, createSSRApp, defineComponent } from 'vue';
 import App from '@/App.vue';
 import routes from './router';
 import { createStore } from './store';
-import ElementPlus from 'element-plus';
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router';
 import { createAPI } from './api';
 
@@ -24,7 +23,6 @@ export function createVueApp(ssr: boolean, cookie?: string) {
   });
   const api = createAPI(cookie);
   const store = createStore(router, api);
-  app.use(ElementPlus);
   app.use(UIPlugin);
   app.use(store);
   app.use(router);

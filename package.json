@@ -24,7 +24,6 @@
     "@vue/cli-plugin-typescript": "^4.5.9",
     "@vue/cli-service": "^4.5.9",
     "@vue/server-renderer": "^3.0.2",
-    "element-plus": "^1.0.1-beta.0",
     "insane": "^2.6.2",
     "koa": "^2.13.0",
     "koa-body": "^4.2.0",
@@ -37,7 +36,7 @@
     "vue": "^3.0.2",
     "vue-router": "^4.0.0-rc.5",
     "vuex": "^4.0.0-rc.1",
-    "webpack": "^4.44.2"
+    "webpack": "^5.11.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",

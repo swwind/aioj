@@ -20,11 +20,7 @@ export type RootActions = Actions & ModuleActions;
 const createActions = (router: Router): Actions => ({
   async [ActionTypes.HANDLE_ERROR]({ state }, payload) {
     if (payload.status >= 400) {
-      notify({
-        title: translate(state.i18n.lang, 'error'),
-        type: 'error',
-        message: translate(state.i18n.lang, payload.error as any),
-      });
+      notify('error', translate(state.i18n.lang, payload.error));
     }
   },
   async [ActionTypes.HANDLE_RENDER_ERROR]({ commit, state, dispatch }, payload) {
@@ -35,21 +31,13 @@ const createActions = (router: Router): Actions => ({
     }
   },
   async [ActionTypes.NOTIFY_DELETE_SUCCESS]({ state }) {
-    notify({
-      title: translate(state.i18n.lang, 'success'),
-      type: 'success',
-      message: translate(state.i18n.lang, 'delete_success'),
-    });
+    notify('success', translate(state.i18n.lang, 'delete_success'));
   },
   async [ActionTypes.ROUTER_PUSH](_, payload: string) {
     router.push(payload);
   },
   async [ActionTypes.NOTIFY_REPLY_SUCCESS]({ state }) {
-    notify({
-      type: 'success',
-      title: translate(state.i18n.lang, 'success'),
-      message: translate(state.i18n.lang, 'reply_success'),
-    });
+    notify('success', translate(state.i18n.lang, 'reply_success'));
   },
 });
 

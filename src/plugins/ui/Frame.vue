@@ -1,7 +1,4 @@
 <template>
-  <div class="fixed-header fw">
-    <slot name="fixed"></slot>
-  </div>
   <div class="container">
     <main class="main fw">
       <slot></slot>
@@ -9,6 +6,9 @@
     <footer class="footer fw">
       <slot name="footer"></slot>
     </footer>
+  </div>
+  <div class="fixed-header fw">
+    <slot name="fixed"></slot>
   </div>
 </template>
 
@@ -22,7 +22,6 @@
   left: 0;
   width: 100vw;
   height: 60px;
-  z-index: 20;
 
   display: flex;
   flex-direction: row;

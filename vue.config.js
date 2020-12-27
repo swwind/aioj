@@ -32,7 +32,6 @@ exports.chainWebpack = (webpackConfig) => {
       'vue': 'Vue',
       'vuex': 'Vuex',
       'vue-router': 'VueRouter',
-      'element-plus': 'ElementPlus',
     });
 
   }

@@ -1,0 +1,95 @@
+@import '@/plugins/ui/styles/vars.less';
+
+.confirm {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, .4);
+  display: grid;
+  place-items: center center;
+  opacity: 0;
+  transition: opacity .3s;
+
+  .window {
+    background-color: @card-background-color;
+    padding: 20px;
+    min-width: 200px;
+    max-width: 400px;
+    transform: translateY(-20px);
+    transition: transform .3s;
+
+    .title {
+      font-size: 1.4rem;
+    }
+
+    .content {
+      margin: 20px 0;
+    }
+
+    .buttons {
+      text-align: right;
+
+      .ok, .cancel {
+        display: inline-block;
+        padding: 5px 10px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .cancel {
+        color: @red;
+      }
+
+      .ok {
+        color: @green;
+      }
+    }
+  }
+
+  &.show {
+    opacity: 1;
+
+    .window {
+      transform: translateY(0);
+    }
+  }
+
+}
+
+.notification {
+  position: fixed;
+  top: 40px;
+  right: 80px;
+  text-align: center;
+  padding: 10px 20px;
+  background-color: @green;
+  color: white;
+  animation-name: notification-anime;
+  animation-duration: 2.5s;
+
+  &.success {
+    background-color: @green;
+    color: white;
+  }
+  &.error {
+    background-color: @red;
+    color: white;
+  }
+}
+
+@keyframes notification-anime {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  5%, 95% {
+    opacity: 1;
+    transform: translate(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

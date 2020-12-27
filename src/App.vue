@@ -127,6 +127,7 @@ export default defineComponent({
 <style lang="less">
 @import '@/plugins/ui/styles/colors.less';
 @import '@/plugins/ui/styles/vars.less';
+@import './confirm.less';
 
 body, html {
   padding: 0;

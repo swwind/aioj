@@ -4,11 +4,6 @@ import { translate } from './i18n/translate';
 import marked from 'marked';
 import insane from 'insane';
 
-import {
-  ElNotification as notify,
-  ElMessageBox as msgbox,
-} from 'element-plus';
-
 export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   let ret = '';
 
@@ -23,24 +18,59 @@ export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   return ret ? `?redirect=${encodeURIComponent(ret)}` : '';
 }
 
-export { notify, msgbox };
-
 export const confirm = async (lang: string, message: string) => {
-  try {
-    await msgbox.confirm(
-      message,
-      translate(lang, 'warning'),
-      {
-        type: 'warning',
-        confirmButtonText: translate(lang, 'ok'),
-        cancelButtonText: translate(lang, 'cancel'),
-      },
-    );
-    return true;
-  } catch (e) {
-    return false;
+  const confirm = document.createElement('div'); confirm.classList.add('confirm');
+  const window = document.createElement('div'); window.classList.add('window');
+  const title = document.createElement('div'); title.classList.add('title');
+  const content = document.createElement('div'); content.classList.add('content');
+  const buttons = document.createElement('div'); buttons.classList.add('buttons');
+  const cancel = document.createElement('div'); cancel.classList.add('cancel');
+  const ok = document.createElement('div'); ok.classList.add('ok');
+
+  confirm.appendChild(window);
+  window.appendChild(title);
+  window.appendChild(content);
+  window.appendChild(buttons);
+  buttons.appendChild(cancel);
+  buttons.appendChild(ok);
+
+  title.innerText = translate(lang, 'warning');
+  content.innerText = message;
+  cancel.innerText = translate(lang, 'cancel');
+  ok.innerText = translate(lang, 'ok');
+
+  document.body.appendChild(confirm);
+  setTimeout(() => confirm.classList.add('show'));
+
+  const remove = () => {
+    confirm.classList.remove('show');
+    setTimeout(() => {
+      confirm.remove();
+    }, 300);
   }
+
+  return new Promise((resolve) => {
+    ok.addEventListener('click', () => {
+      remove();
+      resolve(true);
+    });
+    cancel.addEventListener('click', () => {
+      remove();
+      resolve(false);
+    });
+  });
 };
+
+export const notify = (type: string, content: string) => {
+  const div = document.createElement('div');
+  div.classList.add('notification');
+  div.classList.add(type);
+  div.innerText = content;
+  document.body.appendChild(div);
+  setTimeout(() => {
+    div.remove();
+  }, 2500);
+}
 
 export function toSizeString(size: number) {
   if (size < 0.9 * (2 ** 10)) return `${size}B`;

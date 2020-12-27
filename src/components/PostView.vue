@@ -13,7 +13,7 @@
         Edited
       </span>
       <span class="operations" v-if="accounts.admin || accounts.username === comment.author">
-        <ui-icon class="delete" name="delete_outline"
+        <ui-icon class="delete" name="trash-alt" regular right
           @click="handleDeleteComment(comment.cid)" />
         <ui-icon class="edit" name="edit"
           @click="handleEditComment(comment.cid)" />
@@ -159,6 +159,10 @@ export default defineComponent({
 
     &.marked {
       word-wrap: break-word;
+
+      & > :last-child {
+        margin-bottom: 0;
+      }
     }
 
     &.raw {

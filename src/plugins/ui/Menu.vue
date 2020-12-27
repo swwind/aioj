@@ -47,11 +47,6 @@
         transition: background-color .2s, box-shadow .2s;
       }
 
-      &.active::before {
-        background-color: @theme-color;
-        box-shadow: 0 0 20px @theme-color;
-      }
-
       &:hover {
         background-color: @hover-color;
 
@@ -60,6 +55,11 @@
           box-shadow: 0 0 20px violet;
         }
       }
+    }
+
+    &.active .link::before {
+      background-color: @theme-color;
+      box-shadow: 0 0 20px @theme-color;
     }
   }
 }
