@@ -47,7 +47,7 @@ export const confirm = async (lang: string, message: string) => {
     setTimeout(() => {
       confirm.remove();
     }, 300);
-  }
+  };
 
   return new Promise((resolve) => {
     ok.addEventListener('click', () => {
@@ -70,7 +70,7 @@ export const notify = (type: string, content: string) => {
   setTimeout(() => {
     div.remove();
   }, 2500);
-}
+};
 
 export function toSizeString(size: number) {
   if (size < 0.9 * (2 ** 10)) return `${size}B`;

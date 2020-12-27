@@ -31,12 +31,12 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue'
+import { defineComponent, toRefs } from 'vue';
 import { useStore } from 'vuex';
 export default defineComponent({
   setup() {
     const store = useStore();
     return toRefs(store.state);
-  }
+  },
 });
 </script>
