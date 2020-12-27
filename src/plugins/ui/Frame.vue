@@ -3,9 +3,6 @@
     <slot name="fixed"></slot>
   </div>
   <div class="container">
-    <header class="header fw">
-      <slot name="header"></slot>
-    </header>
     <main class="main fw">
       <slot></slot>
     </main>
@@ -46,16 +43,10 @@
   flex-direction: column;
   min-height: 100vh;
 
-  .header {
-    padding-top: 60px;
-    height: 220px;
-    box-sizing: border-box;
-  }
-
   .main {
     flex: 1;
     background-color: @background-color;
-    padding-top: 20px;
+    padding-top: 120px;
     padding-bottom: 60px;
   }
 

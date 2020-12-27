@@ -29,7 +29,9 @@
   .icon {
     line-height: 40px;
     font-size: 1rem;
-    margin-left: 7px;
+    margin-left: 10px;
+    width: 20px;
+    text-align: center;
     color: @font-color-lighter;
   }
 
@@ -41,7 +43,7 @@
     border: none;
     outline: none;
     background-color: transparent;
-    padding: 0 7px;
+    padding: 0 10px;
     margin: 0;
     color: @font-color-light;
 

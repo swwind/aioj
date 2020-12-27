@@ -1,5 +1,6 @@
 <template>
   <button class="button" :class="{ [type]: true, text, small, disabled }" @click="handleClick($event)">
+    <ui-icon v-if="icon" :name="icon" right />
     <slot></slot>
   </button>
 </template>
@@ -13,6 +14,7 @@ export default defineComponent({
     text: Boolean,
     small: Boolean,
     disabled: Boolean,
+    icon: String,
   },
   emits: ['click'],
   setup(props, ctx) {

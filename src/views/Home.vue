@@ -1,4 +1,5 @@
 <template>
+  <ui-header />
   <ui-card>
     <template #header>
       {{ accounts.username ? `Hello ${accounts.username}` : 'Welcome to AIOJ!' }}

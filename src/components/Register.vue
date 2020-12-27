@@ -1,29 +1,30 @@
 <template>
+  <ui-header />
   <ui-card notitle>
     <ui-input
       type="text"
       v-model="username"
-      icon="perm_identity"
+      icon="user"
       :placeholder="translate(i18n.lang, 'username')"
       class="item"
     />
     <ui-input
       type="password"
       v-model="password"
-      icon="lock_outline"
+      icon="lock"
       :placeholder="translate(i18n.lang, 'password')"
       class="item"
     />
     <ui-input
       type="password"
       v-model="reptpass"
-      icon="lock_outline"
+      icon="lock"
       :placeholder="translate(i18n.lang, 'repeat_password')"
       @keydown="handleKeydown"
       class="item"
     />
     <div class="actions item">
-      <ui-button type="primary" @click="handleRegister">{{ translate(i18n.lang, 'register') }}</ui-button>
+      <ui-button type="primary" @click="handleRegister" icon="location-arrow">{{ translate(i18n.lang, 'register') }}</ui-button>
       <router-link :to="`/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="login">{{ translate(i18n.lang, 'login') }}</router-link>
     </div>
   </ui-card>

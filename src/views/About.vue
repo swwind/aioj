@@ -1,4 +1,5 @@
 <template>
+  <ui-header />
   <ui-card class="about">
     <template #header>
       Welcome to aioj.ac!

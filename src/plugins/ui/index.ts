@@ -7,6 +7,7 @@ import Menu from './Menu.vue';
 import Icon from './Icon.vue';
 import Input from './Input.vue';
 import Editor from './Editor.vue';
+import Header from './Header.vue';
 
 export default {
   install(app: App) {
@@ -17,5 +18,6 @@ export default {
     app.component('ui-icon', Icon);
     app.component('ui-input', Input);
     app.component('ui-editor', Editor);
+    app.component('ui-header', Header);
   },
 };

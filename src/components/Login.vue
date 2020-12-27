@@ -1,22 +1,23 @@
 <template>
+  <ui-header />
   <ui-card notitle>
     <ui-input
       type="text"
-      icon="perm_identity"
+      icon="user"
       v-model="username"
       :placeholder="translate(i18n.lang, 'username')"
       class="item"
     />
     <ui-input
       type="password"
-      icon="lock_outline"
+      icon="lock"
       v-model="password"
       :placeholder="translate(i18n.lang, 'password')"
       @keydown="handleKeydown"
       class="item"
     />
     <div class="actions item">
-      <ui-button type="primary" @click="handleLogin">{{ translate(i18n.lang, 'login') }}</ui-button>
+      <ui-button type="primary" @click="handleLogin" icon="location-arrow">{{ translate(i18n.lang, 'login') }}</ui-button>
       <router-link :to="`/register${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`" class="register">{{ translate(i18n.lang, 'register') }}</router-link>
     </div>
   </ui-card>

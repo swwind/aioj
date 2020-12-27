@@ -1,4 +1,5 @@
 <template>
+  <ui-header />
   <div v-if="data.user.username" class="userview">
     <ui-card>
       <template #header>

@@ -1,12 +1,13 @@
 <template>
+  <ui-header />
   <ui-card notitle
     class="comment"
     v-for="comment of data.comments"
     :key="comment.cid">
     <div class="infos">
       <a :href="`#${comment.cid}`" class="level" :id="comment.cid">#{{ comment.cid }}</a>
-      <router-link class="author" :to="`/u/${comment.author}`"><ui-icon name="perm_identity"/>{{ comment.author }}</router-link>
-      <time class="time"><ui-icon name="access_time" />{{ new Date(comment.date).toLocaleString() }}</time>
+      <router-link class="author" :to="`/u/${comment.author}`"><ui-icon name="user" regular right/>{{ comment.author }}</router-link>
+      <time class="time"><ui-icon name="calendar-alt" regular right/>{{ new Date(comment.date).toLocaleString() }}</time>
       <span class="edited" v-if="comment.edited">
         <ui-icon name="edit" />
         Edited
@@ -34,7 +35,7 @@
       class="reply-content"
     />
     <div class="buttons">
-      <ui-button type="primary" @click="handleReply">{{ translate(i18n.lang, 'submit') }}</ui-button>
+      <ui-button type="primary" icon="location-arrow" @click="handleReply">{{ translate(i18n.lang, 'submit') }}</ui-button>
     </div>
   </ui-card>
 </template>
@@ -132,11 +133,6 @@ export default defineComponent({
 .comment {
 
   .infos {
-
-    i {
-      margin-right: 5px;
-      font-size: 1.125rem;
-    }
 
     .level, .author, .time {
       margin-right: 20px;

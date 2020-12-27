@@ -1,15 +1,16 @@
 <template>
+  <ui-header />
   <ui-card notitle>
     <div class="desc">
       {{ data.region.description }}
       <div class="operations" v-if="accounts.admin">
-        <ui-icon name="delete_outline" @click="handleDeleteRegion" />
+        <ui-icon name="trash-alt" regular right @click="handleDeleteRegion" />
         <ui-icon name="edit" />
       </div>
     </div>
     <ui-icon
       v-if="!data.posts.length"
-      name="unarchive"
+      name="snowflake"
       :text="translate(i18n.lang, 'no_posts')"
     />
     <div class="post-item" v-for="post of data.posts" :key="post.pid" v-else>
@@ -17,11 +18,11 @@
         <router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link>
       </div>
       <router-link class="author" :to="`/u/${post.author}`">
-        <ui-icon name="perm_identity" />
+        <ui-icon name="user" regular right />
         {{ post.author }}
       </router-link>
       <time class="time">
-        <ui-icon name="access_time" />
+        <ui-icon name="calendar-alt" regular right />
         {{ new Date(post.date).toLocaleString() }}
       </time>
     </div>
@@ -35,7 +36,7 @@
         type="text"
         v-model="title"
         class="title"
-        icon="emoji_objects"
+        icon="align-left"
         :placeholder="translate(i18n.lang, 'post_title')"
       />
       <ui-editor
@@ -46,6 +47,7 @@
       <div class="buttonset">
         <ui-button
           type="primary"
+          icon="location-arrow"
           @click="handleSendPost">
           {{ translate(i18n.lang, 'post') }}
         </ui-button>
@@ -122,7 +124,6 @@ export default defineComponent({
     font-size: 1.2rem;
 
     i {
-      margin-right: 5px;
       cursor: pointer;
     }
   }

@@ -19,15 +19,6 @@
         </router-link>
       </div>
     </template>
-    <template #header>
-      <p class="breadcrumbs">
-        <span class="breadcrumb" v-for="subtitle of ssr.title.slice(0, -1)" :key="subtitle.name">
-          <router-link v-if="subtitle.url" :to="subtitle.url">{{ subtitle.name }}</router-link>
-          <span v-else>{{ subtitle.name }}</span>
-        </span>
-      </p>
-      <h1 v-if="ssr.title.length" class="title">{{ ssr.title[ssr.title.length - 1].name }}</h1>
-    </template>
     <router-view v-slot="{ Component }">
       <suspense>
         <template #default>
@@ -181,24 +172,6 @@ a {
 
 .nav {
   flex: 1;
-}
-
-.breadcrumbs {
-  margin-top: 70px;
-  margin-bottom: 5px;
-  height: 20px;
-
-  .breadcrumb {
-    &::after {
-      content: " / ";
-      margin: 0 5px;
-    }
-  }
-}
-
-.title {
-  font-weight: normal;
-  margin-top: 5px;
 }
 
 .buttonset {
