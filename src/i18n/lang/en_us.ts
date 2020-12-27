@@ -24,6 +24,7 @@ const en_us: InternationalizationLanguage = {
   reply_warning: 'Welcome to leave your email for resources, will randomly select the lucky ones permanently ban.',
   reply_placeholder: 'You left a comment, which made the author full of determination.',
 
+  no_files: 'No files uploaded',
   no_posts: 'No posts yet',
   no_regions: 'No regions yet',
   region: 'Region',

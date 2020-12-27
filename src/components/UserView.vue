@@ -38,7 +38,12 @@
         class="tips">
         {{ translate(i18n.lang, 'upload_tips') }}
       </div>
-      <div class="file-list">
+      <ui-icon
+        v-if="!data.files.length"
+        name="snowflake"
+        :text="translate(i18n.lang, 'no_files')"
+      />
+      <div class="file-list" v-else>
         <div class="file-item" v-for="file in data.files" :key="file.fid">
           <span class="file-name">
             <a :href="`${cdn}/f/${file.fid}`" target="_blank">{{ file.filename }}</a>

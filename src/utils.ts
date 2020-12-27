@@ -62,6 +62,10 @@ export const confirm = async (lang: string, message: string) => {
 };
 
 export const notify = (type: string, content: string) => {
+  if (typeof document === 'undefined') {
+    // in ssr
+    return;
+  }
   const div = document.createElement('div');
   div.classList.add('notification');
   div.classList.add(type);

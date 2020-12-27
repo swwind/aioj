@@ -24,6 +24,7 @@ export type InternationalizationLanguage = {
   reply_warning: string;
   reply_placeholder: string;
 
+  no_files: string;
   no_posts: string;
   no_regions: string;
   region: string;
