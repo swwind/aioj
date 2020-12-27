@@ -7,7 +7,8 @@
         <ui-icon
           v-if="accounts.username && accounts.username !== data.user.username"
           class="star"
-          :name="accounts.friends.indexOf(data.user.username) > -1 ? 'star' : 'star_outline'"
+          name="star"
+          :regular="accounts.friends.indexOf(data.user.username) === -1"
           :class="{ on: accounts.friends.indexOf(data.user.username) > -1 }"
           @click="handleToggleFriend"/>
       </template>
@@ -46,11 +47,11 @@
             {{ toSizeString(file.size) }}
           </span>
           <span class="file-date">
-            <ui-icon name="access_time" />
+            <ui-icon name="calendar-alt" regular />
             {{ new Date(file.date).toLocaleString() }}
           </span>
           <span class="file-operations">
-            <ui-icon name="delete_outline" @click="handleDeleteFile(file)" />
+            <ui-icon name="trash-alt" regular @click="handleDeleteFile(file)" />
           </span>
         </div>
       </div>
