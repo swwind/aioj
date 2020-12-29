@@ -1,4 +1,4 @@
-import { createApp, createSSRApp, defineComponent } from 'vue';
+import { createSSRApp } from 'vue';
 import App from '@/App.vue';
 import routes from './router';
 import { createStore } from './store';
@@ -8,13 +8,11 @@ import { createAPI } from './api';
 import UIPlugin from './plugins/ui';
 
 export function createVueApp(ssr: boolean, cookie?: string) {
-  const SuspenseApp = defineComponent({
-    template: '<Suspense><App/></Suspense>',
+  const SuspenseApp = {
+    template: `<Suspense><App/></Suspense>`,
     components: { App },
-  });
-  const app = ssr
-    ? createSSRApp(SuspenseApp)
-    : createApp(SuspenseApp);
+  };
+  const app = createSSRApp(SuspenseApp);
   const router = createRouter({
     history: ssr
       ? createMemoryHistory()

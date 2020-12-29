@@ -24,7 +24,7 @@ const gentemp = (title: string, meta: Record<string, string>, rendered: string, 
 
   return '<!-- attack204 AK world final -->\n' + template
     .replace('<meta charset="utf-8">', '<meta charset="utf-8">' + metastr)
-    .replace('<div id="app"></div>', `<div id="app">${rendered}</div>`)
+    .replace('<div id="app"></div>', `<div id="app" data-server-rendered="true">${rendered}</div>`)
     .replace('</head>', `<script>window.__INITIAL_STATE__=${statestr};</script></head>`);
 };
 

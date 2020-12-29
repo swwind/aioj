@@ -50,14 +50,14 @@ export const confirm = async (lang: string, message: string) => {
   };
 
   return new Promise((resolve) => {
-    ok.addEventListener('click', () => {
+    const end = (choice: boolean) => () => {
       remove();
-      resolve(true);
-    });
-    cancel.addEventListener('click', () => {
-      remove();
-      resolve(false);
-    });
+      resolve(choice);
+    }
+    ok.addEventListener('click', end(true));
+    cancel.addEventListener('click', end(false));
+    confirm.addEventListener('click', end(false));
+    window.addEventListener('click', (e) => e.stopPropagation());
   });
 };
 

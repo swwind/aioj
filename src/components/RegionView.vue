@@ -18,12 +18,10 @@
         <router-link :to="`/r/${data.region.region}/${post.pid}`">{{ post.title }}</router-link>
       </div>
       <router-link class="author" :to="`/u/${post.author}`">
-        <ui-icon name="user" regular right />
-        {{ post.author }}
+        <ui-icon name="user" regular right />{{ post.author }}
       </router-link>
       <time class="time">
-        <ui-icon name="calendar-alt" regular right />
-        {{ new Date(post.date).toLocaleString() }}
+        <ui-icon name="calendar-alt" regular right />{{ new Date(post.date).toLocaleString() }}
       </time>
     </div>
   </ui-card>

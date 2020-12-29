@@ -104,19 +104,27 @@
 
 <script lang="ts">
 import { santinizeMarked } from '@/utils';
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, toRefs, watch } from 'vue';
 export default defineComponent({
   props: {
     placeholder: String,
+    modelValue: {
+      type: String,
+      required: true,
+    },
   },
   emits: ['update:modelValue'],
   setup(props, ctx) {
+    const { modelValue } = toRefs(props);
     const value = ref('');
     const choose = ref(0);
     const active = ref(false);
 
     watch(value, (newvalue) => {
       ctx.emit('update:modelValue', newvalue);
+    });
+    watch(modelValue, (newvalue) => {
+      value.value = newvalue;
     });
 
     const handleFocus = () => {

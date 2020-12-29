@@ -1,6 +1,6 @@
 @import '@/plugins/ui/styles/vars.less';
 
-.confirm {
+body > .confirm {
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -33,17 +33,26 @@
 
       .ok, .cancel {
         display: inline-block;
-        padding: 5px 10px;
+        padding: 7px 20px;
         cursor: pointer;
         user-select: none;
-      }
+        transition: background-color .2s;
 
+        &:hover {
+          background-color: @hover-color;
+        }
+        &:active {
+          background-color: @active-color;
+        }
+      }
+      
       .cancel {
         color: @red;
       }
-
+      
       .ok {
         color: @green;
+        margin-left: 5px;
       }
     }
   }
@@ -55,7 +64,6 @@
       transform: translateY(0);
     }
   }
-
 }
 
 .notification {
