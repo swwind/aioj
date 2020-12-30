@@ -10,7 +10,13 @@ router.put('/u/:username', async (ctx) => {
     return ctx.end(401, LOGIN_REQUIRE);
   }
 
-  if (!ctx.verifyBody(['description', 'email'])) {
+  if (!ctx.verifyBody([{
+      name: 'description',
+      type: 'string'
+    }, {
+      name: 'email',
+      type: 'string'
+    }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 

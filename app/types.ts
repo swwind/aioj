@@ -7,10 +7,10 @@ export type State = {
 export type Tools = {
   end(status: number, error: string): void;
   end(status: number, data?: Object): void;
-  verifyBody(keys: string[]): boolean;
+  verifyBody(keys: { name: string, type: 'string' | 'boolean' | 'file' }[]): boolean;
 }
 
-export type ConfigData = {
+export type CounterData = {
   maxpid: number; // max problem id
 }
 
@@ -34,6 +34,7 @@ export type RegionDetail = {
 
 export type RegionData = {
   maxpid: number; // for counting
+  hidden: boolean;
 } & RegionDetail;
 
 export type PostDetail = {
@@ -62,15 +63,21 @@ export type CommentData = {
   region: string;
 } & CommentDetail;
 
+export type ProblemAbstract = {
+  pid: number;
+  title: string;
+}
+
 export type ProblemDetail = {
   pid: number;
   title: string;
   author: string;
   content: string;
+  date: number;
+  hidden: boolean;
 }
 
 export type ProblemData = {
-  judger: string;
 } & ProblemDetail;
 
 export type FileDetail = {

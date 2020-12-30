@@ -71,6 +71,7 @@ const zh_cn: InternationalizationLanguage = {
   region_already_exists: '模块已经存在',
   region_not_exists: '模块不存在',
   post_not_exists: '帖子不存在',
+  problem_not_exists: '题目不存在',
   comment_not_exists: '评论不存在',
   file_not_found: '文件不存在',
   internal_server_error: '内部异锟斤拷常，恭喜你已经成锟斤拷了锟斤拷锟斤拷烫烫烫烫烫',

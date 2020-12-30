@@ -71,6 +71,7 @@ const en_us: InternationalizationLanguage = {
   region_already_exists: 'Region already exists',
   region_not_exists: 'Region is not exist',
   post_not_exists: 'Post is not exist',
+  problem_not_exists: 'Problem is not exist',
   comment_not_exists: 'Comment is not exist',
   file_not_found: 'File is not exist',
   internal_server_error: 'Internal Secwer ErcOr, y*r *v$!na c4v_e/#$!.',

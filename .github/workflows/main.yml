@@ -28,7 +28,9 @@ jobs:
           node --version
 
       - name: Build
-        run: yarn build
+        run: |
+          ln -sf _config.json config.json
+          yarn build
 
       - name: Lint
         run: yarn lint

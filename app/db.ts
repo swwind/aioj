@@ -1,12 +1,12 @@
 import { MongoClient } from 'mongodb';
 import config from '../config.json';
-import { AuthData, CommentData, CommentDetail, ConfigData, FileData, FileDetail, PostData, PostDetail, ProblemData, RegionData, RegionDetail, UserData, UserDetail } from './types';
+import { AuthData, CommentData, CommentDetail, CounterData, FileData, FileDetail, PostData, PostDetail, ProblemAbstract, ProblemData, ProblemDetail, RegionData, RegionDetail, UserData, UserDetail } from './types';
 
 const client = new MongoClient(config.mongo.url, { useUnifiedTopology: true });
 await client.connect();
 const db = client.db(config.mongo.dbname);
 
-export const configs = db.collection<ConfigData>('config');
+export const counter = db.collection<CounterData>('counter');
 export const users = db.collection<UserData>('user');
 export const regions = db.collection<RegionData>('region');
 export const posts = db.collection<PostData>('post');
@@ -16,8 +16,8 @@ export const files = db.collection<FileData>('file');
 export const auths = db.collection<AuthData>('auth');
 
 // initialize db
-if (!await configs.findOne({ })) {
-  configs.insertOne({ maxpid: 1000 });
+if (!await counter.findOne({ })) {
+  counter.insertOne({ maxpid: 1000 });
 }
 
 export function extractUserDetail(ud: UserData): UserDetail {
@@ -61,4 +61,20 @@ export function extractFileDetail(fd: FileData): FileDetail {
     fid: fd.fid,
     date: fd.date,
   };
+}
+export function extractProblemDetail(pd: ProblemData): ProblemDetail {
+  return {
+    author: pd.author,
+    pid: pd.pid,
+    title: pd.title,
+    content: pd.content,
+    date: pd.date,
+    hidden: pd.hidden,
+  };
+}
+export function extractProblemAbstract(pd: ProblemData): ProblemAbstract {
+  return {
+    pid: pd.pid,
+    title: pd.title,
+  }
 }

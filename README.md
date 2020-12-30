@@ -95,9 +95,24 @@ Content-Type: application/json
     - email: string;
 
 [ ] GET    /problems                    Get the full problem lists
-[ ] GET    /p/:pid                      Get the problem details
-[ ] POST   /problem                     Create a new problem
+    + problems:
+        + pid: number;
+        + title: string;
+[ ] GET    /p/:pid                      Get problem information
+    + problem: ProblemDetail;
+        + pid: number;
+        + author: string;
+        + content: string;
+        + title: string;
+        + date: number;
+        + hidden: boolean;
+[ ] POST   /p/new                       Create a new problem
+    - title: string;
+    + pid: number;
 [ ] PUT    /p/:pid                      Modify a problem
+    - title: string;
+    - content: string;
+    - hidden: boolean;
 [ ] DELETE /p/:pid                      Delete a problem
 
 [x] GET    /friends                     Get my friends list

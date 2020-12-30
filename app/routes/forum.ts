@@ -10,7 +10,13 @@ router.post('/r/:region/:pid/comment', async (ctx) => {
     return ctx.end(401, LOGIN_REQUIRE);
   }
 
-  if (!ctx.verifyBody(['content', 'markdown'])) {
+  if (!ctx.verifyBody([{
+      name: 'content',
+      type: 'string'
+    }, {
+      name: 'markdown',
+      type: 'string'
+    }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
@@ -32,7 +38,16 @@ router.post('/r/:region/post', async (ctx) => {
     return ctx.end(401, LOGIN_REQUIRE);
   }
 
-  if (!ctx.verifyBody(['title', 'content', 'markdown'])) {
+  if (!ctx.verifyBody([{
+      name: 'title',
+      type: 'string',
+    }, {
+      name: 'content',
+      type: 'string',
+    }, {
+      name: 'markdown',
+      type: 'boolean',
+    }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
   const { title, content, markdown } = ctx.request.body;
@@ -50,12 +65,18 @@ router.post('/r/:region', async (ctx) => {
     return ctx.end(403, PERMISSION_DENIED);
   }
 
-  if (!ctx.verifyBody(['description', 'title'])) {
+  if (!ctx.verifyBody([{
+      name: 'description',
+      type: 'string',
+    }, {
+      name: 'title',
+      type: 'string',
+    }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
   const { description, title } = ctx.request.body;
 
-  const result = await createRegion(ctx.params.region, title, description);
+  const result = await createRegion(ctx.params.region, title, description, false);
   if (!result.ok) {
     return ctx.end(400, result.error());
   }
@@ -77,7 +98,10 @@ router.put('/r/:region/:pid/:cid', async (ctx) => {
     return ctx.end(403, PERMISSION_DENIED);
   }
 
-  if (!ctx.verifyBody(['content'])) {
+  if (!ctx.verifyBody([{
+      name: 'content',
+      type: 'string',
+    }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
@@ -107,7 +131,10 @@ router.put('/r/:region/:pid', async (ctx) => {
     return ctx.end(403, PERMISSION_DENIED);
   }
 
-  if (!ctx.verifyBody(['title'])) {
+  if (!ctx.verifyBody([{
+      name: 'title',
+      type: 'string',
+    }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
@@ -127,7 +154,13 @@ router.put('/r/:region', async (ctx) => {
     return ctx.end(403, PERMISSION_DENIED);
   }
 
-  if (!ctx.verifyBody(['description', 'title'])) {
+  if (!ctx.verifyBody([{
+      name: 'description',
+      type: 'string',
+    }, {
+      name: 'title',
+      type: 'string',
+    }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
   const { description, title } = ctx.request.body;

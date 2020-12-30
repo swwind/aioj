@@ -1,4 +1,4 @@
-import { CommentDetail, FileDetail, PostDetail, ProblemDetail, RegionDetail, UserDetail } from '../../../app/types';
+import { CommentDetail, FileDetail, PostDetail, ProblemAbstract, ProblemDetail, RegionDetail, UserDetail } from '../../../app/types';
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
 import { API } from '@/api';
@@ -17,7 +17,7 @@ export type State = {
   files: FileDetail[];
   uploading: boolean;
   progress: number; // range [0,1]
-  problems: ProblemDetail[];
+  problems: ProblemAbstract[];
   problem: ProblemDetail;
 }
 
@@ -100,14 +100,14 @@ export const createDataModule = (api: API) => {
     problems: [{
       pid: 1000,
       title: 'Gomoku',
-      author: 'root',
-      content: '# gomoku\n\ngomoku is a very interesting problem\n',
     }],
     problem: {
       pid: 1000,
       title: 'Gomoku',
       author: 'root',
-      content: '# gomoku\n\ngomoku is a very interesting problem\n',
+      content: 'gomoku is a **very** _interesting_ problem\n',
+      date: Date.now(),
+      hidden: false,
     },
   });
 

@@ -12,7 +12,13 @@ router.post('/login', async (ctx) => {
     return ctx.end(400, LOGOUT_REQUIRE);
   }
 
-  if (!ctx.verifyBody(['username', 'password'])) {
+  if (!ctx.verifyBody([{
+      name: 'username',
+      type: 'string',
+    }, {
+      name: 'password',
+      type: 'string',
+    }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
@@ -36,7 +42,13 @@ router.post('/register', async (ctx) => {
     return ctx.end(400, LOGOUT_REQUIRE);
   }
 
-  if (!ctx.verifyBody(['username', 'password'])) {
+  if (!ctx.verifyBody([{
+      name: 'username',
+      type: 'string',
+    }, {
+      name: 'password',
+      type: 'string',
+    }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 

@@ -24,21 +24,29 @@ router.use('/', async (ctx, next) => {
       ...(typeof data === 'string' ? { error: data } : data),
     });
   };
-  ctx.verifyBody = (keys: string[]) => {
+  ctx.verifyBody = (keys: { name: string, type: 'string' | 'boolean' | 'file' }[]) => {
     for (const key of keys) {
-      if (ctx.request.files && key in ctx.request.files) {
-        continue;
-      }
-      if (key in ctx.request.body) {
-        const value = ctx.request.body[key];
-        if (typeof value === 'boolean' || typeof value === 'number') {
-          continue;
+      if (key.type === 'string') {
+        if (typeof ctx.request.body[key.name] !== 'string') {
+          return false;
         }
-        if (value) {
-          continue;
+        if (!ctx.request.body[key.name]) {
+          return false;
         }
       }
-      return false;
+      if (key.type === 'boolean') {
+        if (typeof ctx.request.body[key.name] !== 'boolean') {
+          return false;
+        }
+      }
+      if (key.type === 'file') {
+        if (!ctx.request.files) {
+          return false;
+        }
+        if (!(key.name in ctx.request.files)) {
+          return false;
+        }
+      }
     }
     return true;
   };

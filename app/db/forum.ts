@@ -3,7 +3,7 @@ import { comments, posts, regions, extractCommentDetail, extractPostDetail, extr
 import { COMMENT_NOT_EXISTS, POST_NOT_EXISTS, REGION_ALREADY_EXISTS, REGION_NOT_EXISTS } from '../errors';
 import { Result } from '../utils';
 
-export async function createRegion(region: string, title: string, description: string): Promise<Result<void, string>> {
+export async function createRegion(region: string, title: string, description: string, hidden: boolean): Promise<Result<void, string>> {
   const res = await regions.findOne({
     region,
   });
@@ -14,6 +14,7 @@ export async function createRegion(region: string, title: string, description: s
     title,
     description,
     maxpid: 0,
+    hidden,
   });
 
   return Result.ok();
@@ -156,5 +157,5 @@ export async function getRegionDetail(region: string): Promise<Result<RegionDeta
 }
 
 export async function getRegionsList(): Promise<RegionDetail[]> {
-  return (await regions.find({ }).toArray()).map(extractRegionDetail);
+  return (await regions.find({ hidden: false }).toArray()).map(extractRegionDetail);
 }
