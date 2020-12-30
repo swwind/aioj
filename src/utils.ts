@@ -6,6 +6,7 @@ import config from '../config.json';
 
 import markdownit from 'markdown-it';
 import mkditkatex from 'markdown-it-katex';
+import md5 from 'md5';
 
 export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   let ret = '';
@@ -104,7 +105,7 @@ marked.use(mkditkatex, {
 });
 marked.use((md) => {
   const defaultRender = md.renderer.rules.image;
-  const reg = /^aioj:\/\/(video|audio|image)\/([a-z0-9]+)$/;
+  const reg = /^aioj:\/\/(video|audio|image|flv|fs)\/([a-z0-9]+)$/;
   if (!defaultRender) return;
 
   md.renderer.rules.image = (tokens, idx, options, env, self) => {
@@ -126,6 +127,10 @@ marked.use((md) => {
           return `<audio controls src="${src}"></audio>`;
         } else if (type === 'image') {
           return `<img alt="${alt}" src="${src}">`;
+        } else if (type === 'fs') {
+          return `<a href="${src}">${alt}</a>`;
+        } else if (type === 'flv') {
+          return `<video controls data-flv-src="${src}"></video>`;
         }
       }
     }
@@ -137,6 +142,14 @@ marked.use((md) => {
 
 export function santinizeMarked(mkd: string) {
   return marked.render(mkd);
+}
+
+export async function copyToClipboard(text: string) {
+  if ('clipboard' in navigator) {
+    await navigator.clipboard.writeText(text);
+    return true;
+  }
+  return false;
 }
 
 export type Argument<S> = S | Ref<S>;

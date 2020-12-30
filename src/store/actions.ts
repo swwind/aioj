@@ -13,6 +13,8 @@ type Actions<S = RootState> = {
   [ActionTypes.NOTIFY_DELETE_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.NOTIFY_REPLY_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.NOTIFY_UPDATE_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.NOTIFY_COPY_FAILED](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.NOTIFY_COPY_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.ROUTER_PUSH](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
 }
 
@@ -42,6 +44,12 @@ const createActions = (router: Router): Actions => ({
   },
   async [ActionTypes.NOTIFY_UPDATE_SUCCESS]({ state }) {
     notify('success', translate(state.i18n.lang, 'update_success'));
+  },
+  async [ActionTypes.NOTIFY_COPY_SUCCESS]({ state }) {
+    notify('success', translate(state.i18n.lang, 'copy_success'));
+  },
+  async [ActionTypes.NOTIFY_COPY_FAILED]({ state }) {
+    notify('success', translate(state.i18n.lang, 'copy_fail'));
   },
 });
 

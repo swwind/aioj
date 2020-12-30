@@ -13,6 +13,8 @@ const en_us: InternationalizationLanguage = {
   reply_success: 'Successfully replied to the post',
   delete_success: 'Successfully deleted',
   update_success: 'Successfully updated',
+  copy_success: 'Copied to clipboard',
+  copy_fail: 'Your browser is out-dated',
   admin: 'Admin',
   username: 'Username',
   password: 'Password',

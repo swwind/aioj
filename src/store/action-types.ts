@@ -33,6 +33,8 @@ export enum ActionTypes {
   NOTIFY_DELETE_SUCCESS = 'notify_delete_success',
   NOTIFY_REPLY_SUCCESS = 'notify_reply_success',
   NOTIFY_UPDATE_SUCCESS = 'notify_update_success',
+  NOTIFY_COPY_SUCCESS = 'notify_copy_success',
+  NOTIFY_COPY_FAILED = 'notify_copy_failed',
 
   HANDLE_ERROR = 'handle_error',
   HANDLE_RENDER_ERROR = 'handle_render_error',

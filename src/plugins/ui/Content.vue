@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { santinizeMarked } from '@/utils';
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 export default defineComponent({
   props: {
     text: {
@@ -37,6 +37,20 @@ export default defineComponent({
     markdown: Boolean,
   },
   setup() {
+    onMounted(() => {
+      if (flvjs.isSupported()) {
+        const elems = document.querySelectorAll<HTMLMediaElement>('video[data-flv-src]');
+        elems.forEach((elem) => {
+          const url = elem.getAttribute('data-flv-src');
+          elem.removeAttribute('data-flv-src');
+          if (!url) return;
+          const player = flvjs.createPlayer({ type: 'flv', url });
+          player.attachMediaElement(elem);
+          player.load();
+        });
+      }
+    });
+
     return {
       santinizeMarked,
     };

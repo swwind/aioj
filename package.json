@@ -23,6 +23,7 @@
     "@vue/cli-plugin-typescript": "^4.5.9",
     "@vue/cli-service": "^4.5.9",
     "@vue/server-renderer": "^3.0.4",
+    "flv.js": "^1.5.0",
     "katex": "^0.12.0",
     "koa": "^2.13.0",
     "koa-body": "^4.2.0",

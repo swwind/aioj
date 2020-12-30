@@ -58,7 +58,8 @@
             {{ new Date(file.date).toLocaleString() }}
           </span>
           <span class="file-operations">
-            <ui-icon name="trash-alt" regular @click="handleDeleteFile(file)" />
+            <ui-icon class="icon" name="trash-alt" regular @click="handleDeleteFile(file)" right />
+            <ui-icon class="icon" name="code" @click="handleCopyLink(file)" />
           </span>
         </div>
       </div>
@@ -86,7 +87,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, toRefs, watch } from 'vue';
-import { toSizeString, confirm } from '@/utils';
+import { toSizeString, confirm, copyToClipboard } from '@/utils';
 import { useStore } from 'vuex';
 import { FileDetail } from 'app/types';
 import { MyStore } from '@/store';
@@ -124,6 +125,25 @@ export default defineComponent({
       await store.dispatch(ActionTypes.DELETE_FILE, file);
     };
 
+    const getLink = (file: FileDetail) => {
+      if (/\.(?:mp4|webm)$/i.test(file.filename)) {
+        return `![](aioj://video/${file.fid})`;
+      } else if (/\.(?:flv)$/i.test(file.filename)) {
+        return `![](aioj://flv/${file.fid})`;
+      } else if (/\.(?:mp3|wav|ogg)$/i.test(file.filename)) {
+        return `![](aioj://audio/${file.fid})`;
+      } else if (/\.(?:jpe?g|png|gif|webp)$/i.test(file.filename)) {
+        return `![](aioj://image/${file.fid})`;
+      }
+      return `![${file.filename}](aioj://fs/${file.fid})`;
+    }
+
+    const handleCopyLink = async (file: FileDetail) => {
+      const link = getLink(file);
+      const success = await copyToClipboard(link);
+      store.dispatch(ActionTypes.NOTIFY_COPY_SUCCESS)
+    };
+
     const handleLogout = async () => {
       if (!await confirm(store.state.i18n.lang, 'confirm_logout')) {
         return;
@@ -144,13 +164,14 @@ export default defineComponent({
     const isFriend = computed(() => store.state.accounts.friends.indexOf(username.value) > -1);
 
     return {
-      handleToggleFriend,
-      ...toRefs(store.state),
+      isFriend,
       toSizeString,
       handleUpload,
-      handleDeleteFile,
       handleLogout,
-      isFriend,
+      handleCopyLink,
+      handleDeleteFile,
+      handleToggleFriend,
+      ...toRefs(store.state),
       cdn: config.port === 443 ? '//' + config.cdn : '',
     };
   },
@@ -201,6 +222,10 @@ export default defineComponent({
 
     .file-operations {
       cursor: pointer;
+
+      .icon {
+        width: 20px;
+      }
     }
   }
 }

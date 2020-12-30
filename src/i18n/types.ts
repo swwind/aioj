@@ -13,6 +13,8 @@ export type InternationalizationLanguage = {
   reply_success: string;
   delete_success: string;
   update_success: string;
+  copy_success: string;
+  copy_fail: string;
   admin: string;
   username: string;
   password: string;

@@ -10,3 +10,5 @@ declare module 'markdown-it-katex' {
   const katex: PluginSimple;
   export default katex;
 }
+
+declare const flvjs: typeof import('flv.js').default;

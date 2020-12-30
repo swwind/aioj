@@ -13,6 +13,8 @@ const zh_cn: InternationalizationLanguage = {
   reply_success: '回复帖子成功',
   delete_success: '删除成功',
   update_success: '更新成功',
+  copy_success: '已复制到粘贴板',
+  copy_fail: '复制失败，建议更新浏览器',
   admin: '管理员',
   username: '用户名',
   password: '密码',
