@@ -68,14 +68,22 @@ export default defineComponent({
     icon: String,
     type: String,
     placeholder: String,
+    modelValue: {
+      type: String,
+      required: true,
+    },
   },
   emits: ['update:modelValue', 'change', 'keydown'],
   setup(props, ctx) {
-    const value = ref('');
+    const { modelValue } = toRefs(props);
+    const value = ref(modelValue.value);
     const active = ref(false);
 
     watch(value, (newvalue) => {
       ctx.emit('update:modelValue', newvalue);
+    });
+    watch(modelValue, (newvalue) => {
+      value.value = newvalue;
     });
 
     const handleFocus = () => {

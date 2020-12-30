@@ -42,7 +42,7 @@
       </div>
       <ui-icon
         v-if="!data.files.length"
-        name="snowflake"
+        name="cat"
         text="no_files"
       />
       <div class="file-list" v-else>

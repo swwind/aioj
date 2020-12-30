@@ -12,6 +12,7 @@ export type InternationalizationLanguage = {
   success: string;
   reply_success: string;
   delete_success: string;
+  update_success: string;
   admin: string;
   username: string;
   password: string;
@@ -36,8 +37,10 @@ export type InternationalizationLanguage = {
   user: string;
   regions: string;
   problems: string;
+  create_new_problem: string;
   create_new_region: string;
   create_new_post: string;
+  create: string;
   reply: string;
   post_title: string;
   post_content: string;
@@ -45,6 +48,7 @@ export type InternationalizationLanguage = {
   region_url: string;
   region_title: string;
   region_desc: string;
+  problem_title: string;
   delete: string;
   my_files: string;
   upload_tips: string;

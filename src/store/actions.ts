@@ -11,8 +11,9 @@ type Actions<S = RootState> = {
   [ActionTypes.HANDLE_ERROR](actx: ArgumentedActionContext<S>, payload: APIResponse): Promise<void>;
   [ActionTypes.HANDLE_RENDER_ERROR](actx: ArgumentedActionContext<S>, payload: APIResponse): Promise<void>;
   [ActionTypes.NOTIFY_DELETE_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
-  [ActionTypes.ROUTER_PUSH](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
   [ActionTypes.NOTIFY_REPLY_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.NOTIFY_UPDATE_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.ROUTER_PUSH](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
 }
 
 export type RootActions = Actions & ModuleActions;
@@ -39,6 +40,9 @@ const createActions = (router: Router): Actions => ({
   async [ActionTypes.NOTIFY_REPLY_SUCCESS]({ state }) {
     notify('success', translate(state.i18n.lang, 'reply_success'));
   },
+  async [ActionTypes.NOTIFY_UPDATE_SUCCESS]({ state }) {
+    notify('success', translate(state.i18n.lang, 'update_success'));
+  }
 });
 
 export default createActions;

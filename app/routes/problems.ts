@@ -25,7 +25,7 @@ router.post('/p/new', async (ctx) => {
     return;
   }
 
-  const result = await createNewProblem(ctx.state.username, ctx.body.title);
+  const result = await createNewProblem(ctx.state.username, ctx.request.body.title);
   ctx.end(200, { pid: result.result() });
 });
 
@@ -57,7 +57,7 @@ router.put('/p/:pid', async (ctx) => {
     return;
   }
 
-  const { content, hidden, title } = ctx.body;
+  const { content, hidden, title } = ctx.request.body;
   await modifyProblem(pid, title, content, hidden);
 
   ctx.end(200);

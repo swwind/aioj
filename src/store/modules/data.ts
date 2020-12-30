@@ -24,7 +24,7 @@ export type State = {
 export type Mutations<S = State> = {
   [MutationTypes.FETCH_USER_DETAIL](state: S, payload: UserDetail): void;
   [MutationTypes.FETCH_REGION_LIST](state: S, payload: RegionDetail[]): void;
-  [MutationTypes.FETCH_PROBLEM_LIST](state: S, payload: ProblemDetail[]): void;
+  [MutationTypes.FETCH_PROBLEM_LIST](state: S, payload: ProblemAbstract[]): void;
   [MutationTypes.FETCH_POST_LIST](state: S, payload: PostDetail[]): void;
   [MutationTypes.FETCH_REGION_DETAIL](state: S, payload: RegionDetail): void;
   [MutationTypes.FETCH_PROBLEM_DETAIL](state: S, payload: ProblemDetail): void;
@@ -42,6 +42,7 @@ export type Mutations<S = State> = {
   [MutationTypes.UPLOAD_START](state: S): void;
   [MutationTypes.UPLOAD_PROGRESS](state: S, progress: number): void;
   [MutationTypes.UPLOAD_END](state: S): void;
+  [MutationTypes.UPDATE_PROBLEM](state: S, payload: { title: string, content: string, hidden: boolean }): void;
 }
 
 export type Actions<S = State> = {
@@ -52,7 +53,7 @@ export type Actions<S = State> = {
   [ActionTypes.FETCH_REGIONS_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.FETCH_PROBLEMS_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.FETCH_REGION_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
-  [ActionTypes.FETCH_PROBLEM_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
+  [ActionTypes.FETCH_PROBLEM_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string | number>): Promise<void>;
   [ActionTypes.FETCH_USER_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.FETCH_USER_FILES](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.DELETE_FILE](actx: ArgumentedActionContext<S>, file: FileDetail): Promise<void>;
@@ -67,10 +68,14 @@ export type Actions<S = State> = {
     pid: string;
     cid: string;
   }>): Promise<void>;
+  [ActionTypes.DELETE_PROBLEM](actx: ArgumentedActionContext<S>, payload: Argument<string | number>): Promise<void>;
   [ActionTypes.CREATE_REGION](actx: ArgumentedActionContext<S>, payload: Arguments<{
     region: string;
     title: string;
     description: string;
+  }>): Promise<void>;
+  [ActionTypes.CREATE_PROBLEM](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    title: string;
   }>): Promise<void>;
   [ActionTypes.CREATE_POST](actx: ArgumentedActionContext<S>, payload: Arguments<{
     region: string;
@@ -83,6 +88,12 @@ export type Actions<S = State> = {
     pid: string;
     content: string;
     markdown: boolean;
+  }>): Promise<boolean>;
+  [ActionTypes.UPDATE_PROBLEM](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    pid: string | number;
+    title: string;
+    content: string;
+    hidden: boolean;
   }>): Promise<boolean>;
 }
 
@@ -97,18 +108,8 @@ export const createDataModule = (api: API) => {
     files: [],
     uploading: false,
     progress: 0,
-    problems: [{
-      pid: 1000,
-      title: 'Gomoku',
-    }],
-    problem: {
-      pid: 1000,
-      title: 'Gomoku',
-      author: 'root',
-      content: 'gomoku is a **very** _interesting_ problem\n',
-      date: Date.now(),
-      hidden: false,
-    },
+    problems: [],
+    problem: {} as any,
   });
 
   const mutations: Mutations = {
@@ -173,6 +174,11 @@ export const createDataModule = (api: API) => {
     [MutationTypes.UPLOAD_END](state) {
       state.uploading = false;
     },
+    [MutationTypes.UPDATE_PROBLEM](state, payload) {
+      state.problem.title = payload.title;
+      state.problem.content = payload.content;
+      state.problem.hidden = payload.hidden;
+    }
   };
 
   const actions: Actions = {
@@ -208,20 +214,31 @@ export const createDataModule = (api: API) => {
         dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
     },
-    async [ActionTypes.FETCH_PROBLEMS_DATA]() {
-      // TODO: fetch problems data here
+    async [ActionTypes.FETCH_PROBLEMS_DATA]({ commit, dispatch }) {
+      const result = await api.getProblemList();
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_PROBLEM_LIST, result.problems);
+      } else {
+        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
+      }
     },
-    async [ActionTypes.FETCH_PROBLEM_DATA]({ commit, rootState, state }) {
-      // TODO: fetch problem data here
-      commit(MutationTypes.CHANGE_SSR_TITLE, [{
-        name: translate(rootState.i18n.lang, 'problems'),
-        url: '/p',
-        show: true,
-      }, {
-        name: state.problem.title,
-        url: '',
-        show: true,
-      }]);
+    async [ActionTypes.FETCH_PROBLEM_DATA]({ commit, rootState, state, dispatch }, payload) {
+      const pid = unref(payload);
+      const result = await api.getProblemDetail(pid);
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_PROBLEM_DETAIL, result.problem);
+        commit(MutationTypes.CHANGE_SSR_TITLE, [{
+          name: translate(rootState.i18n.lang, 'problems'),
+          url: '/p',
+          show: true,
+        }, {
+          name: state.problem.title,
+          url: '',
+          show: true,
+        }]);
+      } else {
+        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
+      }
     },
     async [ActionTypes.FETCH_REGION_DATA]({ rootState: state, commit, dispatch }, payload) {
       const region = unref(payload);
@@ -317,11 +334,30 @@ export const createDataModule = (api: API) => {
         dispatch(ActionTypes.HANDLE_ERROR, result);
       }
     },
+    async [ActionTypes.DELETE_PROBLEM]({ dispatch }, payload) {
+      const pid = unref(payload);
+      const result = await api.deleteProblem(pid);
+      if (result.status === 200) {
+        dispatch(ActionTypes.ROUTER_PUSH, '/p');
+        dispatch(ActionTypes.NOTIFY_DELETE_SUCCESS);
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+      }
+    },
     async [ActionTypes.CREATE_REGION]({ dispatch }, payload) {
       const { region, title, description } = unwarpArguments(payload);
       const result = await api.createRegion(region, title, description);
       if (result.status === 200) {
         dispatch(ActionTypes.ROUTER_PUSH, `/r/${region}`);
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+      }
+    },
+    async [ActionTypes.CREATE_PROBLEM]({ dispatch }, payload) {
+      const { title } = unwarpArguments(payload);
+      const result = await api.createProblem(title);
+      if (result.status === 200) {
+        dispatch(ActionTypes.ROUTER_PUSH, `/p/${result.pid}`);
       } else {
         dispatch(ActionTypes.HANDLE_ERROR, result);
       }
@@ -347,6 +383,31 @@ export const createDataModule = (api: API) => {
         return false;
       }
     },
+    async [ActionTypes.UPDATE_PROBLEM]({ dispatch, commit, rootState, state }, payload) {
+      const { title, content, hidden, pid } = unwarpArguments(payload);
+      const result = await api.modifyProblem(pid, title, content, hidden);
+      if (result.status === 200) {
+        commit(MutationTypes.UPDATE_PROBLEM, {
+          title,
+          content,
+          hidden,
+        });
+        commit(MutationTypes.CHANGE_SSR_TITLE, [{
+          name: translate(rootState.i18n.lang, 'problems'),
+          url: '/p',
+          show: true,
+        }, {
+          name: title,
+          url: '',
+          show: true,
+        }]);
+        dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+        return true;
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+        return false;
+      }
+    }
   };
 
   return {

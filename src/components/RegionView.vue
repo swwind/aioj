@@ -10,7 +10,7 @@
     </div>
     <ui-icon
       v-if="!data.posts.length"
-      name="snowflake"
+      name="cat"
       text="no_posts"
     />
     <div class="post-item" v-for="post of data.posts" :key="post.pid" v-else>

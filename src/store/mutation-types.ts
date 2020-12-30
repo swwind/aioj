@@ -35,4 +35,6 @@ export enum MutationTypes {
   UPLOAD_START = 'upload_start',
   UPLOAD_PROGRESS = 'upload_progress',
   UPLOAD_END = 'upload_end',
+
+  UPDATE_PROBLEM = 'update_problem',
 }

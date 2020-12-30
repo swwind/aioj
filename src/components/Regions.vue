@@ -3,7 +3,7 @@
   <ui-card notitle>
     <ui-icon
       v-if="!data.regions.length"
-      name="snowflake"
+      name="cat"
       text="no_regions"
     />
     <div class="region-item" v-for="region of data.regions" :key="region.region" v-else>

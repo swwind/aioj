@@ -5,6 +5,7 @@ import { State, Tools } from './types';
 
 import accouts from './routes/accouts';
 import friends from './routes/friends';
+import problems from './routes/problems';
 import forum from './routes/forum';
 import users from './routes/users';
 import files, { getFileSource } from './routes/files';
@@ -79,6 +80,8 @@ router.use('/api',
   users.allowedMethods(),
   files.routes(),
   files.allowedMethods(),
+  problems.routes(),
+  problems.allowedMethods(),
 );
 
 const supportedLanguages = ['en_us', 'zh_cn'];

@@ -19,7 +19,7 @@
         <ui-listed-button icon="edit" v-if="hasPermission" :active="editing" @click="handleEdit">
           <ui-text text="edit"/>
         </ui-listed-button>
-        <ui-listed-button icon="trash-alt" danger v-if="hasPermission">
+        <ui-listed-button icon="trash-alt" danger v-if="hasPermission" @click="handleDeleteProblem">
           <ui-text text="delete"/>
         </ui-listed-button>
       </ui-card>
@@ -28,9 +28,10 @@
       <ui-content :text="data.problem.content" markdown></ui-content>
     </ui-card>
     <ui-card notitle v-else>
-      <ui-editor v-model="content"></ui-editor>
+      <ui-input type="text" v-model="title" icon="align-left" placeholder="problem_title" />
+      <ui-editor class="margin" v-model="content"></ui-editor>
       <div class="margin">
-        <ui-button icon="location-arrow" type="primary">
+        <ui-button icon="location-arrow" type="primary" @click="handleUpdateProblem">
           <ui-text text="submit"/>
         </ui-button>
         <ui-button icon="cat" @click="handleExitEdit">
@@ -52,6 +53,7 @@
 <script lang="ts">
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
+import { confirm } from '@/utils';
 import { computed, defineComponent, ref, toRefs, watch } from 'vue';
 import { useStore } from 'vuex';
 
@@ -67,15 +69,17 @@ export default defineComponent({
     const store = useStore() as MyStore;
     const editing = ref(false);
     const content = ref('');
+    const title = ref('');
 
     const updateFetch = async () => {
-      await store.dispatch(ActionTypes.FETCH_PROBLEM_DATA, pid.value);
+      await store.dispatch(ActionTypes.FETCH_PROBLEM_DATA, pid);
     };
     watch(pid, updateFetch);
     await updateFetch();
 
     const handleEdit = () => {
       content.value = store.state.data.problem.content;
+      title.value = store.state.data.problem.title;
       editing.value = true;
     };
 
@@ -83,14 +87,36 @@ export default defineComponent({
       editing.value = false;
     };
 
+    const handleUpdateProblem = async () => {
+      const success = await store.dispatch(ActionTypes.UPDATE_PROBLEM, {
+        pid,
+        title,
+        content,
+        hidden: false,
+      });
+      if (success) {
+        handleExitEdit();
+      }
+    }
+
+    const handleDeleteProblem = async () => {
+      if (!await confirm(store.state.i18n.lang, 'confirm_delete', store.state.data.problem.title)) {
+        return;
+      }
+      await store.dispatch(ActionTypes.DELETE_PROBLEM, pid);
+    }
+
     const hasPermission = computed(() => store.state.accounts.username === store.state.data.problem.author || store.state.accounts.admin);
 
     return {
       editing,
       content,
+      title,
       handleEdit,
-      handleExitEdit,
       hasPermission,
+      handleExitEdit,
+      handleUpdateProblem,
+      handleDeleteProblem,
       ...toRefs(store.state),
     };
   },

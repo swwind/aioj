@@ -3,6 +3,7 @@ import { createForumAPI } from './forum';
 import { createFriendsAPI } from './friends';
 import { createFilesAPI } from './files';
 import { createAPICore } from './utils';
+import { createProblemAPI } from './problems';
 
 export const createAPI = (cookie?: string) => {
   const apicore = createAPICore(cookie);
@@ -12,6 +13,7 @@ export const createAPI = (cookie?: string) => {
     ...createForumAPI(apicore),
     ...createFriendsAPI(apicore),
     ...createFilesAPI(apicore),
+    ...createProblemAPI(apicore),
     ...apicore,
   };
 };

@@ -21,13 +21,18 @@ export enum ActionTypes {
   DELETE_REGION = 'delete_region',
   DELETE_POST = 'delete_post',
   DELETE_COMMENT = 'delete_comment',
+  DELETE_PROBLEM = 'delete_problem',
 
   CREATE_REGION = 'create_region',
   CREATE_POST = 'create_post',
   CREATE_COMMENT = 'create_comment',
+  CREATE_PROBLEM = 'create_problem',
+
+  UPDATE_PROBLEM = 'update_problem',
 
   NOTIFY_DELETE_SUCCESS = 'notify_delete_success',
   NOTIFY_REPLY_SUCCESS = 'notify_reply_success',
+  NOTIFY_UPDATE_SUCCESS = 'notify_update_success',
 
   HANDLE_ERROR = 'handle_error',
   HANDLE_RENDER_ERROR = 'handle_render_error',
