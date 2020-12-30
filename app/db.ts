@@ -76,5 +76,5 @@ export function extractProblemAbstract(pd: ProblemData): ProblemAbstract {
   return {
     pid: pd.pid,
     title: pd.title,
-  }
+  };
 }

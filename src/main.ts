@@ -7,6 +7,6 @@ if ('__INITIAL_STATE__' in window) {
 }
 
 router.isReady()
-.then(() => {
-  app.mount('#app', true);
-});
+  .then(() => {
+    app.mount('#app', true);
+  });

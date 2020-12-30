@@ -53,7 +53,7 @@ export default defineComponent({
 
     const handleCreateProblem = async () => {
       await store.dispatch(ActionTypes.CREATE_PROBLEM, { title });
-    }
+    };
 
     return {
       title,

@@ -11,12 +11,12 @@ router.put('/u/:username', async (ctx) => {
   }
 
   if (!ctx.verifyBody([{
-      name: 'description',
-      type: 'string'
-    }, {
-      name: 'email',
-      type: 'string'
-    }])) {
+    name: 'description',
+    type: 'string',
+  }, {
+    name: 'email',
+    type: 'string',
+  }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 

@@ -13,12 +13,12 @@ router.post('/login', async (ctx) => {
   }
 
   if (!ctx.verifyBody([{
-      name: 'username',
-      type: 'string',
-    }, {
-      name: 'password',
-      type: 'string',
-    }])) {
+    name: 'username',
+    type: 'string',
+  }, {
+    name: 'password',
+    type: 'string',
+  }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
@@ -43,12 +43,12 @@ router.post('/register', async (ctx) => {
   }
 
   if (!ctx.verifyBody([{
-      name: 'username',
-      type: 'string',
-    }, {
-      name: 'password',
-      type: 'string',
-    }])) {
+    name: 'username',
+    type: 'string',
+  }, {
+    name: 'password',
+    type: 'string',
+  }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 

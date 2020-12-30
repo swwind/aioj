@@ -11,12 +11,12 @@ router.post('/r/:region/:pid/comment', async (ctx) => {
   }
 
   if (!ctx.verifyBody([{
-      name: 'content',
-      type: 'string'
-    }, {
-      name: 'markdown',
-      type: 'string'
-    }])) {
+    name: 'content',
+    type: 'string',
+  }, {
+    name: 'markdown',
+    type: 'string',
+  }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
@@ -39,15 +39,15 @@ router.post('/r/:region/post', async (ctx) => {
   }
 
   if (!ctx.verifyBody([{
-      name: 'title',
-      type: 'string',
-    }, {
-      name: 'content',
-      type: 'string',
-    }, {
-      name: 'markdown',
-      type: 'boolean',
-    }])) {
+    name: 'title',
+    type: 'string',
+  }, {
+    name: 'content',
+    type: 'string',
+  }, {
+    name: 'markdown',
+    type: 'boolean',
+  }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
   const { title, content, markdown } = ctx.request.body;
@@ -66,12 +66,12 @@ router.post('/r/:region', async (ctx) => {
   }
 
   if (!ctx.verifyBody([{
-      name: 'description',
-      type: 'string',
-    }, {
-      name: 'title',
-      type: 'string',
-    }])) {
+    name: 'description',
+    type: 'string',
+  }, {
+    name: 'title',
+    type: 'string',
+  }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
   const { description, title } = ctx.request.body;
@@ -99,9 +99,9 @@ router.put('/r/:region/:pid/:cid', async (ctx) => {
   }
 
   if (!ctx.verifyBody([{
-      name: 'content',
-      type: 'string',
-    }])) {
+    name: 'content',
+    type: 'string',
+  }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
@@ -132,9 +132,9 @@ router.put('/r/:region/:pid', async (ctx) => {
   }
 
   if (!ctx.verifyBody([{
-      name: 'title',
-      type: 'string',
-    }])) {
+    name: 'title',
+    type: 'string',
+  }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
 
@@ -155,12 +155,12 @@ router.put('/r/:region', async (ctx) => {
   }
 
   if (!ctx.verifyBody([{
-      name: 'description',
-      type: 'string',
-    }, {
-      name: 'title',
-      type: 'string',
-    }])) {
+    name: 'description',
+    type: 'string',
+  }, {
+    name: 'title',
+    type: 'string',
+  }])) {
     return ctx.end(400, PARAMS_MISSING);
   }
   const { description, title } = ctx.request.body;

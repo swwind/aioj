@@ -25,6 +25,6 @@ export const createProblemAPI = (api: APICore) => {
       return makePOSTRequest<{ pid: number }>('/p/new', {
         title,
       });
-    }
+    },
   };
 };

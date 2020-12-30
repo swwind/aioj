@@ -178,7 +178,7 @@ export const createDataModule = (api: API) => {
       state.problem.title = payload.title;
       state.problem.content = payload.content;
       state.problem.hidden = payload.hidden;
-    }
+    },
   };
 
   const actions: Actions = {
@@ -383,7 +383,7 @@ export const createDataModule = (api: API) => {
         return false;
       }
     },
-    async [ActionTypes.UPDATE_PROBLEM]({ dispatch, commit, rootState, state }, payload) {
+    async [ActionTypes.UPDATE_PROBLEM]({ dispatch, commit, rootState }, payload) {
       const { title, content, hidden, pid } = unwarpArguments(payload);
       const result = await api.modifyProblem(pid, title, content, hidden);
       if (result.status === 200) {
@@ -407,7 +407,7 @@ export const createDataModule = (api: API) => {
         dispatch(ActionTypes.HANDLE_ERROR, result);
         return false;
       }
-    }
+    },
   };
 
   return {

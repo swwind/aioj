@@ -1,15 +1,15 @@
-import { createNewProblem, deleteProblem, getAllProblems, getProblemAuthor, getProblemDetail, modifyProblem } from "app/db/problems";
-import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED, PROBLEM_NOT_EXISTS, SERVER_ERROR } from "app/errors";
-import Router from "koa-router";
+import { createNewProblem, deleteProblem, getAllProblems, getProblemAuthor, getProblemDetail, modifyProblem } from 'app/db/problems';
+import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED, PROBLEM_NOT_EXISTS } from 'app/errors';
+import Router from 'koa-router';
 import { State, Tools } from '../types';
 
 const router = new Router<State, Tools>();
 
 router.post('/p/new', async (ctx) => {
   if (!ctx.verifyBody([{
-      name: 'title',
-      type: 'string',
-    }])) {
+    name: 'title',
+    type: 'string',
+  }])) {
     ctx.end(400, PARAMS_MISSING);
     return;
   }
@@ -31,15 +31,15 @@ router.post('/p/new', async (ctx) => {
 
 router.put('/p/:pid', async (ctx) => {
   if (!ctx.verifyBody([{
-      name: 'title',
-      type: 'string',
-    }, {
-      name: 'content',
-      type: 'string',
-    }, {
-      name: 'hidden',
-      type: 'boolean',
-    }])) {
+    name: 'title',
+    type: 'string',
+  }, {
+    name: 'content',
+    type: 'string',
+  }, {
+    name: 'hidden',
+    type: 'boolean',
+  }])) {
     ctx.end(400, PARAMS_MISSING);
     return;
   }
@@ -62,7 +62,6 @@ router.put('/p/:pid', async (ctx) => {
 
   ctx.end(200);
 });
-
 
 router.delete('/p/:pid', async (ctx) => {
   if (!ctx.state.authorized) {
@@ -96,6 +95,5 @@ router.get('/p/:pid', async (ctx) => {
   }
   ctx.end(200, { problem: result });
 });
-
 
 export default router;

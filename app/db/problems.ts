@@ -1,8 +1,8 @@
-import { SERVER_ERROR } from "app/errors";
-import { ProblemAbstract, ProblemDetail } from "app/types";
-import { counter, extractProblemAbstract, extractProblemDetail, problems } from "../db";
-import { Result } from "../utils";
-import { createRegion } from "./forum";
+import { SERVER_ERROR } from 'app/errors';
+import { ProblemAbstract, ProblemDetail } from 'app/types';
+import { counter, extractProblemAbstract, extractProblemDetail, problems } from '../db';
+import { Result } from '../utils';
+import { createRegion } from './forum';
 
 export async function getAllProblems(): Promise<ProblemAbstract[]> {
   const result = await problems.find({ hidden: false }).toArray();
@@ -50,7 +50,7 @@ export async function modifyProblem(pid: number, title: string, content: string,
       title,
       content,
       hidden,
-    }
+    },
   });
 }
 

@@ -42,7 +42,7 @@ const createActions = (router: Router): Actions => ({
   },
   async [ActionTypes.NOTIFY_UPDATE_SUCCESS]({ state }) {
     notify('success', translate(state.i18n.lang, 'update_success'));
-  }
+  },
 });
 
 export default createActions;

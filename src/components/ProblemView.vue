@@ -97,14 +97,14 @@ export default defineComponent({
       if (success) {
         handleExitEdit();
       }
-    }
+    };
 
     const handleDeleteProblem = async () => {
       if (!await confirm(store.state.i18n.lang, 'confirm_delete', store.state.data.problem.title)) {
         return;
       }
       await store.dispatch(ActionTypes.DELETE_PROBLEM, pid);
-    }
+    };
 
     const hasPermission = computed(() => store.state.accounts.username === store.state.data.problem.author || store.state.accounts.admin);
 
