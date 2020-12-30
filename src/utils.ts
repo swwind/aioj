@@ -103,6 +103,17 @@ const marked = markdownit();
 marked.use(mkditkatex, {
   throwOnError: 'false',
 });
+
+// https://stackoverflow.com/questions/6234773/can-i-escape-html-special-chars-in-javascript
+function escapeHTML(unsafe: string) {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 marked.use((md) => {
   const defaultRender = md.renderer.rules.image;
   const reg = /^aioj:\/\/(video|audio|image|flv|fs)\/([a-z0-9]+)$/;
@@ -111,9 +122,8 @@ marked.use((md) => {
   md.renderer.rules.image = (tokens, idx, options, env, self) => {
     const token = tokens[idx];
     const aIndex = token.attrIndex('src');
-    const bIndex = token.attrIndex('alt');
     const url = token.attrs?.[aIndex][1];
-    const alt = token.attrs?.[bIndex][1] ?? '';
+    const alt = token.content;
 
     if (url && reg.test(url)) {
       const matchres = url.match(reg);
@@ -126,9 +136,9 @@ marked.use((md) => {
         } else if (type === 'audio') {
           return `<audio controls src="${src}"></audio>`;
         } else if (type === 'image') {
-          return `<img alt="${alt}" src="${src}">`;
+          return `<img alt="${encodeURIComponent(alt)}" src="${src}">`;
         } else if (type === 'fs') {
-          return `<a href="${src}">${alt}</a>`;
+          return `<a href="${src}" target="_blank">${escapeHTML(alt)}</a>`;
         } else if (type === 'flv') {
           return `<video controls data-flv-src="${src}"></video>`;
         }
