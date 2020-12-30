@@ -5,7 +5,8 @@ declare module '*.vue' {
   export default component;
 }
 
-declare module 'insane' {
-  function insane(str: string, option: any): string;
-  export = insane;
+declare module 'markdown-it-katex' {
+  import type { PluginSimple } from 'markdown-it';
+  const katex: PluginSimple;
+  export default katex;
 }

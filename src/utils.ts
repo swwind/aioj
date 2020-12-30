@@ -1,8 +1,11 @@
 import { Ref, unref } from 'vue';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { translate } from './i18n/translate';
-import marked from 'marked';
-import insane from 'insane';
+
+import config from '../config.json';
+
+import markdownit from 'markdown-it';
+import mkditkatex from 'markdown-it-katex';
 
 export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   let ret = '';
@@ -95,25 +98,45 @@ export function chooseFile() {
   });
 }
 
-export function santinizeMarked(mkd: string) {
-  const html = marked(mkd)
-    // add controls automatically
-    .replace(/<(video|audio)\b/gi, '<$1 controls');
+const marked = markdownit();
+marked.use(mkditkatex, {
+  throwOnError: 'false',
+});
+marked.use((md) => {
+  const defaultRender = md.renderer.rules.image;
+  const reg = /^aioj:\/\/(video|audio|image)\/([a-z0-9]+)$/;
+  if (!defaultRender) return;
 
-  return insane(html, {
-    allowedAttributes: {
-      a: ['href', 'name', 'target'],
-      img: ['src', 'alt'],
-      video: ['src', 'controls'],
-      audio: ['src', 'controls'],
-    },
-    allowedTags: [
-      'a', 'article', 'b', 'blockquote', 'br', 'caption', 'code', 'del', 'details', 'div', 'em',
-      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'main', 'ol',
-      'p', 'pre', 'section', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table',
-      'tbody', 'td', 'th', 'thead', 'tr', 'u', 'ul', 'video', 'audio',
-    ],
-  });
+  md.renderer.rules.image = (tokens, idx, options, env, self) => {
+    const token = tokens[idx];
+    const aIndex = token.attrIndex('src');
+    const bIndex = token.attrIndex('alt');
+    const url = token.attrs?.[aIndex][1];
+    const alt = token.attrs?.[bIndex][1] ?? '';
+
+    if (url && reg.test(url)) {
+      const matchres = url.match(reg);
+      if (matchres) {
+        const type = matchres[1];
+        const fid = matchres[2];
+        const src = `${config.port === 443 ? `//${config.cdn}` : ''}/f/${fid}`;
+        if (type === 'video') {
+          return `<video controls src="${src}"></video>`;
+        } else if (type === 'audio') {
+          return `<audio controls src="${src}"></audio>`;
+        } else if (type === 'image') {
+          return `<img alt="${alt}" src="${src}">`;
+        }
+      }
+    }
+
+    // pass token to default renderer.
+    return defaultRender(tokens, idx, options, env, self);
+  };
+});
+
+export function santinizeMarked(mkd: string) {
+  return marked.render(mkd);
 }
 
 export type Argument<S> = S | Ref<S>;

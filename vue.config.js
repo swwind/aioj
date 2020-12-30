@@ -32,6 +32,8 @@ exports.chainWebpack = (webpackConfig) => {
       'vue': 'Vue',
       'vuex': 'Vuex',
       'vue-router': 'VueRouter',
+      'katex': 'katex',
+      'markdown-it': 'markdownit',
     });
 
   }

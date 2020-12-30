@@ -15,7 +15,7 @@ router.post('/r/:region/:pid/comment', async (ctx) => {
     type: 'string',
   }, {
     name: 'markdown',
-    type: 'string',
+    type: 'boolean',
   }])) {
     return ctx.end(400, PARAMS_MISSING);
   }

@@ -3,7 +3,7 @@
   <div v-else class="raw" v-text="text"></div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
 .marked {
   word-wrap: break-word;
 
@@ -13,6 +13,10 @@
 
   & > :last-child {
     margin-bottom: 0;
+  }
+
+  video, audio, img {
+    max-width: 100%;
   }
 }
 
