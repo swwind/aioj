@@ -37,7 +37,7 @@
 
   &:hover {
     background-color: @hover-color;
-    
+
     &::before {
       box-shadow: 0 0 10px @theme-color;
       background-color: @theme-color;
@@ -70,13 +70,13 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 export default defineComponent({
   props: {
     icon: String,
     active: Boolean,
     danger: Boolean,
     to: String,
-  }
-})
+  },
+});
 </script>

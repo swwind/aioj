@@ -108,7 +108,7 @@ export const createDataModule = (api: API) => {
       title: 'Gomoku',
       author: 'root',
       content: '# gomoku\n\ngomoku is a very interesting problem\n',
-    }
+    },
   });
 
   const mutations: Mutations = {
@@ -208,10 +208,10 @@ export const createDataModule = (api: API) => {
         dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
     },
-    async [ActionTypes.FETCH_PROBLEMS_DATA]({ commit, dispatch }) {
+    async [ActionTypes.FETCH_PROBLEMS_DATA]() {
       // TODO: fetch problems data here
     },
-    async [ActionTypes.FETCH_PROBLEM_DATA]({ commit, dispatch, rootState, state }) {
+    async [ActionTypes.FETCH_PROBLEM_DATA]({ commit, rootState, state }) {
       // TODO: fetch problem data here
       commit(MutationTypes.CHANGE_SSR_TITLE, [{
         name: translate(rootState.i18n.lang, 'problems'),

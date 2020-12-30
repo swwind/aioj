@@ -22,8 +22,8 @@
 </style>
 
 <script lang="ts">
-import { santinizeMarked } from '@/utils'
-import { defineComponent } from 'vue'
+import { santinizeMarked } from '@/utils';
+import { defineComponent } from 'vue';
 export default defineComponent({
   props: {
     text: {
@@ -32,10 +32,10 @@ export default defineComponent({
     },
     markdown: Boolean,
   },
-  setup(props) {
+  setup() {
     return {
       santinizeMarked,
-    }
-  }
-})
+    };
+  },
+});
 </script>

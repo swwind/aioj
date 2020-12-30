@@ -66,7 +66,6 @@ export default defineComponent({
       handleLogin,
       handleKeydown,
       redirect,
-      translate,
 
       ...toRefs(store.state),
     };

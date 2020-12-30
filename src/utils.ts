@@ -53,7 +53,7 @@ export const confirm = async (lang: string, message: string, ...args: string[]) 
     const end = (choice: boolean) => () => {
       remove();
       resolve(choice);
-    }
+    };
     ok.addEventListener('click', end(true));
     cancel.addEventListener('click', end(false));
     confirm.addEventListener('click', end(false));

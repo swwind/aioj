@@ -50,11 +50,9 @@
 </style>
 
 <script lang="ts">
-import { translate } from '@/i18n/translate';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
-import { MutationTypes } from '@/store/mutation-types';
-import { computed, defineComponent, ref, toRefs, watch } from 'vue'
+import { computed, defineComponent, ref, toRefs, watch } from 'vue';
 import { useStore } from 'vuex';
 
 export default defineComponent({
@@ -62,7 +60,7 @@ export default defineComponent({
     pid: {
       type: String,
       required: true,
-    }
+    },
   },
   async setup(props) {
     const { pid } = toRefs(props);
@@ -72,18 +70,18 @@ export default defineComponent({
 
     const updateFetch = async () => {
       await store.dispatch(ActionTypes.FETCH_PROBLEM_DATA, pid.value);
-    }
+    };
     watch(pid, updateFetch);
     await updateFetch();
 
     const handleEdit = () => {
       content.value = store.state.data.problem.content;
       editing.value = true;
-    }
+    };
 
     const handleExitEdit = () => {
       editing.value = false;
-    }
+    };
 
     const hasPermission = computed(() => store.state.accounts.username === store.state.data.problem.author || store.state.accounts.admin);
 
@@ -94,7 +92,7 @@ export default defineComponent({
       handleExitEdit,
       hasPermission,
       ...toRefs(store.state),
-    }
-  }
+    };
+  },
 });
 </script>

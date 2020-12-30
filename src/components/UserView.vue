@@ -88,7 +88,6 @@
 import { computed, defineComponent, toRefs, watch } from 'vue';
 import { toSizeString, confirm } from '@/utils';
 import { useStore } from 'vuex';
-import { translate } from '@/i18n/translate';
 import { FileDetail } from 'app/types';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
@@ -145,7 +144,6 @@ export default defineComponent({
     const isFriend = computed(() => store.state.accounts.friends.indexOf(username.value) > -1);
 
     return {
-      translate,
       handleToggleFriend,
       ...toRefs(store.state),
       toSizeString,

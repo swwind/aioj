@@ -63,6 +63,6 @@ export default defineComponent({
       translate,
       ...toRefs(store.state),
     };
-  }
+  },
 });
 </script>

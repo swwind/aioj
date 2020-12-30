@@ -50,7 +50,13 @@ export async function getFileDetailsByUsername(username: string): Promise<Result
 export async function deleteFile(fid: string): Promise<Result<void, string>> {
   const result = await files.findOne({ fid });
   if (!result) return Result.error(FILE_NOT_FOUND);
-  await fs.unlink(result.filepath);
+  try {
+    await fs.access(result.filepath);
+    await fs.unlink(result.filepath);
+  } catch (e) {
+    // eslint-disable-next-line
+    console.log(`delete file ${fid} but it is not even exist.`);
+  }
   await files.deleteOne(result);
   return Result.ok();
 }

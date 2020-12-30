@@ -9,7 +9,7 @@ import UIPlugin from './plugins/ui';
 
 export function createVueApp(ssr: boolean, cookie?: string) {
   const SuspenseApp = {
-    template: `<Suspense><App/></Suspense>`,
+    template: '<Suspense><App/></Suspense>',
     components: { App },
   };
   const app = createSSRApp(SuspenseApp);

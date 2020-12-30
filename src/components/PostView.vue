@@ -44,8 +44,7 @@
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
-import { translate } from '@/i18n/translate';
-import { santinizeMarked, confirm } from '@/utils';
+import { confirm } from '@/utils';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
 
@@ -109,12 +108,10 @@ export default defineComponent({
     });
 
     return {
-      translate,
       content,
       handleReply,
       handleEditComment,
       handleDeleteComment,
-      santinizeMarked,
       ...toRefs(store.state),
     };
   },

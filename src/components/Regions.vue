@@ -72,7 +72,6 @@ export default defineComponent({
     await store.dispatch(ActionTypes.FETCH_REGIONS_DATA);
 
     return {
-      translate,
       region,
       title,
       description,

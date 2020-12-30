@@ -9,7 +9,7 @@
 
 .hr {
   padding: 5px 10px;
-  
+
   .line {
     height: 1px;
     width: 100%;

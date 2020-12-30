@@ -3,9 +3,9 @@
 </template>
 
 <script lang="ts">
-import { translate } from '@/i18n/translate'
+import { translate } from '@/i18n/translate';
 import { MyStore } from '@/store';
-import { defineComponent, toRefs } from 'vue'
+import { defineComponent, toRefs } from 'vue';
 import { useStore } from 'vuex';
 export default defineComponent({
   props: {
@@ -18,6 +18,6 @@ export default defineComponent({
       translate,
       ...toRefs(store.state),
     };
-  }
-})
+  },
+});
 </script>

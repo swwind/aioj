@@ -58,7 +58,6 @@
 import { defineComponent, ref, toRefs } from 'vue';
 import { confirm } from '@/utils';
 import { useStore } from 'vuex';
-import { translate } from '@/i18n/translate';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
 
@@ -97,7 +96,6 @@ export default defineComponent({
     return {
       title,
       content,
-      translate,
       handleSendPost,
       handleDeleteRegion,
 
