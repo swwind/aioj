@@ -18,7 +18,7 @@ export function getRedirect(router: Ref<RouteLocationNormalizedLoaded>) {
   return ret ? `?redirect=${encodeURIComponent(ret)}` : '';
 }
 
-export const confirm = async (lang: string, message: string) => {
+export const confirm = async (lang: string, message: string, ...args: string[]) => {
   const confirm = document.createElement('div'); confirm.classList.add('confirm');
   const window = document.createElement('div'); window.classList.add('window');
   const title = document.createElement('div'); title.classList.add('title');
@@ -35,7 +35,7 @@ export const confirm = async (lang: string, message: string) => {
   buttons.appendChild(ok);
 
   title.innerText = translate(lang, 'warning');
-  content.innerText = message;
+  content.innerText = translate(lang, message, ...args);
   cancel.innerText = translate(lang, 'cancel');
   ok.innerText = translate(lang, 'ok');
 

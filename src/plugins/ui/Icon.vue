@@ -2,7 +2,7 @@
   <i class="icons" :class="`${regular ? 'far' : 'fas'} fa-${name}${right ? ' right' : '' }`" v-if="!text"></i>
   <div class="large" v-else>
     <i class="icons" :class="`${regular ? 'far' : 'fas'} fa-${name}${right ? ' right' : '' }`"></i>
-    <div class="text">{{ text }}</div>
+    <div class="text">{{ translate(i18n.lang, text) }}</div>
   </div>
 </template>
 
@@ -46,7 +46,9 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { translate } from '@/i18n/translate';
+import { defineComponent, toRefs } from 'vue';
+import { useStore } from 'vuex';
 export default defineComponent({
   props: {
     name: String,
@@ -54,5 +56,13 @@ export default defineComponent({
     regular: Boolean,
     right: Boolean,
   },
+
+  setup() {
+    const store = useStore();
+    return {
+      translate,
+      ...toRefs(store.state),
+    };
+  }
 });
 </script>

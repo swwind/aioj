@@ -5,7 +5,9 @@ export enum MutationTypes {
   UPDATE_LANGUAGE = 'update_language',
 
   FETCH_REGION_LIST = 'fetch_region_list',
+  FETCH_PROBLEM_LIST = 'fetch_problem_list',
   FETCH_REGION_DETAIL = 'fetch_region_detail',
+  FETCH_PROBLEM_DETAIL = 'fetch_problem_detail',
   FETCH_POST_LIST = 'fetch_post_list',
   FETCH_POST_DETAIL = 'fetch_post_detail',
   FETCH_COMMENT_LIST = 'fetch_comment_list',

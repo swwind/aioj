@@ -86,6 +86,9 @@ export default defineComponent({
       name: 'about',
       url: '/about',
     }, {
+      name: 'problems',
+      url: '/p',
+    }, {
       name: 'forum',
       url: '/r',
     }];

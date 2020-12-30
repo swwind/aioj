@@ -21,15 +21,21 @@ export type InternationalizationLanguage = {
   not_found: string;
   description: string;
   submit: string;
+  submissions: string;
+  edit: string;
+  discuss: string;
+  operations: string;
   reply_warning: string;
   reply_placeholder: string;
 
   no_files: string;
   no_posts: string;
   no_regions: string;
+  no_problems: string;
   region: string;
   user: string;
   regions: string;
+  problems: string;
   create_new_region: string;
   create_new_post: string;
   reply: string;

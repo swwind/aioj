@@ -5,7 +5,7 @@
       :type="type"
       v-model="value"
       class="inner-input"
-      :placeholder="placeholder"
+      :placeholder="translate(i18n.lang, placeholder)"
       @focus="handleFocus"
       @blur="handleBlur"
       @change="handleChange"
@@ -60,7 +60,9 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+import { translate } from '@/i18n/translate';
+import { defineComponent, ref, toRef, toRefs, watch } from 'vue';
+import { useStore } from 'vuex';
 export default defineComponent({
   props: {
     icon: String,
@@ -90,13 +92,17 @@ export default defineComponent({
       ctx.emit('keydown', e);
     };
 
+    const store = useStore();
+
     return {
       value,
       active,
+      translate,
       handleFocus,
       handleBlur,
       handleChange,
       handleKeydown,
+      ...toRefs(store.state),
     };
   },
 });

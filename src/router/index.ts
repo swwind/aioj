@@ -8,6 +8,8 @@ import PostView from '@/components/PostView.vue';
 import UserView from '@/components/UserView.vue';
 import Login from '@/components/Login.vue';
 import Register from '@/components/Register.vue';
+import Problems from '@/components/Problems.vue';
+import ProblemView from '@/components/ProblemView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -36,6 +38,15 @@ const routes: Array<RouteRecordRaw> = [
     path: '/u/:username',
     name: 'UserView',
     component: UserView,
+    props: true,
+  }, {
+    path: '/p',
+    name: 'Problems',
+    component: Problems,
+  }, {
+    path: '/p/:pid',
+    name: 'ProblemView',
+    component: ProblemView,
     props: true,
   }, {
     path: '/login',

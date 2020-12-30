@@ -11,7 +11,7 @@
     <ui-icon
       v-if="!data.posts.length"
       name="snowflake"
-      :text="translate(i18n.lang, 'no_posts')"
+      text="no_posts"
     />
     <div class="post-item" v-for="post of data.posts" :key="post.pid" v-else>
       <div class="title">
@@ -27,7 +27,7 @@
   </ui-card>
   <ui-card class="create" v-if="accounts.username">
     <template #header>
-      {{ translate(i18n.lang, 'create_new_post') }}
+      <ui-text text="create_new_post"/>
     </template>
     <div class="form">
       <ui-input
@@ -35,19 +35,19 @@
         v-model="title"
         class="title"
         icon="align-left"
-        :placeholder="translate(i18n.lang, 'post_title')"
+        placeholder="post_title"
       />
       <ui-editor
         v-model="content"
         class="content"
-        :placeholder="translate(i18n.lang, 'post_content')"
+        placeholder="post_content"
       />
       <div class="buttonset">
         <ui-button
           type="primary"
           icon="location-arrow"
           @click="handleSendPost">
-          {{ translate(i18n.lang, 'post') }}
+          <ui-text text="post"/>
         </ui-button>
       </div>
     </div>
@@ -85,7 +85,7 @@ export default defineComponent({
     };
 
     const handleDeleteRegion = async () => {
-      if (!await confirm(store.state.i18n.lang, translate(store.state.i18n.lang, 'confirm_delete_region'))) {
+      if (!await confirm(store.state.i18n.lang, 'confirm_delete_region')) {
         return;
       }
 

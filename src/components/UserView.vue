@@ -8,17 +8,19 @@
           v-if="accounts.username && accounts.username !== data.user.username"
           class="star"
           name="star"
-          :regular="accounts.friends.indexOf(data.user.username) === -1"
-          :class="{ on: accounts.friends.indexOf(data.user.username) > -1 }"
+          :regular="!isFriend"
+          :class="{ on: isFriend }"
           @click="handleToggleFriend"/>
       </template>
-      <span v-if="data.user.admin">{{ translate(i18n.lang, 'admin') }}</span>
+      <span v-if="data.user.admin">
+        <ui-text text="admin"/>
+      </span>
       <p>Email: {{ data.user.email }}</p>
       <p>Desc: {{ data.user.desc }}</p>
     </ui-card>
     <ui-card v-if="accounts.username === data.user.username || accounts.admin" class="files">
       <template #header>
-        {{ translate(i18n.lang, 'my_files') }}
+        <ui-text text="my_files"/>
       </template>
       <ui-button
         v-if="accounts.username === data.user.username"
@@ -26,7 +28,7 @@
         small
         :disabled="data.uploading"
         @click="handleUpload">
-        {{ translate(i18n.lang, 'upload') }}
+        <ui-text text="upload"/>
       </ui-button>
       <span
         v-if="data.uploading"
@@ -36,12 +38,12 @@
       <div
         v-if="accounts.username === data.user.username"
         class="tips">
-        {{ translate(i18n.lang, 'upload_tips') }}
+        <ui-text text="upload_tips"/>
       </div>
       <ui-icon
         v-if="!data.files.length"
         name="snowflake"
-        :text="translate(i18n.lang, 'no_files')"
+        text="no_files"
       />
       <div class="file-list" v-else>
         <div class="file-item" v-for="file in data.files" :key="file.fid">
@@ -63,27 +65,27 @@
     </ui-card>
     <ui-card v-if="accounts.username === data.user.username" class="actions">
       <template #header>
-        {{ translate(i18n.lang, 'my_accounts') }}
+        <ui-text text="my_accounts"/>
       </template>
       <ui-button
         type="danger"
         small
         @click="handleLogout">
-        {{ translate(i18n.lang, 'logout') }}
+        <ui-text text="logout"/>
       </ui-button>
     </ui-card>
   </div>
   <div v-else>
     <ui-card>
       <template #header>
-        {{ translate(i18n.lang, 'user_not_exists') }}
+        <ui-text text="user_not_exists"/>
       </template>
     </ui-card>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, watch } from 'vue';
+import { computed, defineComponent, toRefs, watch } from 'vue';
 import { toSizeString, confirm } from '@/utils';
 import { useStore } from 'vuex';
 import { translate } from '@/i18n/translate';
@@ -116,7 +118,7 @@ export default defineComponent({
     };
 
     const handleDeleteFile = async (file: FileDetail) => {
-      if (!await confirm(store.state.i18n.lang, translate(store.state.i18n.lang, 'confirm_delete', file.filename))) {
+      if (!await confirm(store.state.i18n.lang, 'confirm_delete', file.filename)) {
         return;
       }
 
@@ -124,7 +126,7 @@ export default defineComponent({
     };
 
     const handleLogout = async () => {
-      if (!await confirm(store.state.i18n.lang, translate(store.state.i18n.lang, 'confirm_logout'))) {
+      if (!await confirm(store.state.i18n.lang, 'confirm_logout')) {
         return;
       }
 
@@ -140,6 +142,8 @@ export default defineComponent({
     watch(username, loadUser);
     await loadUser();
 
+    const isFriend = computed(() => store.state.accounts.friends.indexOf(username.value) > -1);
+
     return {
       translate,
       handleToggleFriend,
@@ -148,6 +152,7 @@ export default defineComponent({
       handleUpload,
       handleDeleteFile,
       handleLogout,
+      isFriend,
       cdn: config.port === 443 ? '//' + config.cdn : '',
     };
   },

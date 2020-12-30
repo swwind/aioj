@@ -4,6 +4,8 @@ export enum ActionTypes {
   FETCH_POST_DATA = 'fetch_post_data',
   FETCH_REGION_DATA = 'fetch_region_data',
   FETCH_REGIONS_DATA = 'fetch_regions_data',
+  FETCH_PROBLEMS_DATA = 'fetch_problems_data',
+  FETCH_PROBLEM_DATA = 'fetch_problem_data',
   FETCH_USER_DATA = 'fetch_user_data',
   FETCH_USER_FILES = 'fetch_user_files',
 

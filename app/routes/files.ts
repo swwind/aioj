@@ -17,8 +17,9 @@ router.post('/upload', async (ctx) => {
   }
 
   const { file } = ctx.request.files;
+  const f = Array.isArray(file) ? file[0] : file;
 
-  const result = await saveFile(ctx.state.username, file.type, file.name, await fs.readFile(file.path));
+  const result = await saveFile(ctx.state.username, f.type, f.name, await fs.readFile(f.path));
   if (!result.ok) {
     return ctx.end(400, result.error());
   }

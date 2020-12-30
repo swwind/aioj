@@ -19,23 +19,24 @@
           @click="handleEditComment(comment.cid)" />
       </span>
     </div>
-    <div class="content marked" v-if="comment.markdown" v-html="santinizeMarked(comment.content)"></div>
-    <div class="content raw" v-else>{{ comment.content }}</div>
+    <ui-content class="content" :text="comment.content" :markdown="comment.markdown"></ui-content>
   </ui-card>
   <ui-card class="reply" v-if="accounts.username" shadow="hover">
     <template #header>
-      {{ translate(i18n.lang, 'reply') }}
+      <ui-text text="reply"/>
     </template>
     <div class="reply-warn">
-      {{ translate(i18n.lang, 'reply_warning') }}
+      <ui-text text="reply_warning"/>
     </div>
     <ui-editor
       v-model="content"
-      :placeholder="translate(i18n.lang, 'reply_placeholder')"
+      placeholder="reply_placeholder"
       class="reply-content"
     />
     <div class="buttons">
-      <ui-button type="primary" icon="location-arrow" @click="handleReply">{{ translate(i18n.lang, 'submit') }}</ui-button>
+      <ui-button type="primary" icon="location-arrow" @click="handleReply">
+        <ui-text text="submit"/>
+      </ui-button>
     </div>
   </ui-card>
 </template>
@@ -79,7 +80,7 @@ export default defineComponent({
 
     const handleDeleteComment = async (cid: number) => {
       if (cid === 1) {
-        if (!await confirm(store.state.i18n.lang, translate(store.state.i18n.lang, 'confirm_delete_post'))) {
+        if (!await confirm(store.state.i18n.lang, 'confirm_delete_post')) {
           return;
         }
         await store.dispatch(ActionTypes.DELETE_POST, {
@@ -87,7 +88,7 @@ export default defineComponent({
           pid,
         });
       } else {
-        if (!await confirm(store.state.i18n.lang, translate(store.state.i18n.lang, 'confirm_delete_comment'))) {
+        if (!await confirm(store.state.i18n.lang, 'confirm_delete_comment')) {
           return;
         }
         await store.dispatch(ActionTypes.DELETE_COMMENT, {
@@ -156,18 +157,6 @@ export default defineComponent({
 
   .content {
     margin-top: 20px;
-
-    &.marked {
-      word-wrap: break-word;
-
-      & > :last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    &.raw {
-      white-space: pre-wrap;
-    }
   }
 
   &:hover .operations {

@@ -22,11 +22,11 @@
         v-if="choose === 0"
         v-model="value"
         class="textarea"
-        :placeholder="placeholder"
+        :placeholder="translate(i18n.lang, placeholder)"
         @focus="handleFocus"
         @blur="handleBlur"
       />
-      <div v-else class="preview" v-html="santinizeMarked(value)"></div>
+      <ui-content :text="value" markdown class="preview" v-else/>
     </div>
   </div>
 </template>
@@ -103,8 +103,9 @@
 </style>
 
 <script lang="ts">
-import { santinizeMarked } from '@/utils';
+import { translate } from '@/i18n/translate';
 import { defineComponent, ref, toRefs, watch } from 'vue';
+import { useStore } from 'vuex';
 export default defineComponent({
   props: {
     placeholder: String,
@@ -116,7 +117,7 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, ctx) {
     const { modelValue } = toRefs(props);
-    const value = ref('');
+    const value = ref(modelValue.value);
     const choose = ref(0);
     const active = ref(false);
 
@@ -126,6 +127,8 @@ export default defineComponent({
     watch(modelValue, (newvalue) => {
       value.value = newvalue;
     });
+
+    const store = useStore();
 
     const handleFocus = () => {
       active.value = true;
@@ -141,10 +144,11 @@ export default defineComponent({
       value,
       choose,
       active,
+      translate,
       handleSwitch,
-      santinizeMarked,
       handleFocus,
       handleBlur,
+      ...toRefs(store.state),
     };
   },
 });

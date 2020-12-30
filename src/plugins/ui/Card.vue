@@ -1,14 +1,13 @@
 <template>
   <div class="card">
     <header v-if="!notitle">
-      <h2 class="title">
+      <h2 class="title" :class="{ nopadding }">
         <slot name="header"></slot>
       </h2>
     </header>
-    <div class="container" v-if="!nopadding">
+    <div class="container" :class="{ nopadding }">
       <slot></slot>
     </div>
-    <slot v-else></slot>
   </div>
 </template>
 
@@ -32,6 +31,12 @@
     font-weight: normal;
     padding: 20px 5px 5px 20px;
     margin: 0;
+
+    &.nopadding {
+      font-size: 1.2rem;
+      padding: 15px;
+      padding-bottom: 10px;
+    }
   }
 
   .container {
@@ -43,6 +48,10 @@
 
     & > :last-child {
       margin-bottom: 0;
+    }
+
+    &.nopadding {
+      padding: 5px 0;
     }
   }
 

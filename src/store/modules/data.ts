@@ -1,4 +1,4 @@
-import { CommentDetail, FileDetail, PostDetail, RegionDetail, UserDetail } from '../../../app/types';
+import { CommentDetail, FileDetail, PostDetail, ProblemDetail, RegionDetail, UserDetail } from '../../../app/types';
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
 import { API } from '@/api';
@@ -17,13 +17,17 @@ export type State = {
   files: FileDetail[];
   uploading: boolean;
   progress: number; // range [0,1]
+  problems: ProblemDetail[];
+  problem: ProblemDetail;
 }
 
 export type Mutations<S = State> = {
   [MutationTypes.FETCH_USER_DETAIL](state: S, payload: UserDetail): void;
   [MutationTypes.FETCH_REGION_LIST](state: S, payload: RegionDetail[]): void;
+  [MutationTypes.FETCH_PROBLEM_LIST](state: S, payload: ProblemDetail[]): void;
   [MutationTypes.FETCH_POST_LIST](state: S, payload: PostDetail[]): void;
   [MutationTypes.FETCH_REGION_DETAIL](state: S, payload: RegionDetail): void;
+  [MutationTypes.FETCH_PROBLEM_DETAIL](state: S, payload: ProblemDetail): void;
   [MutationTypes.FETCH_POST_DETAIL](state: S, payload: PostDetail): void;
   [MutationTypes.FETCH_COMMENT_LIST](state: S, payload: CommentDetail[]): void;
   [MutationTypes.FETCH_FILE_LIST](state: S, payload: FileDetail[]): void;
@@ -46,7 +50,9 @@ export type Actions<S = State> = {
     pid: string;
   }>): Promise<void>;
   [ActionTypes.FETCH_REGIONS_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.FETCH_PROBLEMS_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.FETCH_REGION_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
+  [ActionTypes.FETCH_PROBLEM_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.FETCH_USER_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.FETCH_USER_FILES](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.DELETE_FILE](actx: ArgumentedActionContext<S>, file: FileDetail): Promise<void>;
@@ -91,6 +97,18 @@ export const createDataModule = (api: API) => {
     files: [],
     uploading: false,
     progress: 0,
+    problems: [{
+      pid: 1000,
+      title: 'Gomoku',
+      author: 'root',
+      content: '# gomoku\n\ngomoku is a very interesting problem\n',
+    }],
+    problem: {
+      pid: 1000,
+      title: 'Gomoku',
+      author: 'root',
+      content: '# gomoku\n\ngomoku is a very interesting problem\n',
+    }
   });
 
   const mutations: Mutations = {
@@ -100,11 +118,17 @@ export const createDataModule = (api: API) => {
     [MutationTypes.FETCH_REGION_LIST](state, payload) {
       state.regions = payload;
     },
+    [MutationTypes.FETCH_PROBLEM_LIST](state, payload) {
+      state.problems = payload;
+    },
     [MutationTypes.FETCH_POST_LIST](state, payload) {
       state.posts = payload;
     },
     [MutationTypes.FETCH_REGION_DETAIL](state, payload) {
       state.region = payload;
+    },
+    [MutationTypes.FETCH_PROBLEM_DETAIL](state, payload) {
+      state.problem = payload;
     },
     [MutationTypes.FETCH_POST_DETAIL](state, payload) {
       state.post = payload;
@@ -183,6 +207,21 @@ export const createDataModule = (api: API) => {
       } else {
         dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
+    },
+    async [ActionTypes.FETCH_PROBLEMS_DATA]({ commit, dispatch }) {
+      // TODO: fetch problems data here
+    },
+    async [ActionTypes.FETCH_PROBLEM_DATA]({ commit, dispatch, rootState, state }) {
+      // TODO: fetch problem data here
+      commit(MutationTypes.CHANGE_SSR_TITLE, [{
+        name: translate(rootState.i18n.lang, 'problems'),
+        url: '/p',
+        show: true,
+      }, {
+        name: state.problem.title,
+        url: '',
+        show: true,
+      }]);
     },
     async [ActionTypes.FETCH_REGION_DATA]({ rootState: state, commit, dispatch }, payload) {
       const region = unref(payload);

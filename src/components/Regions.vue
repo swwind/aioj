@@ -4,7 +4,7 @@
     <ui-icon
       v-if="!data.regions.length"
       name="snowflake"
-      :text="translate(i18n.lang, 'no_regions')"
+      text="no_regions"
     />
     <div class="region-item" v-for="region of data.regions" :key="region.region" v-else>
       <router-link :to="`/r/${region.region}`" class="title">{{ region.title }}</router-link>
@@ -13,7 +13,7 @@
   </ui-card>
   <ui-card class="create" v-if="accounts.admin">
     <template #header>
-      {{ translate(i18n.lang, 'create_new_region') }}
+      <ui-text text="create_new_region"/>
     </template>
     <div class="form">
       <ui-input
@@ -21,23 +21,23 @@
         class="form-item"
         icon="code"
         v-model="region"
-        :placeholder="translate(i18n.lang, 'region_url')" />
+        placeholder="region_url" />
       <ui-input
         type="text"
         icon="align-left"
         class="form-item"
         v-model="title"
-        :placeholder="translate(i18n.lang, 'region_title')" />
+        placeholder="region_title" />
       <ui-editor
         class="form-item"
         v-model="description"
-        :placeholder="translate(i18n.lang, 'region_desc')" />
+        placeholder="region_desc" />
       <div class="buttonset">
         <ui-button
           type="primary"
           icon="location-arrow"
           @click="handleCreateRegion">
-          {{ translate(i18n.lang, 'post') }}
+          <ui-text text="post"/>
         </ui-button>
       </div>
     </div>
