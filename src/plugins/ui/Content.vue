@@ -26,6 +26,7 @@
 </style>
 
 <script lang="ts">
+/* eslint-disable no-undef */
 import { santinizeMarked } from '@/utils';
 import { defineComponent, onMounted } from 'vue';
 export default defineComponent({

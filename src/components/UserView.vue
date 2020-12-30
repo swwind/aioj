@@ -136,12 +136,16 @@ export default defineComponent({
         return `![](aioj://image/${file.fid})`;
       }
       return `![${file.filename}](aioj://fs/${file.fid})`;
-    }
+    };
 
     const handleCopyLink = async (file: FileDetail) => {
       const link = getLink(file);
       const success = await copyToClipboard(link);
-      store.dispatch(ActionTypes.NOTIFY_COPY_SUCCESS)
+      if (success) {
+        store.dispatch(ActionTypes.NOTIFY_COPY_SUCCESS);
+      } else {
+        store.dispatch(ActionTypes.NOTIFY_COPY_FAILED);
+      }
     };
 
     const handleLogout = async () => {
