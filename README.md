@@ -96,7 +96,7 @@ Content-Type: application/json
     - email: string;
 
 [ ] GET    /problems                    Get the full problem lists
-    + problems:
+    + problems: ProblemAbstract[]
         + pid: number;
         + title: string;
 [ ] GET    /p/:pid                      Get problem information

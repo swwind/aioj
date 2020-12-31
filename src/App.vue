@@ -5,12 +5,12 @@
       <div class="buttonset" v-if="!accounts.username">
         <ui-button
           @click="jumpTo('/login')">
-          {{ translate(i18n.lang, 'login') }}
+          <ui-text text="login" />
         </ui-button>
         <ui-button
           @click="jumpTo('/register')"
           type="primary">
-          {{ translate(i18n.lang, 'register') }}
+          <ui-text text="register" />
         </ui-button>
       </div>
       <div class="userpanel" v-else>
@@ -68,7 +68,6 @@
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { getRedirect } from './utils';
-import { translate } from '@/i18n/translate';
 import { defineComponent, onMounted, toRefs } from 'vue';
 import { MyStore } from './store';
 import { MutationTypes } from './store/mutation-types';
@@ -83,8 +82,8 @@ export default defineComponent({
       name: 'home',
       url: '/',
     }, {
-      name: 'about',
-      url: '/about',
+      name: 'help',
+      url: '/help',
     }, {
       name: 'problems',
       url: '/p',
@@ -117,7 +116,6 @@ export default defineComponent({
     return {
       menus,
       jumpTo,
-      translate,
       langs,
       useLang,
 

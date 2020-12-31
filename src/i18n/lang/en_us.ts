@@ -56,6 +56,7 @@ const en_us: InternationalizationLanguage = {
   upload_tips: 'File should not exceed 2GB',
   upload: 'Upload',
   my_accounts: 'My accounts',
+  help: 'Help',
 
   confirm_logout: 'Are you sure you want to logout?',
   confirm_delete: 'Are you sure you want to delete {}?',

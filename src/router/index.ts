@@ -2,6 +2,7 @@ import { RouteRecordRaw } from 'vue-router';
 import Home from '@/views/Home.vue';
 import NotFound from '@/views/NotFound.vue';
 import About from '@/views/About.vue';
+import Help from '@/views/Help.vue';
 import Regions from '@/components/Regions.vue';
 import RegionView from '@/components/RegionView.vue';
 import PostView from '@/components/PostView.vue';
@@ -20,6 +21,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/about',
     name: 'About',
     component: About,
+  }, {
+    path: '/help',
+    name: 'Help',
+    component: Help,
   }, {
     path: '/r',
     name: 'Forum',

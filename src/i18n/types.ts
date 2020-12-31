@@ -56,6 +56,7 @@ export type InternationalizationLanguage = {
   upload_tips: string;
   upload: string;
   my_accounts: string;
+  help: string;
 
   confirm_logout: string;
   confirm_delete: string;
