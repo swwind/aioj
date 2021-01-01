@@ -38,7 +38,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/r/:region/:pid',
     name: 'Post',
     component: PostView,
-    props: true,
+    props: (route) => ({
+      region: route.params.region,
+      pid: Number(route.params.pid),
+    }),
   }, {
     path: '/u/:username',
     name: 'UserView',
@@ -52,7 +55,9 @@ const routes: Array<RouteRecordRaw> = [
     path: '/p/:pid',
     name: 'ProblemView',
     component: ProblemView,
-    props: true,
+    props: (route) => ({
+      pid: Number(route.params.pid),
+    }),
   }, {
     path: '/login',
     name: 'Login',

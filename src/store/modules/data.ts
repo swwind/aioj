@@ -32,8 +32,8 @@ export type Mutations<S = State> = {
   [MutationTypes.FETCH_COMMENT_LIST](state: S, payload: CommentDetail[]): void;
   [MutationTypes.FETCH_FILE_LIST](state: S, payload: FileDetail[]): void;
   [MutationTypes.DELETED_REGION](state: S, payload: string): void;
-  [MutationTypes.DELETED_POST](state: S, payload: string): void;
-  [MutationTypes.DELETED_COMMENT](state: S, payload: string): void;
+  [MutationTypes.DELETED_POST](state: S, payload: number): void;
+  [MutationTypes.DELETED_COMMENT](state: S, payload: number): void;
   [MutationTypes.DELETED_FILE](state: S, payload: string): void;
   [MutationTypes.CREATED_REGION](state: S, payload: RegionDetail): void;
   [MutationTypes.CREATED_POST](state: S, payload: PostDetail): void;
@@ -43,17 +43,20 @@ export type Mutations<S = State> = {
   [MutationTypes.UPLOAD_PROGRESS](state: S, progress: number): void;
   [MutationTypes.UPLOAD_END](state: S): void;
   [MutationTypes.UPDATE_PROBLEM](state: S, payload: { title: string, content: string, hidden: boolean }): void;
+  [MutationTypes.UPDATE_COMMENT](state: S, payload: { cid: number, content: string }): void;
+  [MutationTypes.UPDATE_REGION](state: S, payload: { title: string, description: string }): void;
 }
 
 export type Actions<S = State> = {
+  
   [ActionTypes.FETCH_POST_DATA](actx: ArgumentedActionContext<S>, payload: Arguments<{
     region: string;
-    pid: string;
+    pid: number;
   }>): Promise<void>;
   [ActionTypes.FETCH_REGIONS_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.FETCH_PROBLEMS_DATA](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.FETCH_REGION_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
-  [ActionTypes.FETCH_PROBLEM_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string | number>): Promise<void>;
+  [ActionTypes.FETCH_PROBLEM_DATA](actx: ArgumentedActionContext<S>, payload: Argument<number>): Promise<void>;
   [ActionTypes.FETCH_USER_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.FETCH_USER_FILES](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.DELETE_FILE](actx: ArgumentedActionContext<S>, file: FileDetail): Promise<void>;
@@ -61,14 +64,14 @@ export type Actions<S = State> = {
   [ActionTypes.DELETE_REGION](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.DELETE_POST](actx: ArgumentedActionContext<S>, payload: Arguments<{
     region: string;
-    pid: string;
+    pid: number;
   }>): Promise<void>;
   [ActionTypes.DELETE_COMMENT](actx: ArgumentedActionContext<S>, payload: Arguments<{
     region: string;
-    pid: string;
-    cid: string;
+    pid: number;
+    cid: number;
   }>): Promise<void>;
-  [ActionTypes.DELETE_PROBLEM](actx: ArgumentedActionContext<S>, payload: Argument<string | number>): Promise<void>;
+  [ActionTypes.DELETE_PROBLEM](actx: ArgumentedActionContext<S>, payload: Argument<number>): Promise<void>;
   [ActionTypes.CREATE_REGION](actx: ArgumentedActionContext<S>, payload: Arguments<{
     region: string;
     title: string;
@@ -85,15 +88,26 @@ export type Actions<S = State> = {
   }>): Promise<void>;
   [ActionTypes.CREATE_COMMENT](actx: ArgumentedActionContext<S>, payload: Arguments<{
     region: string;
-    pid: string;
+    pid: number;
     content: string;
     markdown: boolean;
   }>): Promise<boolean>;
   [ActionTypes.UPDATE_PROBLEM](actx: ArgumentedActionContext<S>, payload: Arguments<{
-    pid: string | number;
+    pid: number;
     title: string;
     content: string;
     hidden: boolean;
+  }>): Promise<boolean>;
+  [ActionTypes.UPDATE_COMMENT](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    region: string;
+    pid: number;
+    cid: number;
+    content: string;
+  }>): Promise<boolean>;
+  [ActionTypes.UPDATE_REGION](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    region: string;
+    title: string;
+    description: string;
   }>): Promise<boolean>;
 }
 
@@ -144,10 +158,10 @@ export const createDataModule = (api: API) => {
       state.regions = state.regions.filter((s) => s.region !== payload);
     },
     [MutationTypes.DELETED_POST](state, payload) {
-      state.posts = state.posts.filter((s) => String(s.pid) !== payload);
+      state.posts = state.posts.filter((s) => s.pid !== payload);
     },
     [MutationTypes.DELETED_COMMENT](state, payload) {
-      state.comments = state.comments.filter((s) => String(s.cid) !== payload);
+      state.comments = state.comments.filter((s) => s.cid !== payload);
     },
     [MutationTypes.DELETED_FILE](state, payload) {
       state.files = state.files.filter((s) => s.fid !== payload);
@@ -179,6 +193,19 @@ export const createDataModule = (api: API) => {
       state.problem.content = payload.content;
       state.problem.hidden = payload.hidden;
     },
+    [MutationTypes.UPDATE_COMMENT](state, payload) {
+      state.comments = state.comments.map((cmt) => {
+        if (cmt.cid === payload.cid) {
+          cmt.content = payload.content;
+          cmt.edited = true;
+        }
+        return cmt;
+      });
+    },
+    [MutationTypes.UPDATE_REGION](state, payload) {
+      state.region.title = payload.title;
+      state.region.description = payload.description;
+    },
   };
 
   const actions: Actions = {
@@ -202,25 +229,22 @@ export const createDataModule = (api: API) => {
           url: '',
           show: true,
         }]);
-      } else {
-        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
+      dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
     async [ActionTypes.FETCH_REGIONS_DATA]({ commit, dispatch }) {
       const result = await api.getRegions();
       if (result.status === 200) {
         commit(MutationTypes.FETCH_REGION_LIST, result.regions);
-      } else {
-        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
+      dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
     async [ActionTypes.FETCH_PROBLEMS_DATA]({ commit, dispatch }) {
       const result = await api.getProblemList();
       if (result.status === 200) {
         commit(MutationTypes.FETCH_PROBLEM_LIST, result.problems);
-      } else {
-        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
+      dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
     async [ActionTypes.FETCH_PROBLEM_DATA]({ commit, rootState, state, dispatch }, payload) {
       const pid = unref(payload);
@@ -236,9 +260,8 @@ export const createDataModule = (api: API) => {
           url: '',
           show: true,
         }]);
-      } else {
-        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
+      dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
     async [ActionTypes.FETCH_REGION_DATA]({ rootState: state, commit, dispatch }, payload) {
       const region = unref(payload);
@@ -257,9 +280,8 @@ export const createDataModule = (api: API) => {
         commit(MutationTypes.CHANGE_SSR_META, {
           description: result.region.description,
         });
-      } else {
-        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
+      dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
     async [ActionTypes.FETCH_USER_DATA]({ rootState: state, commit, dispatch }, payload) {
       const username = unref(payload);
@@ -267,9 +289,8 @@ export const createDataModule = (api: API) => {
       if (result.status === 200) {
         commit(MutationTypes.FETCH_USER_DETAIL, result.user);
         commit(MutationTypes.CHANGE_SSR_TITLE, [translate(state.i18n.lang, 'user'), result.user.username]);
-      } else {
-        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
+      dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
     async [ActionTypes.FETCH_USER_FILES]({ commit, dispatch }, payload) {
       const username = unref(payload);
@@ -401,6 +422,38 @@ export const createDataModule = (api: API) => {
           url: '',
           show: true,
         }]);
+        dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+        return true;
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+        return false;
+      }
+    },
+    async [ActionTypes.UPDATE_COMMENT]({ dispatch, commit }, payload) {
+      const { region, content, cid, pid } = unwarpArguments(payload);
+      const result = await api.modifyComment(region, pid, cid, content);
+      if (result.status === 200) {
+        commit(MutationTypes.UPDATE_COMMENT, { cid, content });
+        dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+        return true;
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+        return false;
+      }
+    },
+    async [ActionTypes.UPDATE_REGION]({ dispatch, commit, rootState: state }, payload) {
+      const { region, title, description } = unwarpArguments(payload);
+      const result = await api.modifyRegion(region, title, description);
+      if (result.status === 200) {
+        commit(MutationTypes.UPDATE_REGION, { title, description });
+        commit(MutationTypes.CHANGE_SSR_TITLE, [
+          {
+            name: translate(state.i18n.lang, 'region'),
+            url: '/r',
+            show: true,
+          },
+          title,
+        ]);
         dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
         return true;
       } else {

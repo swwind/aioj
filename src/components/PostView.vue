@@ -1,44 +1,62 @@
 <template>
   <ui-header />
-  <ui-card notitle
-    class="comment"
-    v-for="comment of data.comments"
-    :key="comment.cid">
-    <div class="infos">
-      <a :href="`#${comment.cid}`" class="level" :id="comment.cid">#{{ comment.cid }}</a>
-      <router-link class="author" :to="`/u/${comment.author}`"><ui-icon name="user" regular right/>{{ comment.author }}</router-link>
-      <time class="time"><ui-icon name="calendar-alt" regular right/>{{ new Date(comment.date).toLocaleString() }}</time>
-      <span class="edited" v-if="comment.edited">
-        <ui-icon name="edit" />
-        Edited
-      </span>
-      <span class="operations" v-if="accounts.admin || accounts.username === comment.author">
-        <ui-icon class="delete" name="trash-alt" regular right
-          @click="handleDeleteComment(comment.cid)" />
-        <ui-icon class="edit" name="edit"
-          @click="handleEditComment(comment.cid)" />
-      </span>
-    </div>
-    <ui-content class="content" :text="comment.content" :markdown="comment.markdown"></ui-content>
-  </ui-card>
-  <ui-card class="reply" v-if="accounts.username" shadow="hover">
-    <template #header>
-      <ui-text text="reply"/>
-    </template>
-    <div class="reply-warn">
-      <ui-text text="reply_warning"/>
-    </div>
-    <ui-editor
-      v-model="content"
-      placeholder="reply_placeholder"
-      class="reply-content"
-    />
-    <div class="buttons">
-      <ui-button type="primary" icon="location-arrow" @click="handleReply">
-        <ui-text text="submit"/>
-      </ui-button>
-    </div>
-  </ui-card>
+  <div v-if="ssr.status === 200">
+    <ui-card
+      notitle
+      class="comment"
+      v-for="comment of data.comments"
+      :key="comment.cid">
+      <div class="infos">
+        <a :href="`#${comment.cid}`" class="level" :id="comment.cid">#{{ comment.cid }}</a>
+        <router-link class="author" :to="`/u/${comment.author}`"><ui-icon name="user" regular right/>{{ comment.author }}</router-link>
+        <time class="time"><ui-icon name="calendar-alt" regular right/>{{ new Date(comment.date).toLocaleString() }}</time>
+        <span class="edited" v-if="comment.edited">
+          <ui-icon name="edit" right />
+          <ui-text text="edited" />
+        </span>
+        <span class="operations" v-if="accounts.admin || accounts.username === comment.author">
+          <ui-icon class="delete" name="trash-alt" regular right
+            @click="handleDeleteComment(comment.cid)" />
+          <ui-icon class="edit" name="edit"
+            @click="handleEditComment(comment)" />
+        </span>
+      </div>
+      <ui-content
+        v-if="editing !== comment.cid"
+        class="content"
+        :text="comment.content"
+        :markdown="comment.markdown" />
+      <div class="editing" v-else>
+        <ui-editor v-model="editingText" />
+        <div class="bts">
+          <ui-button type="primary" icon="location-arrow" @click="handleApplyEdit"> 
+            <ui-text text="submit" />
+          </ui-button>
+          <ui-button icon="cat" @click="handleCancelEdit">
+            <ui-text text="cancel" />
+          </ui-button>
+        </div>
+      </div>
+    </ui-card>
+    <ui-card class="reply" v-if="accounts.username" shadow="hover">
+      <template #header>
+        <ui-text text="reply"/>
+      </template>
+      <div class="reply-warn">
+        <ui-text text="reply_warning"/>
+      </div>
+      <ui-editor
+        v-model="content"
+        placeholder="reply_placeholder"
+        class="reply-content"
+      />
+      <div class="buttons">
+        <ui-button type="primary" icon="location-arrow" @click="handleReply">
+          <ui-text text="submit"/>
+        </ui-button>
+      </div>
+    </ui-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -47,6 +65,7 @@ import { useStore } from 'vuex';
 import { confirm } from '@/utils';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
+import { CommentDetail } from 'app/types';
 
 export default defineComponent({
   props: {
@@ -55,12 +74,14 @@ export default defineComponent({
       required: true,
     },
     pid: {
-      type: String,
+      type: Number,
       required: true,
     },
   },
   async setup(props) {
     const content = ref('');
+    const editing = ref(-1);
+    const editingText = ref('');
     const { region, pid } = toRefs(props);
 
     const store = useStore() as MyStore;
@@ -93,14 +114,30 @@ export default defineComponent({
         await store.dispatch(ActionTypes.DELETE_COMMENT, {
           region,
           pid,
-          cid: String(cid),
+          cid,
         });
       }
     };
 
-    const handleEditComment = (cid: number) => {
-      alert('Not implemented yet ' + cid);
+    const handleEditComment = (cmt: CommentDetail) => {
+      editingText.value = cmt.content;
+      editing.value = cmt.cid;
     };
+    const handleCancelEdit = () => {
+      editing.value = -1;
+    }
+
+    const handleApplyEdit = async () => {
+      const success = await store.dispatch(ActionTypes.UPDATE_COMMENT, {
+        region,
+        pid,
+        cid: editing,
+        content: editingText,
+      });
+      if (success) {
+        handleCancelEdit();
+      }
+    }
 
     await store.dispatch(ActionTypes.FETCH_POST_DATA, {
       region: region.value,
@@ -108,8 +145,12 @@ export default defineComponent({
     });
 
     return {
+      editing,
       content,
       handleReply,
+      editingText,
+      handleApplyEdit,
+      handleCancelEdit,
       handleEditComment,
       handleDeleteComment,
       ...toRefs(store.state),
@@ -158,6 +199,14 @@ export default defineComponent({
 
   &:hover .operations {
     opacity: 1;
+  }
+
+  .editing {
+    margin-top: 20px;
+
+    .bts {
+      margin-top: 20px;
+    }
   }
 }
 

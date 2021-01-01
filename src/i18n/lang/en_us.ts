@@ -26,6 +26,7 @@ const en_us: InternationalizationLanguage = {
   submit: 'Submit',
   submissions: 'Submissions',
   edit: 'Edit',
+  edited: 'Edited',
   discuss: 'Discuss',
   operations: 'Operations',
   reply_warning: 'Welcome to leave your email for resources, will randomly select the lucky ones permanently ban.',

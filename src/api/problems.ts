@@ -8,17 +8,17 @@ export const createProblemAPI = (api: APICore) => {
     getProblemList() {
       return makeGETRequest<{ problems: ProblemAbstract[] }>('/problems');
     },
-    getProblemDetail(pid: number | string) {
+    getProblemDetail(pid: number) {
       return makeGETRequest<{ problem: ProblemDetail }>(`/p/${pid}`);
     },
-    modifyProblem(pid: number | string, title: string, content: string, hidden: boolean) {
+    modifyProblem(pid: number, title: string, content: string, hidden: boolean) {
       return makePUTRequest(`/p/${pid}`, {
         title,
         content,
         hidden,
       });
     },
-    deleteProblem(pid: number | string) {
+    deleteProblem(pid: number) {
       return makeDELETERequest(`/p/${pid}`);
     },
     createProblem(title: string) {

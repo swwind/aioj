@@ -1,5 +1,6 @@
 <template>
-  <div v-if="markdown" class="marked" v-html="santinizeMarked(text)"></div>
+  <ui-icon v-if="!text" name="snowflake" text="not_found" />
+  <div v-else-if="markdown" class="marked" v-html="santinizeMarked(text)"></div>
   <div v-else class="raw" v-text="text"></div>
 </template>
 
@@ -31,10 +32,7 @@ import { santinizeMarked } from '@/utils';
 import { defineComponent, onMounted } from 'vue';
 export default defineComponent({
   props: {
-    text: {
-      type: String,
-      required: true,
-    },
+    text: String,
     markdown: Boolean,
   },
   setup() {

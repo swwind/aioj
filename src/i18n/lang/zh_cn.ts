@@ -26,6 +26,7 @@ const zh_cn: InternationalizationLanguage = {
   submit: '提交',
   submissions: '提交记录',
   edit: '编辑',
+  edited: '已编辑',
   discuss: '讨论',
   operations: '操作',
   reply_warning: '欢迎大家留下邮箱求资源，将随机挑选幸运儿永久封号。',

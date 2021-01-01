@@ -1,6 +1,6 @@
 <template>
   <ui-header />
-  <ui-sidebar>
+  <ui-sidebar v-if="ssr.status === 200">
     <template #sidebar>
       <ui-card nopadding>
         <template #header>
@@ -25,7 +25,7 @@
       </ui-card>
     </template>
     <ui-card notitle v-if="!editing">
-      <ui-content :text="data.problem.content" markdown></ui-content>
+      <ui-content :text="data.problem.content" markdown />
     </ui-card>
     <ui-card notitle v-else>
       <ui-input type="text" v-model="title" icon="align-left" placeholder="problem_title" />
@@ -60,7 +60,7 @@ import { useStore } from 'vuex';
 export default defineComponent({
   props: {
     pid: {
-      type: String,
+      type: Number,
       required: true,
     },
   },

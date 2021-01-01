@@ -29,6 +29,8 @@ export enum ActionTypes {
   CREATE_PROBLEM = 'create_problem',
 
   UPDATE_PROBLEM = 'update_problem',
+  UPDATE_COMMENT = 'update_comment',
+  UPDATE_REGION = 'update_region',
 
   NOTIFY_DELETE_SUCCESS = 'notify_delete_success',
   NOTIFY_REPLY_SUCCESS = 'notify_reply_success',

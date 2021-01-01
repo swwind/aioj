@@ -37,4 +37,6 @@ export enum MutationTypes {
   UPLOAD_END = 'upload_end',
 
   UPDATE_PROBLEM = 'update_problem',
+  UPDATE_COMMENT = 'update_comment',
+  UPDATE_REGION = 'update_region',
 }

@@ -31,6 +31,8 @@ const createActions = (router: Router): Actions => ({
       dispatch(ActionTypes.HANDLE_ERROR, payload);
       commit(MutationTypes.CHANGE_SSR_STATUS, 404);
       commit(MutationTypes.CHANGE_SSR_TITLE, translate(state.i18n.lang, 'not_found'));
+    } else if (payload.status === 200) {
+      commit(MutationTypes.CHANGE_SSR_STATUS, 200);
     }
   },
   async [ActionTypes.NOTIFY_DELETE_SUCCESS]({ state }) {

@@ -26,6 +26,7 @@ export type InternationalizationLanguage = {
   submit: string;
   submissions: string;
   edit: string;
+  edited: string;
   discuss: string;
   operations: string;
   reply_warning: string;
