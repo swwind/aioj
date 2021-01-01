@@ -10,7 +10,7 @@ yarn build && node .
 ## Known Issues
 
 - `/r/region/pid#cid` not work
-- update problem title not effect region title
+- ~~update problem title not effect region title~~
 
 ## API
 

@@ -1,3 +1,4 @@
+import { modifyRegion } from 'app/db/forum';
 import { createNewProblem, deleteProblem, getAllProblems, getProblemAuthor, getProblemDetail, modifyProblem } from 'app/db/problems';
 import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED, PROBLEM_NOT_EXISTS } from 'app/errors';
 import Router from 'koa-router';
@@ -59,6 +60,7 @@ router.put('/p/:pid', async (ctx) => {
 
   const { content, hidden, title } = ctx.request.body;
   await modifyProblem(pid, title, content, hidden);
+  await modifyRegion(`p${pid}`, title, '');
 
   ctx.end(200);
 });
