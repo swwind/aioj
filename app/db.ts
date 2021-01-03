@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 import config from '../config.json';
-import { AuthData, CommentData, CommentDetail, CounterData, FileData, FileDetail, PostData, PostDetail, ProblemAbstract, ProblemData, ProblemDetail, RegionData, RegionDetail, UserData, UserDetail } from './types';
+import { AuthData, BotData, BotDetail, CommentData, CommentDetail, CounterData, FileData, FileDetail, PostData, PostDetail, ProblemAbstract, ProblemData, ProblemDetail, RegionData, RegionDetail, RoundData, RoundDetail, UserData, UserDetail } from './types';
 
 const client = new MongoClient(config.mongo.url, { useUnifiedTopology: true });
 await client.connect();
@@ -14,10 +14,12 @@ export const comments = db.collection<CommentData>('comment');
 export const problems = db.collection<ProblemData>('problem');
 export const files = db.collection<FileData>('file');
 export const auths = db.collection<AuthData>('auth');
+export const bots = db.collection<BotData>('bots');
+export const rounds = db.collection<RoundData>('rounds');
 
 // initialize db
 if (!await counter.findOne({ })) {
-  counter.insertOne({ maxpid: 1000 });
+  counter.insertOne({ maxpid: 1000, maxbid: 1, maxrid: 1 });
 }
 
 export function extractUserDetail(ud: UserData): UserDetail {
@@ -70,6 +72,7 @@ export function extractProblemDetail(pd: ProblemData): ProblemDetail {
     content: pd.content,
     date: pd.date,
     hidden: pd.hidden,
+    fid: pd.fid,
   };
 }
 export function extractProblemAbstract(pd: ProblemData): ProblemAbstract {
@@ -77,4 +80,25 @@ export function extractProblemAbstract(pd: ProblemData): ProblemAbstract {
     pid: pd.pid,
     title: pd.title,
   };
+}
+
+export function extractBotDetail(bd: BotData): BotDetail {
+  return {
+    fid: bd.fid,
+    version: bd.version,
+    name: bd.name,
+    description: bd.description,
+    author: bd.author,
+    pid: bd.pid,
+    bid: bd.bid,
+  }
+}
+export function extractRoundDetail(rd: RoundData): RoundDetail {
+  return {
+    log: rd.log,
+    pid: rd.pid,
+    bids: rd.bids,
+    rid: rd.rid,
+    status: rd.status,
+  }
 }

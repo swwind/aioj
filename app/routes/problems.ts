@@ -1,16 +1,17 @@
+import { deleteFile, saveFileWithoutUser } from 'app/db/files';
 import { modifyRegion } from 'app/db/forum';
-import { createNewProblem, deleteProblem, getAllProblems, getProblemAuthor, getProblemDetail, modifyProblem } from 'app/db/problems';
+import { createNewProblem, deleteProblem, getAllProblems, getProblemAuthor, getProblemDetail, modifyProblem, modifyProblemFid } from 'app/db/problems';
 import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED, PROBLEM_NOT_EXISTS } from 'app/errors';
 import Router from 'koa-router';
 import { State, Tools } from '../types';
+import { promises as fs } from 'fs';
 
 const router = new Router<State, Tools>();
 
 router.post('/p/new', async (ctx) => {
-  if (!ctx.verifyBody([{
-    name: 'title',
-    type: 'string',
-  }])) {
+  if (!ctx.verifyBody({
+    title: 'string',
+  })) {
     ctx.end(400, PARAMS_MISSING);
     return;
   }
@@ -30,17 +31,50 @@ router.post('/p/new', async (ctx) => {
   ctx.end(200, { pid: result.result() });
 });
 
+router.put('/p/:pid/file', async (ctx) => {
+  if (!ctx.state.authorized) {
+    ctx.end(401, LOGIN_REQUIRE);
+    return;
+  }
+
+  const pid = Number(ctx.params.pid);
+  const pd = await getProblemDetail(pid);
+
+  if (!pd) {
+    ctx.end(404, PROBLEM_NOT_EXISTS);
+    return;
+  }
+
+  if (!ctx.state.admin && ctx.state.username !== pd.author) {
+    ctx.end(401, PERMISSION_DENIED);
+    return;
+  }
+
+  let file = ctx.request.files?.file;
+  if (!file) {
+    ctx.end(400, PARAMS_MISSING);
+    return;
+  }
+  if (Array.isArray(file)) {
+    file = file[0];
+  }
+
+  if (pd.fid) {
+    await deleteFile(pd.fid);
+  }
+
+  const fid = await saveFileWithoutUser(await fs.readFile(file.path));
+  await modifyProblemFid(pid, fid);
+
+  ctx.end(200);
+});
+
 router.put('/p/:pid', async (ctx) => {
-  if (!ctx.verifyBody([{
-    name: 'title',
-    type: 'string',
-  }, {
-    name: 'content',
-    type: 'string',
-  }, {
-    name: 'hidden',
-    type: 'boolean',
-  }])) {
+  if (!ctx.verifyBody({
+    title: 'string',
+    content: 'string',
+    hidden: 'boolean',
+  })) {
     ctx.end(400, PARAMS_MISSING);
     return;
   }
@@ -53,7 +87,7 @@ router.put('/p/:pid', async (ctx) => {
   const pid = Number(ctx.params.pid);
   const author = await getProblemAuthor(pid);
 
-  if (!ctx.state.admin || ctx.state.username !== author) {
+  if (!ctx.state.admin && ctx.state.username !== author) {
     ctx.end(401, PERMISSION_DENIED);
     return;
   }
@@ -74,7 +108,7 @@ router.delete('/p/:pid', async (ctx) => {
   const pid = Number(ctx.params.pid);
 
   const author = await getProblemAuthor(pid);
-  if (!ctx.state.admin || ctx.state.username !== author) {
+  if (!ctx.state.admin && ctx.state.username !== author) {
     ctx.end(401, PERMISSION_DENIED);
     return;
   }

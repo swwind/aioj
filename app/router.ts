@@ -25,26 +25,54 @@ router.use('/', async (ctx, next) => {
       ...(typeof data === 'string' ? { error: data } : data),
     });
   };
-  ctx.verifyBody = (keys: { name: string, type: 'string' | 'boolean' | 'file' }[]) => {
-    for (const key of keys) {
-      if (key.type === 'string') {
-        if (typeof ctx.request.body[key.name] !== 'string') {
+  ctx.verifyBody = (keys) => {
+    for (const key of Object.keys(keys)) {
+      if (keys[key] === 'string') {
+        if (typeof ctx.request.body[key] !== 'string') {
           return false;
         }
-        if (!ctx.request.body[key.name]) {
-          return false;
-        }
-      }
-      if (key.type === 'boolean') {
-        if (typeof ctx.request.body[key.name] !== 'boolean') {
+        if (!ctx.request.body[key]) {
           return false;
         }
       }
-      if (key.type === 'file') {
+      if (keys[key] === 'boolean') {
+        if (typeof ctx.request.body[key] !== 'boolean') {
+          return false;
+        }
+      }
+      if (keys[key] === 'file') {
         if (!ctx.request.files) {
           return false;
         }
-        if (!(key.name in ctx.request.files)) {
+        if (!(key in ctx.request.files)) {
+          return false;
+        }
+        if (Array.isArray(ctx.request.files[key])) {
+          return false;
+        }
+      }
+      if (keys[key] === 'number') {
+        if (typeof ctx.request.body[key] !== 'number') {
+          return false;
+        }
+      }
+      if (Array.isArray(keys[key])) {
+        const type = keys[key][0];
+        if (!type) return false;
+        const data = ctx.request.body[key];
+        if (Array.isArray(data)) {
+          return false;
+        }
+        const all = (data as any[]).reduce<boolean>((data, now) => {
+          if (typeof now !== type) {
+            return false;
+          }
+          if (type === 'string' && !now) {
+            return false;
+          }
+          return data;
+        }, true);
+        if (!all) {
           return false;
         }
       }

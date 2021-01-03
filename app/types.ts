@@ -7,11 +7,20 @@ export type State = {
 export type Tools = {
   end(status: number, error: string): void;
   end(status: number, data?: Object): void;
-  verifyBody(keys: { name: string, type: 'string' | 'boolean' | 'file' }[]): boolean;
+  verifyBody(keys: {
+    [key: string]:
+      'string' |
+      'boolean' |
+      'file' |
+      'number' |
+      Array<'string' | 'boolean' | 'file' | 'number'>
+    }): boolean;
 }
 
 export type CounterData = {
   maxpid: number; // max problem id
+  maxbid: number; // max bot id
+  maxrid: number; // max round id
 }
 
 export type UserDetail = {
@@ -75,6 +84,7 @@ export type ProblemDetail = {
   content: string;
   date: number;
   hidden: boolean;
+  fid: string;
 }
 
 export type ProblemData = {
@@ -98,3 +108,27 @@ export type AuthData = {
   token: string;
   date: number;
 };
+
+export type RoundDetail = {
+  log: string;
+  pid: number;
+  bids: number[];
+  rid: number;
+  status: 'pending' | 'finish' | 'judging';
+}
+
+export type RoundData = {
+} & RoundDetail;
+
+export type BotDetail = {
+  fid: string;
+  version: number;
+  name: string;
+  description: string;
+  author: string;
+  pid: number;
+  bid: number;
+}
+
+export type BotData = {
+} & BotDetail;

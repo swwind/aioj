@@ -33,6 +33,7 @@ export async function createNewProblem(username: string, title: string): Promise
     pid,
     date: Date.now(),
     hidden: true,
+    fid: '',
   });
   if (!result.result.ok) {
     return Result.error(SERVER_ERROR);
@@ -52,6 +53,10 @@ export async function modifyProblem(pid: number, title: string, content: string,
       hidden,
     },
   });
+}
+
+export async function modifyProblemFid(pid: number, fid: string) {
+  await problems.findOneAndReplace({ pid }, { $set: { fid } });
 }
 
 export async function deleteProblem(pid: number) {

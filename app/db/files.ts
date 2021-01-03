@@ -24,12 +24,27 @@ export async function saveFile(username: string, mimetype: string, filename: str
     filepath,
     mimetype,
     date: Date.now(),
-  };
-
+  }
   await files.insertOne(filedata);
   await fs.writeFile(filepath, buffer);
 
   return Result.ok(extractFileDetail(filedata));
+}
+
+export async function saveFileWithoutUser(buffer: Buffer) {
+  const fid = await getNewFileId();
+  const filepath = `uploads/${fid}`;
+  await fs.writeFile(filepath, buffer);
+  await files.insertOne({
+    fid,
+    uploader: '',
+    size: buffer.length,
+    filename: '',
+    filepath,
+    mimetype: '',
+    date: Date.now(),
+  });
+  return fid;
 }
 
 export async function getFileData(fid: string): Promise<Result<FileData, string>> {

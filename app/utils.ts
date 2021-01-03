@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { promises as fs } from 'fs';
 
 export class Result<T, R> {
   ok: boolean;
@@ -30,3 +31,17 @@ export const neq = <T> (x: T) => (y: T) => x !== y;
 export const generateRandomBytes = (n: number) => {
   return crypto.randomBytes(n).toString('hex');
 };
+
+export const getTmpDir = async () => {
+  while (true) {
+    const dm = generateRandomBytes(8);
+    const dirname = `/tmp/--aioj-judger-${dm}`;
+    try {
+      await fs.access(dirname);
+      await fs.mkdir(dirname);
+      return dirname;
+    } catch (e) {
+      continue;
+    }
+  }
+}

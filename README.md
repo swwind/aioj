@@ -114,6 +114,8 @@ Content-Type: application/json
     - title: string;
     - content: string;
     - hidden: boolean;
+[ ] PUT    /p/:pid/file                 Upload judger
+    - file: File
 [ ] DELETE /p/:pid                      Delete a problem
 
 [x] GET    /friends                     Get my friends list
@@ -122,12 +124,6 @@ Content-Type: application/json
     + friends: string[];
 [x] PUT    /friends/:username           Add a new friend
 [x] DELETE /friends/:username           Delete a friend
-
-[ ] GET    /s/:username                 Get user's submissions for all problems
-[ ] GET    /s/:username/:pid            Get user's submissions for a specific problem
-
-[ ] POST   /submit/:pid                 Submit your code and save as a bot
-[ ] POST   /challenge/:pid              Start a challenge with a set of bots
 
 [x] POST   /r/:region                   Create a new region
     - title: string;
@@ -213,6 +209,20 @@ Content-Type: application/json
         + size: number;
         + date: number;
 [x] DELETE /files/:fid                  Delete a file
+
+[x] POST   /b/:pid                      Create a new bot
+    - name: string
+    - description: string
+    - [src: string, type: string]
+    - [file: File]
+[x] PUT    /b/:bid                      Modify a bot
+    - name: string
+    - description: string
+    - [src: string, type: string]
+    - [file: File]
+[x] POST   /s/new                       Create a new round
+    - pid: number
+    - bids: number[]
 
 P.S. about regions : every problems have its own region name like `_p1001` (for problem 1001), and it will not be returned in regions list.
 ```
