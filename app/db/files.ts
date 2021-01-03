@@ -24,7 +24,7 @@ export async function saveFile(username: string, mimetype: string, filename: str
     filepath,
     mimetype,
     date: Date.now(),
-  }
+  };
   await files.insertOne(filedata);
   await fs.writeFile(filepath, buffer);
 

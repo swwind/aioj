@@ -13,7 +13,7 @@ export const exec = (command: string, log: (str: string) => void) => {
       }
     });
   });
-}
+};
 
 export type JudgerProcess = {
   read(): Promise<string>;
@@ -32,9 +32,9 @@ export const spawn = (command: string, args: string[], log: (str: string) => voi
     },
     kill() {
       ps.kill('SIGINT');
-    }
-  }
-}
+    },
+  };
+};
 
 export const spawnFromCode = async (dirname: string, mainfile: string, log: (str: string) => void) => {
   if (mainfile.endsWith('.cpp')) {
@@ -54,6 +54,6 @@ export const spawnFromCode = async (dirname: string, mainfile: string, log: (str
     const deno = (await exec('which deno', log)).split('\n')[0];
     return spawn(deno, [file], log);
   } else {
-    throw new Error("unsupported file");
+    throw new Error('unsupported file');
   }
-}
+};

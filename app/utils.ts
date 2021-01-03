@@ -44,4 +44,4 @@ export const getTmpDir = async () => {
       continue;
     }
   }
-}
+};

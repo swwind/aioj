@@ -48,7 +48,7 @@ export type Mutations<S = State> = {
 }
 
 export type Actions<S = State> = {
-  
+
   [ActionTypes.FETCH_POST_DATA](actx: ArgumentedActionContext<S>, payload: Arguments<{
     region: string;
     pid: number;

@@ -91,7 +91,7 @@ export function extractBotDetail(bd: BotData): BotDetail {
     author: bd.author,
     pid: bd.pid,
     bid: bd.bid,
-  }
+  };
 }
 export function extractRoundDetail(rd: RoundData): RoundDetail {
   return {
@@ -100,5 +100,5 @@ export function extractRoundDetail(rd: RoundData): RoundDetail {
     bids: rd.bids,
     rid: rd.rid,
     status: rd.status,
-  }
+  };
 }

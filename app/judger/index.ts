@@ -5,16 +5,16 @@ import { getTmpDir } from 'app/utils';
 import { exec } from 'child_process';
 import { run } from './judge';
 
-const unzip = (fid: string) => {
+const unzip = async (fid: string) => {
   const zip = `uploads/${fid}`;
-  return new Promise<string>(async (resolve, reject) => {
-    const dirname = await getTmpDir();
+  const dirname = await getTmpDir();
+  return new Promise<string>((resolve, reject) => {
     exec(`unzip "${zip}" -d "${dirname}"`, (err) => {
       if (err) reject(err);
       else resolve(dirname);
     });
   });
-}
+};
 
 export const addToJudgerQueue = async (rid: number) => {
   const rd = await getRoundDetail(rid);
@@ -62,10 +62,8 @@ export const addToJudgerQueue = async (rid: number) => {
   });
 
   await updateRoundState(rid, 'finish', data);
-}
+};
 
-export const createJudger = (jfid: string, bfid: string[], log: (str: string) => void) => {
-  return new Promise<Promise<void>>(async (resolve) => {
-    resolve(run(await unzip(jfid), await Promise.all(bfid.map((bot) => unzip(bot))), log));
-  });
-}
+export const createJudger = async (jfid: string, bfid: string[], log: (str: string) => void) => {
+  return await run(await unzip(jfid), await Promise.all(bfid.map((bot) => unzip(bot))), log);
+};

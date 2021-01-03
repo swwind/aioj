@@ -1,13 +1,13 @@
-import { createNewBot, getBotDetail, modifyBot } from "app/db/bots";
-import { FILE_NOT_FOUND, LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from "app/errors";
-import { Tools, State } from "app/types";
-import { getTmpDir } from "app/utils";
-import { Request } from "koa";
-import Router from "koa-router";
+import { createNewBot, getBotDetail, modifyBot } from 'app/db/bots';
+import { FILE_NOT_FOUND, LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from 'app/errors';
+import { Tools, State } from 'app/types';
+import { getTmpDir } from 'app/utils';
+import { Request } from 'koa';
+import Router from 'koa-router';
 import path from 'path';
 import { promises as fs } from 'fs';
-import { exec } from "app/judger/spawner";
-import { deleteFile, saveFileWithoutUser } from "app/db/files";
+import { exec } from 'app/judger/spawner';
+import { deleteFile, saveFileWithoutUser } from 'app/db/files';
 
 const router = new Router<State, Tools>();
 
@@ -32,7 +32,7 @@ async function patchSourceFile(req: Request) {
       }"`, (err) => {
         if (err) reject(err);
         else resolve();
-      })
+      });
     });
 
     const buffer = await fs.readFile(path.join(dirname, 'pack.zip'));
@@ -107,9 +107,9 @@ router.put('/b/:bid', async (ctx) => {
     ctx.end(403, PERMISSION_DENIED);
     return;
   }
-    
+
   const { name, description } = ctx.request.body;
-  
+
   const fid = await patchSourceFile(ctx.request);
   if (!fid) {
     ctx.end(400, PARAMS_MISSING);

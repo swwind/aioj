@@ -318,7 +318,7 @@ function __fucking_paint(ctx, ws) {
   }
 
   ws.addEventListener('message', ({ data }) => {
-    const reg = /bot (\d+) > (\d+) (\d+)/;
+    const reg = /bot (\\d+) > (\\d+) (\\d+)/;
     const res = reg.match(data);
     if (res) {
       const id = res[1];

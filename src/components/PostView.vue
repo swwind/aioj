@@ -29,7 +29,7 @@
       <div class="editing" v-else>
         <ui-editor v-model="editingText" />
         <div class="bts">
-          <ui-button type="primary" icon="location-arrow" @click="handleApplyEdit"> 
+          <ui-button type="primary" icon="location-arrow" @click="handleApplyEdit">
             <ui-text text="submit" />
           </ui-button>
           <ui-button icon="cat" @click="handleCancelEdit">
@@ -125,7 +125,7 @@ export default defineComponent({
     };
     const handleCancelEdit = () => {
       editing.value = -1;
-    }
+    };
 
     const handleApplyEdit = async () => {
       const success = await store.dispatch(ActionTypes.UPDATE_COMMENT, {
@@ -137,7 +137,7 @@ export default defineComponent({
       if (success) {
         handleCancelEdit();
       }
-    }
+    };
 
     await store.dispatch(ActionTypes.FETCH_POST_DATA, {
       region: region.value,

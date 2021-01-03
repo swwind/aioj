@@ -1,6 +1,6 @@
-import { bots, counter, extractBotDetail } from "app/db";
-import { SERVER_ERROR } from "app/errors";
-import { Result } from "app/utils";
+import { bots, counter, extractBotDetail } from 'app/db';
+import { SERVER_ERROR } from 'app/errors';
+import { Result } from 'app/utils';
 
 export async function createNewBot(username: string, name: string, description: string, fid: string, pid: number): Promise<Result<number, string>> {
   const counts = await counter.findOneAndUpdate({ }, { $inc: { maxbid: 1 } });

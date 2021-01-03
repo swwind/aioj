@@ -104,11 +104,11 @@ export default defineComponent({
       rtitle.value = store.state.data.region.title;
       rdesc.value = store.state.data.region.description;
       editing.value = true;
-    }
+    };
 
     const handleCancelEdit = () => {
       editing.value = false;
-    }
+    };
     const handleEditRegion = async () => {
       const success = await store.dispatch(ActionTypes.UPDATE_REGION, {
         region,
@@ -118,7 +118,7 @@ export default defineComponent({
       if (success) {
         handleCancelEdit();
       }
-    }
+    };
 
     const handleSendPost = async () => {
       await store.dispatch(ActionTypes.CREATE_POST, {

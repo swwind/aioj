@@ -1,8 +1,8 @@
-import { startNewRound } from "app/db/rounds";
-import { PARAMS_MISSING } from "app/errors";
-import { addToJudgerQueue } from "app/judger";
-import { Tools, State } from "app/types";
-import Router from "koa-router";
+import { startNewRound } from 'app/db/rounds';
+import { PARAMS_MISSING } from 'app/errors';
+import { addToJudgerQueue } from 'app/judger';
+import { Tools, State } from 'app/types';
+import Router from 'koa-router';
 
 const router = new Router<State, Tools>();
 
