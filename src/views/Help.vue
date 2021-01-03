@@ -72,7 +72,270 @@ AIOJ 的论坛可以让您与其他选手亲切地交♂流。
 WIP
 `,
     zh_cn: `
-构建中
+
+### 对于选手
+
+您可以使用以下语言来书写您的 bot:
+
+- JavaScript
+- C++
+- Python
+
+对于每个 bot，所有所需要的信息将会从 stdin 输入。
+
+输入的第一行包括一个整数，表示您被分配到的 id。
+
+其中输入的第一行为主程序的初始化输入。
+
+接下来的每一行的第一个数为当前操作的 bot id，如果这个 id 与您被分配到的 id 相同，则您需要做出决策，并将操作输出到 stdout。否则接下来由空格分隔，衔接上对方 bot 的决策。选手需要自行模拟对方操作对当前战局产生的影响。
+
+当主程序可以判定对局的胜负的时候，评测线程便会直接 kill 掉您的 bot 线程。
+
+以下是五子棋的随机下子 bot，可以参考。
+
+\`\`\`cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int a[19][19];
+int me;
+
+pair<int, int> getPosition() {
+  int x = rand() % 19;
+  int y = rand() % 19;
+  while (a[x][y]) {
+    x = rand() % 19;
+    y = rand() % 19;
+  }
+  return make_pair(x, y);
+}
+
+int main() {
+  srand(time(0));
+
+  cin >> me;
+  // initial game state is nothing
+
+  while (true) {
+    int player;
+    cin >> player;
+    if (player != me) {
+      int x, y;
+      cin >> x >> y;
+      a[x][y] = 1;
+    } else {
+      pair<int, int> pr = getPosition();
+      a[pr.first][pr.second] = 1;
+      cout << pr.first << " " << pr.second << endl << flush;
+    }
+  }
+}
+\`\`\`
+
+**提交代码**
+
+您可以直接提交单个文件，或者整个文件夹。
+
+提交文件夹的时候请注意，请将文件夹打包成 \`.tar\`, \`.tar.gz\` 或者 \`.zip\` 的形式。
+
+文件夹中需要包含一个 \`settings.json\` 文件，其中需要包含 \`main\` 字段，填写入口程序的相对文件名。
+
+### 对于出题人
+
+您可能需要写一堆文件。
+
+**settings.json**
+
+包含若干字段，\`main\` 字段表示主程序的入口文件，\`paint\` 字段表示绘制部分的 js 文件，\`players\` 表示限制的玩家数量。
+
+**主程序**
+
+主程序用来模拟游戏过程以及按照游戏的规则做出判决。
+
+主程序初始时将会输入一个整数，表示玩家的数量 $n$，所有玩家将会以 $0$ 到 $n-1$ 编号。
+
+接下来主程序需要输出游戏的初始局面，并以换行表示输出的结束。
+
+接下来开始游戏的轮回，每次开始的时候输出 \`continue %d\` 并换行，其中 \`%d\` 表示当前轮到操作的选手 id。
+
+接下来可以读入一行，表示当前选手做出的操作。
+
+接下来由主程序判断操作是否合法，以及游戏是否出现了胜者。
+
+如果游戏出现胜者，则输出 \`win %d\` 并换行，表示选手 \`%d\` 胜出，游戏结束。
+
+如果游戏平局，则输出 \`draw\` 并换行。
+
+否则游戏继续进行，回到下一轮回的开始。
+
+以下是五子棋的主程序，可以参考：
+
+\`\`\`cpp
+#include <bits/stdc++.h>
+
+int board[19][19];
+std::vector<std::pair<int, int>> p[2];
+
+// initialize the game
+void init() {
+  memset(board, -1, sizeof board);
+  p[0].clear();
+  p[1].clear();
+}
+
+bool validate(int x, int y) {
+  if (x < 0 || x >= 19) return false;
+  if (y < 0 || y >= 19) return false;
+  return board[x][y] == -1;
+}
+
+// 0: player 1 win | 1: player 2 win | -1: nobody win
+int checkWin() {
+  for (int i = 0; i < 15; ++ i) {
+    for (int j = 0; j < 15; ++ j) {
+      int one, two;
+      // [-]
+      one = two = 0;
+      for (int k = 0; k < 5; ++ k) {
+        if (board[i][j+k] == 0) {
+          ++ one;
+        } else if (board[i][j+k] == 1) {
+          ++ two;
+        }
+      }
+      if (one == 5) return 0;
+      if (two == 5) return 1;
+
+      // [|]
+      one = two = 0;
+      for (int k = 0; k < 5; ++ k) {
+        if (board[i+k][j] == 0) {
+          ++ one;
+        } else if (board[i+k][j] == 1) {
+          ++ two;
+        }
+      }
+      if (one == 5) return 0;
+      if (two == 5) return 1;
+
+      // [\\]
+      one = two = 0;
+      for (int k = 0; k < 5; ++ k) {
+        if (board[i+k][j+k] == 0) {
+          ++ one;
+        } else if (board[i+k][j+k] == 1) {
+          ++ two;
+        }
+      }
+      if (one == 5) return 0;
+      if (two == 5) return 1;
+
+      // [/]
+      one = two = 0;
+      for (int k = 0; k < 5; ++ k) {
+        if (board[i+4-k][j+k] == 0) {
+          ++ one;
+        } else if (board[i+4-k][j+k] == 1) {
+          ++ two;
+        }
+      }
+      if (one == 5) return 0;
+      if (two == 5) return 1;
+    }
+  }
+  return -1;
+}
+
+int main(int argc, const char* argv[]) {
+  init();
+
+  int n = 0;
+  std::cin >> n;
+  // assert(n == 2);
+  std::cout << output() << std::endl << std::flush;
+
+  int nowplayer = 0;
+  std::cout << "continue " << nowplayer << std::endl << std::flush;
+
+  while (true) {
+    // read player operation
+    int x, y;
+    std::cin >> x >> y;
+
+    // validate the operation
+    if (!validate(x, y)) {
+      std::cout << "win " << (nowplayer ^ 1) << std::endl << std::flush;
+      return 0;
+    }
+
+    // take the operation
+    board[x][y] = nowplayer;
+    p[nowplayer].push_back(std::make_pair(x, y));
+
+    // check if somebody wins
+    int winner = checkWin();
+    if (winner > -1) {
+      std::cout << "win " << winner << std::endl << std::flush;
+      return 0;
+    }
+
+    // check if there is no place to put chess anymore
+    if (p[0].size() + p[1].size() == 19 * 19) {
+      std::cout << "draw" << std::endl << std::flush;
+      return 0;
+    }
+
+    // continue playing
+    nowplayer ^= 1;
+    std::cout << "continue " << nowplayer << std::endl << std::flush;
+  }
+}
+\`\`\`
+
+接下来需要一个 \`paint.js\` 来在前端将战局绘制成图形。
+
+需要在 paint.js 中暴露一个函数，接受两个参数，\`ctx\` 和 \`ws\`，分别为 CanvasContext 对象和 WebSocket 对象。
+
+具体接口请参考以下五子棋绘制代码：
+
+\`\`\`js
+function __fucking_paint(ctx, ws) {
+  const bg = new Path2D();
+  bg.rect(0, 0, 1000, 1000);
+  ctx.fillStyle = '#f4b475';
+  ctx.fill(bg);
+  ctx.fillStyle = 'black';
+  for (let i = 1; i <= 19; ++ i) {
+    const line = new Path2D();
+    line.moveTo(i * 50, 50);
+    line.lineTo(i * 50, 19 * 50);
+    ctx.stroke(line);
+
+    const row = new Path2D();
+    row.moveTo(50, i * 50);
+    row.lineTo(19 * 50, i * 50);
+    ctx.stroke(row);
+  }
+
+  ws.addEventListener('message', ({ data }) => {
+    const reg = /bot (\d+) > (\d+) (\d+)/;
+    const res = reg.match(data);
+    if (res) {
+      const id = res[1];
+      const x = res[2];
+      const y = res[3];
+
+      const zi = new Path2D();
+      zi.moveTo(x * 50 + 50, y * 50 + 50, 45, 0, Math.PI * 2);
+      ctx.fillStyle = Number(id) ? 'black' : 'white';
+      ctx.fill(zi);
+    }
+  });
+}
+
+// expose here
+module.exports = __fucking_paint;
+\`\`\`
 `,
   },
 }];
