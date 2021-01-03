@@ -8,6 +8,8 @@ import friends from './routes/friends';
 import problems from './routes/problems';
 import forum from './routes/forum';
 import users from './routes/users';
+import bots from './routes/bots';
+import rounds from './routes/rounds';
 import files, { getFileSource } from './routes/files';
 import { renderToHTML, template } from './ssr';
 import { Middleware } from 'koa';
@@ -110,6 +112,10 @@ router.use('/api',
   files.allowedMethods(),
   problems.routes(),
   problems.allowedMethods(),
+  bots.routes(),
+  bots.allowedMethods(),
+  rounds.routes(),
+  rounds.allowedMethods(),
 );
 
 const supportedLanguages = ['en_us', 'zh_cn'];
