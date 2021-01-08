@@ -7,9 +7,12 @@ import serve from 'koa-static';
 import cors from '@koa/cors';
 import config from './config.json';
 import https from 'https';
+import websocketify from 'koa-websocket';
 import { promises as fs } from 'fs';
+import { createWSS } from 'app/judger/wss';
+import { createWsRouter } from 'app/routes/ws';
 
-const app = new Koa();
+const app = websocketify(new Koa());
 
 const isProd = !process.env.TEST;
 const disableSSR = !!process.env.NO_SSR;
@@ -51,6 +54,12 @@ app.use(serve('static'));
 
 app.use(router.routes());
 app.use(router.allowedMethods());
+
+const wss = createWSS();
+const wsrouter = createWsRouter(wss);
+
+app.ws.use(wsrouter.routes() as any);
+app.ws.use(wsrouter.allowedMethods() as any);
 
 if (isProd) {
   console.log(`Server Side Rendering ${disableSSR ? 'disabled' : 'enabled'}`);

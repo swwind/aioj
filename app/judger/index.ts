@@ -4,6 +4,7 @@ import { getRoundDetail, updateRoundState } from 'app/db/rounds';
 import { getTmpDir } from 'app/utils';
 import { exec } from 'child_process';
 import { run } from './judge';
+import { WSS } from './wss';
 
 const unzip = async (fid: string) => {
   const zip = `uploads/${fid}`;
@@ -15,6 +16,22 @@ const unzip = async (fid: string) => {
     });
   });
 };
+
+export type Judger = (rid: number, jfid: string, bfid: string[], log: (data: string) => void) => Promise<void>;
+
+let judger: Judger;
+
+export const createJudger = (wss: WSS) => {
+  judger = async (rid, jfid, bfid, log) => {
+    const judgerpath = await unzip(jfid);
+    const botspath = await Promise.all(bfid.map((bot) => unzip(bot)));
+    await run(judgerpath, botspath, (data) => {
+      log(data);
+      wss.emit(rid, data);
+    });
+    wss.clear(rid);
+  }
+}
 
 export const addToJudgerQueue = async (rid: number) => {
   const rd = await getRoundDetail(rid);
@@ -52,18 +69,17 @@ export const addToJudgerQueue = async (rid: number) => {
     bfids.push(bd.fid);
   }
 
-  let data = '';
+  if (!judger) {
+    await updateRoundState(rid, 'finish', `error: judger failed initialization`);
+    return;
+  }
+
+  let log = '';
   await updateRoundState(rid, 'judging', '');
 
-  await createJudger(jfid, bfids, (str) => {
-    data += str + '\n';
-    console.log(str);
-    // TODO: send to ws
+  await judger(rid, jfid, bfids, (str) => {
+    log += str + '\n';
   });
 
-  await updateRoundState(rid, 'finish', data);
-};
-
-export const createJudger = async (jfid: string, bfid: string[], log: (str: string) => void) => {
-  return await run(await unzip(jfid), await Promise.all(bfid.map((bot) => unzip(bot))), log);
+  await updateRoundState(rid, 'finish', log);
 };
