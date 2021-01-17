@@ -7,6 +7,7 @@ import Regions from '@/components/Regions.vue';
 import RegionView from '@/components/RegionView.vue';
 import PostView from '@/components/PostView.vue';
 import UserView from '@/components/UserView.vue';
+import CommitBot from '@/components/CommitBot.vue';
 import Login from '@/components/Login.vue';
 import Register from '@/components/Register.vue';
 import Problems from '@/components/Problems.vue';
@@ -55,6 +56,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/p/:pid',
     name: 'ProblemView',
     component: ProblemView,
+    props: (route) => ({
+      pid: Number(route.params.pid),
+    }),
+  }, {
+    path: '/submit/:pid',
+    name: 'CommitBot',
+    component: CommitBot,
     props: (route) => ({
       pid: Number(route.params.pid),
     }),

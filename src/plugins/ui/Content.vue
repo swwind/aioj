@@ -1,6 +1,5 @@
 <template>
-  <ui-icon v-if="!text" name="snowflake" text="not_found" />
-  <div v-else-if="markdown" class="marked" v-html="santinizeMarked(text)"></div>
+  <div v-if="markdown" class="marked" v-html="santinizeMarked(text)"></div>
   <div v-else class="raw" v-text="text"></div>
 </template>
 

@@ -31,6 +31,8 @@ const en_us: InternationalizationLanguage = {
   operations: 'Operations',
   reply_warning: 'Welcome to leave your email for resources, will randomly select the lucky ones permanently ban.',
   reply_placeholder: 'You left a comment, which made the author full of determination.',
+  bot_name: 'Bot name',
+  commit_bot: 'New bot for {}',
 
   no_files: 'No files uploaded',
   no_posts: 'No posts yet',

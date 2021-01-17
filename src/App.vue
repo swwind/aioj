@@ -143,6 +143,10 @@ body {
   overflow-y: scroll;
 }
 
+.margin {
+  margin-top: 20px;
+}
+
 a {
   color: @theme-color;
   text-decoration: none;

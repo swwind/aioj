@@ -6,7 +6,7 @@
         <template #header>
           <ui-text text="operations"/>
         </template>
-        <ui-listed-button icon="location-arrow" v-if="accounts.username">
+        <ui-listed-button icon="location-arrow" v-if="accounts.username" :active="submit" @click="handleSubmit">
           <ui-text text="submit"/>
         </ui-listed-button>
         <ui-listed-button icon="history">
@@ -24,10 +24,26 @@
         </ui-listed-button>
       </ui-card>
     </template>
-    <ui-card notitle v-if="!editing">
+    <ui-card notitle v-if="!editing && !submit">
       <ui-content :text="data.problem.content" markdown />
     </ui-card>
-    <ui-card notitle v-else>
+    <ui-card v-if="submit">
+      <template #header>
+        Create a new bot
+      </template>
+      <div class="margin">
+        <ui-text text="Give your bot a professional name!"></ui-text>
+      </div>
+      <ui-input v-model="name" placeholder="bot_name" icon="robot" class="margin"></ui-input>
+      <div class="margin">
+        <ui-text text="Enter your code below or use a zip file..."></ui-text>
+      </div>
+      <ui-fileinput class="margin" accept=".zip" v-model="file" />
+      <ui-button icon="location-arrow" type="primary" small v-if="file">Submit File</ui-button>
+      <ui-code v-model="code" class="margin" />
+      <ui-button icon="location-arrow" type="primary" class="margin">Submit Code</ui-button>
+    </ui-card>
+    <ui-card notitle v-if="editing">
       <ui-input type="text" v-model="title" icon="align-left" placeholder="problem_title" />
       <ui-editor class="margin" v-model="content"></ui-editor>
       <div class="margin">
@@ -68,6 +84,10 @@ export default defineComponent({
     const { pid } = toRefs(props);
     const store = useStore() as MyStore;
     const editing = ref(false);
+    const submit = ref(false);
+    const name = ref('');
+    const code = ref({ lang: 1, code: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n  return 0;\n}' });
+    const file = ref<File | null>(null);
     const content = ref('');
     const title = ref('');
 
@@ -81,9 +101,15 @@ export default defineComponent({
       content.value = store.state.data.problem.content;
       title.value = store.state.data.problem.title;
       editing.value = true;
+      submit.value = false;
     };
 
     const handleExitEdit = () => {
+      editing.value = false;
+    };
+
+    const handleSubmit = () => {
+      submit.value = true;
       editing.value = false;
     };
 
@@ -112,10 +138,15 @@ export default defineComponent({
       editing,
       content,
       title,
+      submit,
+      name,
+      code,
+      file,
       handleEdit,
       hasPermission,
       handleExitEdit,
       handleUpdateProblem,
+      handleSubmit,
       handleDeleteProblem,
       ...toRefs(store.state),
     };

@@ -31,6 +31,8 @@ export type InternationalizationLanguage = {
   operations: string;
   reply_warning: string;
   reply_placeholder: string;
+  bot_name: string;
+  commit_bot: string;
 
   no_files: string;
   no_posts: string;

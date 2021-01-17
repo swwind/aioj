@@ -30,8 +30,8 @@ export const createJudger = (wss: WSS) => {
       wss.emit(rid, data);
     });
     wss.clear(rid);
-  }
-}
+  };
+};
 
 export const addToJudgerQueue = async (rid: number) => {
   const rd = await getRoundDetail(rid);
@@ -70,7 +70,7 @@ export const addToJudgerQueue = async (rid: number) => {
   }
 
   if (!judger) {
-    await updateRoundState(rid, 'finish', `error: judger failed initialization`);
+    await updateRoundState(rid, 'finish', 'error: judger failed initialization');
     return;
   }
 

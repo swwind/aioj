@@ -9,8 +9,9 @@ function translate(lang: any, str: any, ...pattern: string[]): string {
     for (const ptn of pattern) {
       s = s.replace('{}', ptn);
     }
+    return s;
   }
-  return s;
+  return str;
 }
 
 export { translate };
