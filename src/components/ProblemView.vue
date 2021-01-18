@@ -27,9 +27,27 @@
         </ui-listed-button>
       </ui-card>
     </template>
+
+    <!-- problem showing page -->
     <ui-card notitle v-if="!editing && !submit">
+      <div class="info">
+        <span class="tag">
+          <ui-text icon="robot" />
+          {{ data.problem.playerMin === data.problem.playerMax
+              ? data.problem.playerMin
+              : data.problem.playerMax === Infinity
+                ? `> ${data.problem.playerMin}`
+                : `${data.problem.playerMin} ~ ${data.problem.playerMax}` }}
+        </span>
+        <span class="tag">
+          <ui-text icon="user" />
+          {{ data.problem.author }}
+        </span>
+      </div>
       <ui-content :text="data.problem.content" markdown />
     </ui-card>
+
+    <!-- submit page -->
     <ui-card v-if="submit">
       <template #header>
         <ui-text text="create_a_new_bot" />
@@ -51,9 +69,21 @@
         <ui-text text="submit_code" />
       </ui-button>
     </ui-card>
+
+    <!-- editing page -->
     <ui-card notitle v-if="editing">
+      <h3>Title</h3>
       <ui-input type="text" v-model="title" icon="align-left" placeholder="problem_title" />
+      <h3>Description</h3>
       <ui-editor class="margin" v-model="content"></ui-editor>
+      <h3>Paint Script</h3>
+      <ui-code class="margin" v-model="paint" locked />
+      <h3>Players</h3>
+      <div class="range">
+        <ui-input type="number" v-model="playerMin" class="item" required placeholder="min" />
+        <span class="hr"></span>
+        <ui-input type="number" v-model="playerMax" class="item" required placeholder="max (-1 = inf)" />
+      </div>
       <div class="margin">
         <ui-button icon="location-arrow" type="primary" @click="handleUpdateProblem">
           <ui-text text="submit"/>
@@ -68,8 +98,24 @@
 
 <style lang="less" scoped>
 
-.margin {
-  margin-top: 20px;
+.info {
+  margin-bottom: 20px;
+
+  .tag {
+    margin-right: 10px;
+  }
+}
+
+.range {
+  display: flex;
+
+  .hr {
+    width: 20px;
+  }
+
+  .item {
+    flex: 1;
+  }
 }
 
 </style>
@@ -99,6 +145,9 @@ export default defineComponent({
     const file = ref<File | null>(null);
     const content = ref('');
     const title = ref('');
+    const paint = ref({ lang: 'js', code: '' });
+    const playerMin = ref(0);
+    const playerMax = ref(0);
 
     const updateFetch = async () => {
       await store.dispatch(ActionTypes.FETCH_PROBLEM_DATA, pid);
@@ -130,6 +179,9 @@ export default defineComponent({
     const handleEdit = () => {
       content.value = store.state.data.problem.content;
       title.value = store.state.data.problem.title;
+      paint.value.code = store.state.data.problem.paint;
+      playerMin.value = store.state.data.problem.playerMin;
+      playerMax.value = store.state.data.problem.playerMax;
       editing.value = true;
       submit.value = false;
     };
@@ -149,6 +201,9 @@ export default defineComponent({
         title,
         content,
         hidden: false,
+        playerMin,
+        playerMax,
+        paint: paint.value.code,
       });
       if (success) {
         handleExitEdit();
@@ -168,10 +223,13 @@ export default defineComponent({
       editing,
       content,
       title,
+      playerMin,
+      playerMax,
       submit,
       name,
       code,
       file,
+      paint,
       handleEdit,
       description,
       handleSubmitByCode,

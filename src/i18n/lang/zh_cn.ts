@@ -48,6 +48,8 @@ const zh_cn: InternationalizationLanguage = {
   submit_your_code_or_upload_a_zip: '在下方提交您的代码，或是直接上传一份 zip 档案...',
   submit_file: '提交文件',
   submit_code: '提交代码',
+  author: '作者',
+  player_number: '玩家数量',
   my_bots: '我的机器人',
   all_bots: '所有机器人',
   create_new_problem: '新建题目',

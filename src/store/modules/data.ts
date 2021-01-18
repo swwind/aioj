@@ -106,6 +106,9 @@ export type Actions<S = State> = {
     title: string;
     content: string;
     hidden: boolean;
+    playerMin: number;
+    playerMax: number;
+    paint: string;
   }>): Promise<boolean>;
   [ActionTypes.UPDATE_COMMENT](actx: ArgumentedActionContext<S>, payload: Arguments<{
     region: string;
@@ -466,14 +469,10 @@ export const createDataModule = (api: API) => {
       }
     },
     async [ActionTypes.UPDATE_PROBLEM]({ dispatch, commit, rootState }, payload) {
-      const { title, content, hidden, pid } = unwarpArguments(payload);
-      const result = await api.modifyProblem(pid, title, content, hidden);
+      const { title, content, hidden, pid, playerMin, playerMax, paint } = unwarpArguments(payload);
+      const result = await api.modifyProblem(pid, title, content, hidden, paint, playerMin, playerMax);
       if (result.status === 200) {
-        commit(MutationTypes.UPDATE_PROBLEM, {
-          title,
-          content,
-          hidden,
-        });
+        commit(MutationTypes.FETCH_PROBLEM_DETAIL, result.problem);
         commit(MutationTypes.CHANGE_SSR_TITLE, [{
           name: translate(rootState.i18n.lang, 'problems'),
           url: '/p',

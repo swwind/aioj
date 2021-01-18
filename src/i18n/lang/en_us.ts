@@ -46,6 +46,8 @@ const en_us: InternationalizationLanguage = {
   submit_your_code_or_upload_a_zip: 'Submit your code below or upload a zip file...',
   submit_file: 'Submit File',
   submit_code: 'Submit Code',
+  author: 'Author',
+  player_number: 'Player number',
   my_bots: 'My bots',
   all_bots: 'All bots',
   user: 'User',

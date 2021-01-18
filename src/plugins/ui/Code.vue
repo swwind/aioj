@@ -1,6 +1,6 @@
 <template>
-  <div class="code">
-    <ui-select :keys="keys" v-model="lang" class="select"></ui-select>
+  <div class="code" :class="{ locked }">
+    <ui-select :keys="keys" v-model="lang" class="select" v-if="!locked"></ui-select>
     <div class="number">{{ new Array(rows).fill(0).map((_, i) => i+1).join('\n') }}</div>
     <textarea v-model="code" class="text"></textarea>
   </div>
@@ -13,6 +13,10 @@
   display: flex;
   border: 5px solid @background-color;
   border-left: none;
+
+  &.locked {
+    border-left: 5px solid @background-color;
+  }
 
   .select {
     flex: 3;
@@ -57,6 +61,7 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    locked: Boolean,
   },
   emits: ['update:modelValue'],
   setup(props, ctx) {

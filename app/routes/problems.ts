@@ -99,7 +99,9 @@ router.put('/p/:pid', async (ctx) => {
   await modifyProblem(pid, title, content, hidden, paint, playerMin, playerMax);
   await modifyRegion(`p${pid}`, title, title);
 
-  ctx.end(200);
+  const problem = await getProblemDetail(pid);
+
+  ctx.end(200, { problem });
 });
 
 router.delete('/p/:pid', async (ctx) => {

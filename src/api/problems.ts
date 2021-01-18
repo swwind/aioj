@@ -11,11 +11,14 @@ export const createProblemAPI = (api: APICore) => {
     getProblemDetail(pid: number) {
       return makeGETRequest<{ problem: ProblemDetail }>(`/p/${pid}`);
     },
-    modifyProblem(pid: number, title: string, content: string, hidden: boolean) {
-      return makePUTRequest(`/p/${pid}`, {
+    modifyProblem(pid: number, title: string, content: string, hidden: boolean, paint: string, playerMin: number, playerMax: number) {
+      return makePUTRequest<{ problem: ProblemDetail }>(`/p/${pid}`, {
         title,
         content,
         hidden,
+        paint,
+        playerMin,
+        playerMax,
       });
     },
     deleteProblem(pid: number) {

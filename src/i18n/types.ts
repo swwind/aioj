@@ -48,6 +48,8 @@ export type InternationalizationLanguage = {
   submit_your_code_or_upload_a_zip: string;
   submit_file: string;
   submit_code: string;
+  author: string;
+  player_number: string;
   my_bots: string;
   all_bots: string;
   create_new_problem: string;

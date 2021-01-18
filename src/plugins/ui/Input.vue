@@ -74,7 +74,7 @@ export default defineComponent({
     type: String,
     placeholder: String,
     modelValue: {
-      type: String,
+      type: [String, Number],
       required: true,
     },
     required: Boolean,

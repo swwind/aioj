@@ -20,9 +20,7 @@ export async function createNewBot(username: string, name: string, description: 
 }
 
 export async function modifyBot(bid: number, name: string, description: string, fid: string) {
-  const bot = await bots.findOneAndUpdate({ bid }, { $set: { name, description, fid }, $inc: { version: 1 } });
-  if (!bot.ok || !bot.value) throw new Error('mongodb fucked');
-  return extractBotDetail(bot.value);
+  await bots.findOneAndUpdate({ bid }, { $set: { name, description, fid }, $inc: { version: 1 } });
 }
 
 export async function getBotDetail(bid: number) {

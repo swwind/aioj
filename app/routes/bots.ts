@@ -117,7 +117,8 @@ router.put('/b/:bid', async (ctx) => {
   }
 
   await deleteFile(bd.fid);
-  const bot = await modifyBot(bid, name, description, fid);
+  await modifyBot(bid, name, description, fid);
+  const bot = await getBotDetail(bid);
 
   ctx.end(200, { bot });
 });
