@@ -53,10 +53,7 @@
           <span class="file-size">
             {{ toSizeString(file.size) }}
           </span>
-          <span class="file-date">
-            <ui-icon name="calendar-alt" regular />
-            {{ new Date(file.date).toLocaleString() }}
-          </span>
+          <ui-date :time="file.date" />
           <span class="file-operations">
             <ui-icon class="icon" name="trash-alt" regular @click="handleDeleteFile(file)" right />
             <ui-icon class="icon" name="code" @click="handleCopyLink(file)" />

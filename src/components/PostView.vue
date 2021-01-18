@@ -9,7 +9,7 @@
       <div class="infos">
         <a :href="`#${comment.cid}`" class="level" :id="comment.cid">#{{ comment.cid }}</a>
         <router-link class="author" :to="`/u/${comment.author}`"><ui-icon name="user" regular right/>{{ comment.author }}</router-link>
-        <time class="time"><ui-icon name="calendar-alt" regular right/>{{ new Date(comment.date).toLocaleString() }}</time>
+        <ui-date :time="comment.date" />
         <span class="edited" v-if="comment.edited">
           <ui-icon name="edit" right />
           <ui-text text="edited" />

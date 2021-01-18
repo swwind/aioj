@@ -40,9 +40,7 @@
         <router-link class="author" :to="`/u/${post.author}`">
           <ui-icon name="user" regular right />{{ post.author }}
         </router-link>
-        <time class="time">
-          <ui-icon name="calendar-alt" regular right />{{ new Date(post.date).toLocaleString() }}
-        </time>
+        <ui-date :time="post.date" />
       </div>
     </ui-card>
     <ui-card class="create" v-if="accounts.username">

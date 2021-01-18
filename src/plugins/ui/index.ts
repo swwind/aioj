@@ -16,6 +16,7 @@ import Text from './Text.vue';
 import Select from './Select.vue';
 import Code from './Code.vue';
 import FileInput from './FileInput.vue';
+import Date from './Date.vue';
 
 export default {
   install(app: App) {
@@ -32,6 +33,7 @@ export default {
     app.component('ui-listed-button', ListedButton);
     app.component('ui-listed-hr', ListedHr);
     app.component('ui-text', Text);
+    app.component('ui-date', Date);
     app.component('ui-select', Select);
     app.component('ui-code', Code);
     app.component('ui-fileinput', FileInput);

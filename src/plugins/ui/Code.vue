@@ -25,6 +25,7 @@
     font-size: 1.25rem;
     line-height: 1.5rem;
     text-align: right;
+    user-select: none;
   }
 
   .text {

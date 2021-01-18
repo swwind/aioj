@@ -9,8 +9,11 @@
         <ui-listed-button icon="location-arrow" v-if="accounts.username" :active="submit" @click="handleSubmit">
           <ui-text text="submit"/>
         </ui-listed-button>
-        <ui-listed-button icon="history">
-          <ui-text text="submissions"/>
+        <ui-listed-button icon="history" v-if="accounts.username" :to="`/bot/list?p=${data.problem.pid}&user=${accounts.username}`">
+          <ui-text text="my_bots"/>
+        </ui-listed-button>
+        <ui-listed-button icon="robot" :to="`/bot/list?p=${data.problem.pid}`">
+          <ui-text text="all_bots"/>
         </ui-listed-button>
         <ui-listed-button icon="comments" :to="`/r/p${data.problem.pid}`">
           <ui-text text="discuss"/>
@@ -29,19 +32,23 @@
     </ui-card>
     <ui-card v-if="submit">
       <template #header>
-        Create a new bot
+        <ui-text text="create_a_new_bot" />
       </template>
       <div class="margin">
-        <ui-text text="Give your bot a professional name!"></ui-text>
+        <ui-text text="give_your_bot_a_name" />
       </div>
-      <ui-input v-model="name" placeholder="bot_name" icon="robot" class="margin"></ui-input>
+      <ui-input v-model="name" placeholder="bot_name" icon="robot" class="margin" required />
       <div class="margin">
-        <ui-text text="Enter your code below or use a zip file..."></ui-text>
+        <ui-text text="submit_your_code_or_upload_a_zip" />
       </div>
       <ui-fileinput class="margin" accept=".zip" v-model="file" />
-      <ui-button icon="location-arrow" type="primary" small v-if="file">Submit File</ui-button>
+      <ui-button icon="location-arrow" type="primary" text v-if="file">
+        <ui-text text="submit_file" />
+      </ui-button>
       <ui-code v-model="code" class="margin" />
-      <ui-button icon="location-arrow" type="primary" class="margin">Submit Code</ui-button>
+      <ui-button icon="location-arrow" type="primary" class="margin">
+        <ui-text text="submit_code" />
+      </ui-button>
     </ui-card>
     <ui-card notitle v-if="editing">
       <ui-input type="text" v-model="title" icon="align-left" placeholder="problem_title" />

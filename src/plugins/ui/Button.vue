@@ -110,7 +110,10 @@ export default defineComponent({
     border-color: transparent;
 
     &:hover {
-      background-color: transparent;
+      background-color: @hover-color;
+    }
+    &:active {
+      background-color: @active-color;
     }
 
     &.primary {

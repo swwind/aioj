@@ -42,6 +42,14 @@ export type InternationalizationLanguage = {
   user: string;
   regions: string;
   problems: string;
+  before_the_big_bang: string;
+  create_a_new_bot: string;
+  give_your_bot_a_name: string;
+  submit_your_code_or_upload_a_zip: string;
+  submit_file: string;
+  submit_code: string;
+  my_bots: string;
+  all_bots: string;
   create_new_problem: string;
   create_new_region: string;
   create_new_post: string;

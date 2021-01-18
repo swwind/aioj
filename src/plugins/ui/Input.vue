@@ -1,5 +1,5 @@
 <template>
-  <div class="input" :class="{ active }">
+  <div class="input" :class="{ active, wrong }">
     <ui-icon v-if="icon" :name="icon" class="icon" />
     <input
       :type="type"
@@ -52,6 +52,11 @@
     }
   }
 
+  &.wrong {
+    background-color: @card-background-color;
+    border-color: @red;
+  }
+
   &.active {
     background-color: @card-background-color;
     border-color: @theme-color;
@@ -72,21 +77,29 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    required: Boolean,
   },
   emits: ['update:modelValue', 'change', 'keydown'],
   setup(props, ctx) {
     const { modelValue } = toRefs(props);
     const value = ref(modelValue.value);
     const active = ref(false);
+    const wrong = ref(false);
 
+    const updateWrongCheck = () => {
+      wrong.value = props.required && !value.value;
+    }
     watch(value, (newvalue) => {
+      updateWrongCheck();
       ctx.emit('update:modelValue', newvalue);
     });
     watch(modelValue, (newvalue) => {
       value.value = newvalue;
     });
 
+
     const handleFocus = () => {
+      updateWrongCheck();
       active.value = true;
     };
     const handleBlur = () => {
@@ -104,6 +117,7 @@ export default defineComponent({
 
     return {
       value,
+      wrong,
       active,
       translate,
       handleFocus,
