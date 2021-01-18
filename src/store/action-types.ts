@@ -8,6 +8,8 @@ export enum ActionTypes {
   FETCH_PROBLEM_DATA = 'fetch_problem_data',
   FETCH_USER_DATA = 'fetch_user_data',
   FETCH_USER_FILES = 'fetch_user_files',
+  FETCH_BOTS_DATA = 'fetch_bots_data',
+  FETCH_BOT_DATA = 'fetch_bot_data',
 
   LOGOUT = 'logout',
   LOGIN = 'login',
@@ -41,6 +43,11 @@ export enum ActionTypes {
   HANDLE_ERROR = 'handle_error',
   HANDLE_RENDER_ERROR = 'handle_render_error',
   ROUTER_PUSH = 'router_push',
+
+  UPDATE_BOT_BY_CODE = 'update_bot_by_code',
+  UPDATE_BOT_BY_FILE = 'update_bot_by_file',
+  CREATE_BOT_BY_CODE = 'create_bot_by_code',
+  CREATE_BOT_BY_FILE = 'create_bot_by_file',
 
   UNBLOCK_SSR = 'unblock_ssr',
 }

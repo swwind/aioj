@@ -38,10 +38,12 @@ export const getTmpDir = async () => {
     const dirname = `/tmp/--aioj-judger-${dm}`;
     try {
       await fs.access(dirname);
+      // exists
+      continue;
+    } catch (e) {
+      // not exists
       await fs.mkdir(dirname);
       return dirname;
-    } catch (e) {
-      continue;
     }
   }
 };

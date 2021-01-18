@@ -1,4 +1,4 @@
-import { CommentDetail, FileDetail, PostDetail, ProblemAbstract, ProblemDetail, RegionDetail, UserDetail } from '../../../app/types';
+import { BotDetail, CommentDetail, FileDetail, PostDetail, ProblemAbstract, ProblemDetail, RegionDetail, UserDetail } from '../../../app/types';
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
 import { API } from '@/api';
@@ -18,6 +18,8 @@ export type State = {
   uploading: boolean;
   progress: number; // range [0,1]
   problems: ProblemAbstract[];
+  bots: BotDetail[];
+  bot: BotDetail;
   problem: ProblemDetail;
 }
 
@@ -31,6 +33,8 @@ export type Mutations<S = State> = {
   [MutationTypes.FETCH_POST_DETAIL](state: S, payload: PostDetail): void;
   [MutationTypes.FETCH_COMMENT_LIST](state: S, payload: CommentDetail[]): void;
   [MutationTypes.FETCH_FILE_LIST](state: S, payload: FileDetail[]): void;
+  [MutationTypes.FETCH_BOT_DETAIL](state: S, payload: BotDetail): void;
+  [MutationTypes.FETCH_BOT_LIST](state: S, payload: BotDetail[]): void;
   [MutationTypes.DELETED_REGION](state: S, payload: string): void;
   [MutationTypes.DELETED_POST](state: S, payload: number): void;
   [MutationTypes.DELETED_COMMENT](state: S, payload: number): void;
@@ -59,6 +63,11 @@ export type Actions<S = State> = {
   [ActionTypes.FETCH_PROBLEM_DATA](actx: ArgumentedActionContext<S>, payload: Argument<number>): Promise<void>;
   [ActionTypes.FETCH_USER_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.FETCH_USER_FILES](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
+  [ActionTypes.FETCH_BOT_DATA](actx: ArgumentedActionContext<S>, payload: Argument<number>): Promise<void>;
+  [ActionTypes.FETCH_BOTS_DATA](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    username: string | undefined;
+    pid: number | undefined;
+  }>): Promise<void>;
   [ActionTypes.DELETE_FILE](actx: ArgumentedActionContext<S>, file: FileDetail): Promise<void>;
   [ActionTypes.UPLOAD_FILE](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.DELETE_REGION](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
@@ -109,6 +118,32 @@ export type Actions<S = State> = {
     title: string;
     description: string;
   }>): Promise<boolean>;
+  [ActionTypes.CREATE_BOT_BY_CODE](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    pid: number;
+    name: string;
+    description: string;
+    src: string;
+    type: string;
+  }>): Promise<void>;
+  [ActionTypes.CREATE_BOT_BY_FILE](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    pid: number;
+    name: string;
+    description: string;
+    file: File;
+  }>): Promise<void>;
+  [ActionTypes.UPDATE_BOT_BY_CODE](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    bid: number;
+    name: string;
+    description: string;
+    src: string;
+    type: string;
+  }>): Promise<void>;
+  [ActionTypes.UPDATE_BOT_BY_FILE](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    bid: number;
+    name: string;
+    description: string;
+    file: File;
+  }>): Promise<void>;
 }
 
 export const createDataModule = (api: API) => {
@@ -124,6 +159,8 @@ export const createDataModule = (api: API) => {
     progress: 0,
     problems: [],
     problem: {} as any,
+    bots: [],
+    bot: {} as any,
   });
 
   const mutations: Mutations = {
@@ -153,6 +190,12 @@ export const createDataModule = (api: API) => {
     },
     [MutationTypes.FETCH_FILE_LIST](state, payload) {
       state.files = payload;
+    },
+    [MutationTypes.FETCH_BOT_DETAIL](state, payload) {
+      state.bot = payload;
+    },
+    [MutationTypes.FETCH_BOT_LIST](state, payload) {
+      state.bots = payload;
     },
     [MutationTypes.DELETED_REGION](state, payload) {
       state.regions = state.regions.filter((s) => s.region !== payload);
@@ -297,6 +340,24 @@ export const createDataModule = (api: API) => {
       const result = await api.getUserUploadedFiles(username);
       if (result.status === 200) {
         commit(MutationTypes.FETCH_FILE_LIST, result.files);
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+      }
+    },
+    async [ActionTypes.FETCH_BOT_DATA]({ commit, dispatch }, payload) {
+      const bid = unref(payload);
+      const result = await api.getBotDetail(bid);
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_BOT_DETAIL, result.bot);
+      } else {
+        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
+      }
+    },
+    async [ActionTypes.FETCH_BOTS_DATA]({ commit, dispatch }, payload) {
+      const { username, pid } = unwarpArguments(payload);
+      const result = await api.getBotList(pid, username);
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_BOT_LIST, result.bots);
       } else {
         dispatch(ActionTypes.HANDLE_ERROR, result);
       }
@@ -459,6 +520,54 @@ export const createDataModule = (api: API) => {
       } else {
         dispatch(ActionTypes.HANDLE_ERROR, result);
         return false;
+      }
+    },
+    async [ActionTypes.CREATE_BOT_BY_CODE]({ dispatch }, payload) {
+      const { name, description, src, type, pid } = unwarpArguments(payload);
+      const result = await api.createNewBotFromCode(pid, name, description, src, type);
+      if (result.status === 200) {
+        dispatch(ActionTypes.ROUTER_PUSH, `/b/${result.bid}`);
+        dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+      }
+    },
+    async [ActionTypes.CREATE_BOT_BY_FILE]({ commit, dispatch }, payload) {
+      const { name, description, file, pid } = unwarpArguments(payload);
+      commit(MutationTypes.UPLOAD_START);
+      const result = await api.createNewBotFromFile(pid, name, description, file, (e) => {
+        commit(MutationTypes.UPLOAD_PROGRESS, e.loaded / e.total);
+      });
+      commit(MutationTypes.UPLOAD_END);
+      if (result.status === 200) {
+        dispatch(ActionTypes.ROUTER_PUSH, `/b/${result.bid}`);
+        dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+      }
+    },
+    async [ActionTypes.UPDATE_BOT_BY_CODE]({ commit, dispatch }, payload) {
+      const { name, description, src, type, bid } = unwarpArguments(payload);
+      const result = await api.updateBotFromCode(bid, name, description, src, type);
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_BOT_DETAIL, result.bot);
+        dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+      }
+    },
+    async [ActionTypes.UPDATE_BOT_BY_FILE]({ commit, dispatch }, payload) {
+      const { name, description, file, bid } = unwarpArguments(payload);
+      commit(MutationTypes.UPLOAD_START);
+      const result = await api.updateBotFromFile(bid, name, description, file, (e) => {
+        commit(MutationTypes.UPLOAD_PROGRESS, e.loaded / e.total);
+      });
+      commit(MutationTypes.UPLOAD_END);
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_BOT_DETAIL, result.bot);
+        dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
       }
     },
   };

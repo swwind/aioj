@@ -38,15 +38,16 @@
         <ui-text text="give_your_bot_a_name" />
       </div>
       <ui-input v-model="name" placeholder="bot_name" icon="robot" class="margin" required />
+      <ui-editor v-model="description" class="margin" placeholder="Fooosss" />
       <div class="margin">
         <ui-text text="submit_your_code_or_upload_a_zip" />
       </div>
       <ui-fileinput class="margin" accept=".zip" v-model="file" />
-      <ui-button icon="location-arrow" type="primary" text v-if="file">
+      <ui-button icon="location-arrow" type="primary" text v-if="file" @click="handleSubmitByFile">
         <ui-text text="submit_file" />
       </ui-button>
       <ui-code v-model="code" class="margin" />
-      <ui-button icon="location-arrow" type="primary" class="margin">
+      <ui-button icon="location-arrow" type="primary" class="margin" @click="handleSubmitByCode">
         <ui-text text="submit_code" />
       </ui-button>
     </ui-card>
@@ -93,7 +94,8 @@ export default defineComponent({
     const editing = ref(false);
     const submit = ref(false);
     const name = ref('');
-    const code = ref({ lang: 1, code: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n  return 0;\n}' });
+    const description = ref('');
+    const code = ref({ lang: 'cpp', code: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n  return 0;\n}' });
     const file = ref<File | null>(null);
     const content = ref('');
     const title = ref('');
@@ -103,6 +105,27 @@ export default defineComponent({
     };
     watch(pid, updateFetch);
     await updateFetch();
+
+    const handleSubmitByCode = () => {
+      store.dispatch(ActionTypes.CREATE_BOT_BY_CODE, {
+        pid,
+        name,
+        description,
+        src: code.value.code,
+        type: code.value.lang,
+      });
+    }
+
+    const handleSubmitByFile = () => {
+      if (file.value === null) return;
+
+      store.dispatch(ActionTypes.CREATE_BOT_BY_FILE, {
+        pid,
+        name,
+        description,
+        file: file.value,
+      });
+    }
 
     const handleEdit = () => {
       content.value = store.state.data.problem.content;
@@ -150,6 +173,9 @@ export default defineComponent({
       code,
       file,
       handleEdit,
+      description,
+      handleSubmitByCode,
+      handleSubmitByFile,
       hasPermission,
       handleExitEdit,
       handleUpdateProblem,

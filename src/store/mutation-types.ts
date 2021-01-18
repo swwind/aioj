@@ -13,6 +13,8 @@ export enum MutationTypes {
   FETCH_COMMENT_LIST = 'fetch_comment_list',
   FETCH_USER_DETAIL = 'fetch_user_detail',
   FETCH_FILE_LIST = 'fetch_file_list',
+  FETCH_BOT_LIST = 'fetch_bot_list',
+  FETCH_BOT_DETAIL = 'fetch_bot_detail',
 
   DELETED_REGION = 'deleted_region',
   DELETED_POST = 'deleted_post',

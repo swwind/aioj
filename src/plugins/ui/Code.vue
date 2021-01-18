@@ -63,9 +63,36 @@ export default defineComponent({
     const { modelValue } = toRefs(props);
     const code = ref(modelValue.value.code ?? '');
     const active = ref(false);
-    const lang = ref(modelValue.value.lang ?? 0);
+    const lang = ref(modelValue.value.lang ?? 'cpp');
     const rows = ref(code.value.split('\n').length);
-    const keys = ['C', 'C++', 'Python', 'JavaScript (NodeJS)', 'Java (Java SE)', 'TypeScript (Deno)', 'Haskell'];
+    const keys = [{
+      name: 'C',
+      value: 'c',
+    }, {
+      name: 'C++',
+      value: 'cpp',
+    }, {
+      name: 'Java (SE 8)',
+      value: 'java',
+    }, {
+      name: 'Python 2',
+      value: 'py2',
+    }, {
+      name: 'Python 3',
+      value: 'py3',
+    }, {
+      name: 'Haskell',
+      value: 'hs',
+    }, {
+      name: 'Clojure',
+      value: 'clj',
+    }, {
+      name: 'JavaScript (node.js 14)',
+      value: 'js',
+    }, {
+      name: 'TypeScript (deno)',
+      value: 'ts',
+    }];
 
     watch(code, () => {
       ctx.emit('update:modelValue', { lang: lang.value, code: code.value });

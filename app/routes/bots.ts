@@ -1,4 +1,4 @@
-import { createNewBot, getBotDetail, modifyBot } from 'app/db/bots';
+import { createNewBot, getBotDetail, getBotList, modifyBot } from 'app/db/bots';
 import { FILE_NOT_FOUND, LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from 'app/errors';
 import { Tools, State } from 'app/types';
 import { getTmpDir } from 'app/utils';
@@ -6,7 +6,7 @@ import { Request } from 'koa';
 import Router from 'koa-router';
 import path from 'path';
 import { promises as fs } from 'fs';
-import { exec } from 'app/judger/spawner';
+import { exec } from 'child_process';
 import { deleteFile, saveFileWithoutUser } from 'app/db/files';
 
 const router = new Router<State, Tools>();
@@ -117,9 +117,17 @@ router.put('/b/:bid', async (ctx) => {
   }
 
   await deleteFile(bd.fid);
-  await modifyBot(bid, name, description, fid);
+  const bot = await modifyBot(bid, name, description, fid);
 
-  ctx.end(200);
+  ctx.end(200, { bot });
+});
+
+router.get('/b/list', async (ctx) => {
+  const pid = typeof ctx.query.p !== 'undefined' ? Number(ctx.query.p) : undefined;
+  const username = typeof ctx.query.u !== 'undefined' ? String(ctx.query.u) : undefined;
+
+  const bots = await getBotList(pid, username);
+  ctx.end(200, { bots });
 });
 
 export default router;

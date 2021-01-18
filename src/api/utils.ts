@@ -70,9 +70,9 @@ export const createAPICore = (cookie?: string) => {
     }));
   };
 
-  const makeMultipartRequest = <T = {}> (url: string, formdata: FormData, onUploadProgress: (progressEvent: any) => void) => {
+  const makeMultipartRequest = <T = {}> (url: string, formdata: FormData, onUploadProgress: (progressEvent: any) => void, method: Method = 'POST') => {
     return makeRequest<T>(request.request({
-      method: 'post',
+      method,
       url,
       data: formdata,
       headers: {

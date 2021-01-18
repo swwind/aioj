@@ -34,6 +34,9 @@ export async function createNewProblem(username: string, title: string): Promise
     date: Date.now(),
     hidden: true,
     fid: '',
+    paint: '',
+    playerMin: 2,
+    playerMax: 2,
   });
   if (!result.result.ok) {
     return Result.error(SERVER_ERROR);
@@ -45,12 +48,15 @@ export async function createNewProblem(username: string, title: string): Promise
   return Result.ok(pid);
 }
 
-export async function modifyProblem(pid: number, title: string, content: string, hidden: boolean) {
+export async function modifyProblem(pid: number, title: string, content: string, hidden: boolean, paint: string, playerMin: number, playerMax: number) {
   await problems.findOneAndUpdate({ pid }, {
     $set: {
       title,
       content,
       hidden,
+      paint,
+      playerMin,
+      playerMax,
     },
   });
 }

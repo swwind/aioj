@@ -2,11 +2,11 @@
   <div class="select">
     <div
       class="options"
-      v-for="(key, index) in keys"
-      :key="index"
-      :class="{ selected: index === selected }"
-      @click="handleClick(index)">
-      {{ key }}
+      v-for="item in keys"
+      :key="item.name"
+      :class="{ selected: item.value === selected }"
+      @click="handleClick(item.value)">
+      {{ item.name }}
     </div>
   </div>
 </template>
@@ -64,13 +64,13 @@
 import { defineComponent, ref } from 'vue';
 export default defineComponent({
   props: {
-    modelValue: Number,
+    modelValue: String,
     keys: Array,
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    const selected = ref(props.modelValue ?? 0);
-    const handleClick = (newv: number) => {
+    const selected = ref(props.modelValue ?? '');
+    const handleClick = (newv: string) => {
       emit('update:modelValue', newv);
       selected.value = newv;
     };

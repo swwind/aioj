@@ -73,6 +73,9 @@ export function extractProblemDetail(pd: ProblemData): ProblemDetail {
     date: pd.date,
     hidden: pd.hidden,
     fid: pd.fid,
+    paint: pd.paint,
+    playerMax: pd.playerMax,
+    playerMin: pd.playerMin,
   };
 }
 export function extractProblemAbstract(pd: ProblemData): ProblemAbstract {

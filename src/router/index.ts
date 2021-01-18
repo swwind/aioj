@@ -60,13 +60,6 @@ const routes: Array<RouteRecordRaw> = [
       pid: Number(route.params.pid),
     }),
   }, {
-    path: '/submit/:pid',
-    name: 'CommitBot',
-    component: CommitBot,
-    props: (route) => ({
-      pid: Number(route.params.pid),
-    }),
-  }, {
     path: '/login',
     name: 'Login',
     component: Login,

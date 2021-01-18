@@ -85,7 +85,7 @@ WIP
 
 输入的第一行包括一个整数，表示您被分配到的 id。
 
-其中输入的第一行为主程序的初始化输入。
+接下来的一行为主程序的初始化输入（可能没有，如果是这样那就是一个空行）。
 
 接下来的每一行的第一个数为当前操作的 bot id，如果这个 id 与您被分配到的 id 相同，则您需要做出决策，并将操作输出到 stdout。否则接下来由空格分隔，衔接上对方 bot 的决策。选手需要自行模拟对方操作对当前战局产生的影响。
 
@@ -136,17 +136,13 @@ int main() {
 
 您可以直接提交单个文件，或者整个文件夹。
 
-提交文件夹的时候请注意，请将文件夹打包成 \`.tar\`, \`.tar.gz\` 或者 \`.zip\` 的形式。
+提交文件夹的时候请注意，请将文件夹打包成 \`.zip\` 的形式。
 
 文件夹中需要包含一个 \`settings.json\` 文件，其中需要包含 \`main\` 字段，填写入口程序的相对文件名。
 
 ### 对于出题人
 
-您可能需要写一堆文件。
-
-**settings.json**
-
-包含若干字段，\`main\` 字段表示主程序的入口文件，\`paint\` 字段表示绘制部分的 js 文件，\`players\` 表示限制的玩家数量。
+您可能需要写一堆东西
 
 **主程序**
 
@@ -197,11 +193,8 @@ int checkWin() {
       // [-]
       one = two = 0;
       for (int k = 0; k < 5; ++ k) {
-        if (board[i][j+k] == 0) {
-          ++ one;
-        } else if (board[i][j+k] == 1) {
-          ++ two;
-        }
+        one += board[i][j+k] == 0;
+        tow += board[i][j+k] == 1;
       }
       if (one == 5) return 0;
       if (two == 5) return 1;
@@ -209,11 +202,8 @@ int checkWin() {
       // [|]
       one = two = 0;
       for (int k = 0; k < 5; ++ k) {
-        if (board[i+k][j] == 0) {
-          ++ one;
-        } else if (board[i+k][j] == 1) {
-          ++ two;
-        }
+        one += board[i+k][j] == 0;
+        tow += board[i+k][j] == 1;
       }
       if (one == 5) return 0;
       if (two == 5) return 1;
@@ -221,11 +211,8 @@ int checkWin() {
       // [\\]
       one = two = 0;
       for (int k = 0; k < 5; ++ k) {
-        if (board[i+k][j+k] == 0) {
-          ++ one;
-        } else if (board[i+k][j+k] == 1) {
-          ++ two;
-        }
+        one += board[i+k][j+k] == 0;
+        tow += board[i+k][j+k] == 1;
       }
       if (one == 5) return 0;
       if (two == 5) return 1;
@@ -233,11 +220,8 @@ int checkWin() {
       // [/]
       one = two = 0;
       for (int k = 0; k < 5; ++ k) {
-        if (board[i+4-k][j+k] == 0) {
-          ++ one;
-        } else if (board[i+4-k][j+k] == 1) {
-          ++ two;
-        }
+        one += board[i+4-k][j+k] == 0;
+        tow += board[i+4-k][j+k] == 1;
       }
       if (one == 5) return 0;
       if (two == 5) return 1;
@@ -252,7 +236,8 @@ int main(int argc, const char* argv[]) {
   int n = 0;
   std::cin >> n;
   // assert(n == 2);
-  std::cout << output() << std::endl << std::flush;
+
+  std::cout << std::endl << std::flush;
 
   int nowplayer = 0;
   std::cout << "continue " << nowplayer << std::endl << std::flush;
@@ -292,9 +277,9 @@ int main(int argc, const char* argv[]) {
 }
 \`\`\`
 
-接下来需要一个 \`paint.js\` 来在前端将战局绘制成图形。
+接下来需要一个绘图脚本来在前端将战局绘制成图形。
 
-需要在 paint.js 中暴露一个函数，接受两个参数，\`ctx\` 和 \`ws\`，分别为 CanvasContext 对象和 WebSocket 对象。
+需要在全局中暴露一个函数，接受两个参数，\`ctx\` 和 \`ws\`，分别为 CanvasContext 对象和 WebSocket 对象。
 
 具体接口请参考以下五子棋绘制代码：
 
@@ -334,7 +319,7 @@ function __fucking_paint(ctx, ws) {
 }
 
 // expose here
-module.exports = __fucking_paint;
+window.__paint_script__ = __fucking_paint;
 \`\`\`
 `,
   },

@@ -74,6 +74,9 @@ router.put('/p/:pid', async (ctx) => {
     title: 'string',
     content: 'string',
     hidden: 'boolean',
+    playerMin: 'number',
+    playerMax: 'number',
+    paint: 'string',
   })) {
     ctx.end(400, PARAMS_MISSING);
     return;
@@ -92,9 +95,9 @@ router.put('/p/:pid', async (ctx) => {
     return;
   }
 
-  const { content, hidden, title } = ctx.request.body;
-  await modifyProblem(pid, title, content, hidden);
-  await modifyRegion(`p${pid}`, title, '');
+  const { content, hidden, title, paint, playerMin, playerMax } = ctx.request.body;
+  await modifyProblem(pid, title, content, hidden, paint, playerMin, playerMax);
+  await modifyRegion(`p${pid}`, title, title);
 
   ctx.end(200);
 });

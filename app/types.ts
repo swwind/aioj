@@ -85,6 +85,9 @@ export type ProblemDetail = {
   date: number;
   hidden: boolean;
   fid: string;
+  paint: string;
+  playerMin: number;
+  playerMax: number;
 }
 
 export type ProblemData = {

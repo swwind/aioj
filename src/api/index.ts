@@ -4,6 +4,7 @@ import { createFriendsAPI } from './friends';
 import { createFilesAPI } from './files';
 import { createAPICore } from './utils';
 import { createProblemAPI } from './problems';
+import { createBotAPI } from './bots';
 
 export const createAPI = (cookie?: string) => {
   const apicore = createAPICore(cookie);
@@ -14,6 +15,7 @@ export const createAPI = (cookie?: string) => {
     ...createFriendsAPI(apicore),
     ...createFilesAPI(apicore),
     ...createProblemAPI(apicore),
+    ...createBotAPI(apicore),
     ...apicore,
   };
 };

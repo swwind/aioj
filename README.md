@@ -213,13 +213,25 @@ Content-Type: application/json
 [x] POST   /b/:pid                      Create a new bot
     - name: string
     - description: string
+    - paint: string
+    - playerMin: number
+    - playerMax: number
     - [src: string, type: string]
     - [file: File]
+    + bid: number
 [x] PUT    /b/:bid                      Modify a bot
     - name: string
     - description: string
+    - paint: string
+    - playerMin: number
+    - playerMax: number
     - [src: string, type: string]
     - [file: File]
+    + bot: BotDetail
+[x] GET    /b/list                      Get bots list
+    - (query) p: number             --  Problem id
+    - (query) u: string             --  Username
+    + bots: BotDetail[]
 [x] POST   /s/new                       Create a new round
     - pid: number
     - bids: number[]
