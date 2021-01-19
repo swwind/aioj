@@ -2,7 +2,6 @@ import { BotDetail, CommentDetail, FileDetail, PostDetail, ProblemAbstract, Prob
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
 import { API } from '@/api';
-import { translate } from '@/i18n/translate';
 import { Argument, Arguments, chooseFile, unwarpArguments } from '@/utils';
 import { ArgumentedActionContext } from '..';
 import { unref } from 'vue';
@@ -255,26 +254,13 @@ export const createDataModule = (api: API) => {
   };
 
   const actions: Actions = {
-    async [ActionTypes.FETCH_POST_DATA]({ rootState, commit, dispatch }, payload) {
+    async [ActionTypes.FETCH_POST_DATA]({ commit, dispatch }, payload) {
       const { region, pid } = unwarpArguments(payload);
       const result = await api.getPostDetail(region, pid);
       if (result.status === 200) {
         commit(MutationTypes.FETCH_POST_DETAIL, result.post);
         commit(MutationTypes.FETCH_COMMENT_LIST, result.comments);
         commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
-        commit(MutationTypes.CHANGE_SSR_TITLE, [{
-          name: translate(rootState.i18n.lang, 'region'),
-          url: '/r',
-          show: false,
-        }, {
-          name: result.region.title,
-          url: `/r/${region}`,
-          show: false,
-        }, {
-          name: result.post.title,
-          url: '',
-          show: true,
-        }]);
       }
       dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
@@ -292,49 +278,31 @@ export const createDataModule = (api: API) => {
       }
       dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
-    async [ActionTypes.FETCH_PROBLEM_DATA]({ commit, rootState, state, dispatch }, payload) {
+    async [ActionTypes.FETCH_PROBLEM_DATA]({ commit, dispatch }, payload) {
       const pid = unref(payload);
       const result = await api.getProblemDetail(pid);
       if (result.status === 200) {
         commit(MutationTypes.FETCH_PROBLEM_DETAIL, result.problem);
-        commit(MutationTypes.CHANGE_SSR_TITLE, [{
-          name: translate(rootState.i18n.lang, 'problems'),
-          url: '/p',
-          show: true,
-        }, {
-          name: state.problem.title,
-          url: '',
-          show: true,
-        }]);
       }
       dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
-    async [ActionTypes.FETCH_REGION_DATA]({ rootState: state, commit, dispatch }, payload) {
+    async [ActionTypes.FETCH_REGION_DATA]({ commit, dispatch }, payload) {
       const region = unref(payload);
       const result = await api.getPostsList(region);
       if (result.status === 200) {
         commit(MutationTypes.FETCH_REGION_DETAIL, result.region);
         commit(MutationTypes.FETCH_POST_LIST, result.posts);
-        commit(MutationTypes.CHANGE_SSR_TITLE, [
-          {
-            name: translate(state.i18n.lang, 'region'),
-            url: '/r',
-            show: true,
-          },
-          result.region.title,
-        ]);
         commit(MutationTypes.CHANGE_SSR_META, {
           description: result.region.description,
         });
       }
       dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
-    async [ActionTypes.FETCH_USER_DATA]({ rootState: state, commit, dispatch }, payload) {
+    async [ActionTypes.FETCH_USER_DATA]({ commit, dispatch }, payload) {
       const username = unref(payload);
       const result = await api.getUserDetail(username);
       if (result.status === 200) {
         commit(MutationTypes.FETCH_USER_DETAIL, result.user);
-        commit(MutationTypes.CHANGE_SSR_TITLE, [translate(state.i18n.lang, 'user'), result.user.username]);
       }
       dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
     },
@@ -468,20 +436,11 @@ export const createDataModule = (api: API) => {
         return false;
       }
     },
-    async [ActionTypes.UPDATE_PROBLEM]({ dispatch, commit, rootState }, payload) {
+    async [ActionTypes.UPDATE_PROBLEM]({ dispatch, commit }, payload) {
       const { title, content, hidden, pid, playerMin, playerMax, paint } = unwarpArguments(payload);
       const result = await api.modifyProblem(pid, title, content, hidden, paint, playerMin, playerMax);
       if (result.status === 200) {
         commit(MutationTypes.FETCH_PROBLEM_DETAIL, result.problem);
-        commit(MutationTypes.CHANGE_SSR_TITLE, [{
-          name: translate(rootState.i18n.lang, 'problems'),
-          url: '/p',
-          show: true,
-        }, {
-          name: title,
-          url: '',
-          show: true,
-        }]);
         dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
         return true;
       } else {
@@ -501,19 +460,11 @@ export const createDataModule = (api: API) => {
         return false;
       }
     },
-    async [ActionTypes.UPDATE_REGION]({ dispatch, commit, rootState: state }, payload) {
+    async [ActionTypes.UPDATE_REGION]({ dispatch, commit }, payload) {
       const { region, title, description } = unwarpArguments(payload);
       const result = await api.modifyRegion(region, title, description);
       if (result.status === 200) {
         commit(MutationTypes.UPDATE_REGION, { title, description });
-        commit(MutationTypes.CHANGE_SSR_TITLE, [
-          {
-            name: translate(state.i18n.lang, 'region'),
-            url: '/r',
-            show: true,
-          },
-          title,
-        ]);
         dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
         return true;
       } else {

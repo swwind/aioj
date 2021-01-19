@@ -1,11 +1,13 @@
 <template>
-  <p class="breadcrumbs">
-    <span class="breadcrumb" v-for="subtitle of ssr.title.slice(0, -1)" :key="subtitle.name">
-      <router-link v-if="subtitle.url" :to="subtitle.url">{{ subtitle.name }}</router-link>
-      <span v-else>{{ subtitle.name }}</span>
+  <p class="breadcrumbs" v-if="ssr.status === 200">
+    <span class="breadcrumb" v-for="i in [1, 2, 3, 4, 5]" :key="i">
+      <slot :name="`route${i}`"></slot>
     </span>
   </p>
-  <h1 v-if="ssr.title.length" class="title">{{ ssr.title[ssr.title.length - 1].name }}</h1>
+  <h1 class="title">
+    <slot v-if="ssr.status === 200"></slot>
+    <ui-text v-else text="not_found" />
+  </h1>
 </template>
 
 <style lang="less" scoped>
@@ -19,6 +21,10 @@
       content: " / ";
       margin: 0 5px;
     }
+
+    &:empty {
+      display: none;
+    }
   }
 }
 
@@ -31,12 +37,31 @@
 </style>
 
 <script lang="ts">
+import { translate } from '@/i18n/translate';
+import { MyStore } from '@/store';
+import { MutationTypes } from '@/store/mutation-types';
 import { defineComponent, toRefs } from 'vue';
 import { useStore } from 'vuex';
 export default defineComponent({
-  setup() {
-    const store = useStore();
-    return toRefs(store.state);
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    translate: Boolean,
+  },
+  setup(props) {
+    const store = useStore() as MyStore;
+    if (store.state.ssr.status === 200) {
+      store.commit(MutationTypes.CHANGE_SSR_TITLE, props.translate
+        ? translate(store.state.i18n.lang, props.title)
+        : props.title);
+    } else {
+      store.commit(MutationTypes.CHANGE_SSR_TITLE, translate(store.state.i18n.lang, 'not_found'));
+    }
+    return {
+      ...toRefs(store.state),
+    };
   },
 });
 </script>

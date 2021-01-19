@@ -1,5 +1,13 @@
 <template>
-  <ui-header />
+  <ui-header :title="data.post.title">
+    <template #route1>
+      <ui-text to="/r" text="region" />
+    </template>
+    <template #route2>
+      <ui-text :to="`/r/${data.region.region}`" :text="data.region.title" row />
+    </template>
+    <ui-text :text="data.post.title" />
+  </ui-header>
   <div v-if="ssr.status === 200">
     <ui-card
       notitle

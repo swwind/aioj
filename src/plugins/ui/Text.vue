@@ -1,6 +1,12 @@
 <template>
-  <ui-icon v-if="icon" :name="icon"/>
-  {{ translate(i18n.lang, text) }}
+  <span v-if="!to">
+    <ui-icon v-if="icon" :name="icon"/>
+    {{ row ? text : translate(i18n.lang, text) }}
+  </span>
+  <router-link v-else :to="to">
+    <ui-icon v-if="icon" :name="icon"/>
+    {{ row ? text : translate(i18n.lang, text) }}
+  </router-link>
 </template>
 
 <script lang="ts">
@@ -12,6 +18,8 @@ export default defineComponent({
   props: {
     text: String,
     icon: String,
+    to: String,
+    row: Boolean,
   },
   setup() {
     const store = useStore() as MyStore;

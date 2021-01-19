@@ -18,9 +18,11 @@ export const createBotAPI = (api: APICore) => {
 
     createNewBotFromCode(pid: number, name: string, description: string, src: string, type: string) {
       return makePOSTRequest<{ bid: number }>(`/b/${pid}`, {
-        name, description,
-        src, type,
-      })
+        name,
+        description,
+        src,
+        type,
+      });
     },
 
     createNewBotFromFile(pid: number, name: string, description: string, file: File, onProgress: (e: any) => void) {
@@ -33,9 +35,11 @@ export const createBotAPI = (api: APICore) => {
 
     updateBotFromCode(bid: number, name: string, description: string, src: string, type: string) {
       return makePUTRequest<{ bot: BotDetail }>(`/b/${bid}`, {
-        name, description,
-        src, type,
-      })
+        name,
+        description,
+        src,
+        type,
+      });
     },
 
     updateBotFromFile(bid: number, name: string, description: string, file: File, onProgress: (e: any) => void) {

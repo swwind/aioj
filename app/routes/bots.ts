@@ -23,7 +23,7 @@ async function patchSourceFile(req: Request) {
     }));
 
     await new Promise<void>((resolve, reject) => {
-      exec(`zip "${
+      exec(`zip -j "${
         path.join(dirname, 'pack.zip')
       }" "${
         path.join(dirname, filename)
@@ -129,6 +129,12 @@ router.get('/b/list', async (ctx) => {
 
   const bots = await getBotList(pid, username);
   ctx.end(200, { bots });
+});
+
+router.get('/b/:bid', async (ctx) => {
+  const bid = Number(ctx.params.bid);
+  const bot = await getBotDetail(bid);
+  ctx.end(200, { bot });
 });
 
 export default router;

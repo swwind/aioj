@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue';
 export default defineComponent({
   props: {
     time: Number,
@@ -18,10 +18,10 @@ export default defineComponent({
       const date = new Date(props.time);
       const day = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
 
-      return `A.D. ${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} (${day}) ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+      return `A.D. ${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} (${day}) ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
     });
 
     return { text };
-  }
-})
+  },
+});
 </script>

@@ -49,6 +49,7 @@ const en_us: InternationalizationLanguage = {
   author: 'Author',
   player_number: 'Player number',
   my_bots: 'My bots',
+  bot: 'Bot',
   all_bots: 'All bots',
   user: 'User',
   regions: 'Regions',

@@ -1,5 +1,8 @@
 <template>
-  <ui-header />
+  <ui-header title="problems" translate>
+    <ui-text text="problems" />
+  </ui-header>
+
   <ui-card notitle>
     <ui-icon
       v-if="!data.problems.length"
@@ -37,10 +40,8 @@
 </style>
 
 <script lang="ts">
-import { translate } from '@/i18n/translate';
 import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
-import { MutationTypes } from '@/store/mutation-types';
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 export default defineComponent({
@@ -48,7 +49,6 @@ export default defineComponent({
     const store = useStore() as MyStore;
     const title = ref('');
 
-    store.commit(MutationTypes.CHANGE_SSR_TITLE, translate(store.state.i18n.lang, 'problems'));
     await store.dispatch(ActionTypes.FETCH_PROBLEMS_DATA);
 
     const handleCreateProblem = async () => {

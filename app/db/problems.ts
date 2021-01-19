@@ -49,7 +49,7 @@ export async function createNewProblem(username: string, title: string): Promise
 }
 
 export async function modifyProblem(pid: number, title: string, content: string, hidden: boolean, paint: string, playerMin: number, playerMax: number) {
-  const result = await problems.findOneAndUpdate({ pid }, {
+  await problems.findOneAndUpdate({ pid }, {
     $set: {
       title,
       content,

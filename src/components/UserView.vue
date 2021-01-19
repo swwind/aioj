@@ -1,5 +1,11 @@
 <template>
-  <ui-header />
+  <ui-header :title="data.user.username">
+    <template #route1>
+      <ui-text text="user" />
+    </template>
+    <ui-text :text="data.user.username" row />
+  </ui-header>
+
   <div v-if="data.user.username" class="userview">
     <ui-card>
       <template #header>

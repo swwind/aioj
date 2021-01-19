@@ -1,5 +1,11 @@
 <template>
-  <ui-header />
+  <ui-header :title="data.problem.title">
+    <template #route1>
+      <ui-text text="problems" to="/p" />
+    </template>
+    <ui-text :text="data.problem.title" row />
+  </ui-header>
+
   <ui-sidebar v-if="ssr.status === 200">
     <template #sidebar>
       <ui-card nopadding>
@@ -163,7 +169,7 @@ export default defineComponent({
         src: code.value.code,
         type: code.value.lang,
       });
-    }
+    };
 
     const handleSubmitByFile = () => {
       if (file.value === null) return;
@@ -174,7 +180,7 @@ export default defineComponent({
         description,
         file: file.value,
       });
-    }
+    };
 
     const handleEdit = () => {
       content.value = store.state.data.problem.content;

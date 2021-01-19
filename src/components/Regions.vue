@@ -1,5 +1,8 @@
 <template>
-  <ui-header />
+  <ui-header title="regions" translate>
+    <ui-text text="regions" />
+  </ui-header>
+
   <ui-card notitle>
     <ui-icon
       v-if="!data.regions.length"
@@ -48,14 +51,11 @@
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 import { MyStore } from '@/store';
-import { translate } from '@/i18n/translate';
-import { MutationTypes } from '@/store/mutation-types';
 import { ActionTypes } from '@/store/action-types';
 
 export default defineComponent({
   async setup() {
     const store = useStore() as MyStore;
-    store.commit(MutationTypes.CHANGE_SSR_TITLE, translate(store.state.i18n.lang, 'regions'));
 
     const region = ref('');
     const title = ref('');

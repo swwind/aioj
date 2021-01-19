@@ -1,5 +1,8 @@
 <template>
-  <ui-header />
+  <ui-header title="help" translate>
+    <ui-text text="help" />
+  </ui-header>
+
   <ui-card v-for="(help, index) in helps" :key="index">
     <template #header>
       {{ help.title[i18n.lang] }}
@@ -11,9 +14,7 @@
 <script lang="ts">
 import { useStore } from 'vuex';
 import { MyStore } from '@/store';
-import { translate } from '@/i18n/translate';
 import { defineComponent, toRefs } from 'vue';
-import { MutationTypes } from '@/store/mutation-types';
 
 const helps = [{
   title: {
@@ -328,8 +329,6 @@ window.__paint_script__ = __fucking_paint;
 export default defineComponent({
   setup() {
     const store = useStore() as MyStore;
-
-    store.commit(MutationTypes.CHANGE_SSR_TITLE, translate(store.state.i18n.lang, 'help'));
 
     return {
       helps,

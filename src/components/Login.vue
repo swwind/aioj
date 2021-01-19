@@ -1,5 +1,8 @@
 <template>
-  <ui-header />
+  <ui-header title="login" translate>
+    <ui-text text="login" />
+  </ui-header>
+
   <ui-card notitle>
     <ui-input
       type="text"
@@ -31,9 +34,7 @@
 import { defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { translate } from '@/i18n/translate';
 import { MyStore } from '@/store';
-import { MutationTypes } from '@/store/mutation-types';
 import { ActionTypes } from '@/store/action-types';
 
 export default defineComponent({
@@ -45,7 +46,6 @@ export default defineComponent({
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
 
     const store = useStore() as MyStore;
-    store.commit(MutationTypes.CHANGE_SSR_TITLE, translate(store.state.i18n.lang, 'login'));
 
     const handleLogin = async () => {
       await store.dispatch(ActionTypes.LOGIN, {

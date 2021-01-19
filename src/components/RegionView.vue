@@ -1,5 +1,11 @@
 <template>
-  <ui-header />
+  <ui-header :title="data.region.title">
+    <template #route1>
+      <ui-text text="region" to="/r" />
+    </template>
+    <ui-text :text="data.region.title" row />
+  </ui-header>
+
   <div v-if="ssr.status === 200">
     <ui-card notitle>
       <div class="desc">

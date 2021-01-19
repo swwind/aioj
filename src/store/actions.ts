@@ -26,11 +26,10 @@ const createActions = (router: Router): Actions => ({
       notify('error', translate(state.i18n.lang, payload.error));
     }
   },
-  async [ActionTypes.HANDLE_RENDER_ERROR]({ commit, state, dispatch }, payload) {
+  async [ActionTypes.HANDLE_RENDER_ERROR]({ commit, dispatch }, payload) {
     if (payload.status >= 400) {
       dispatch(ActionTypes.HANDLE_ERROR, payload);
       commit(MutationTypes.CHANGE_SSR_STATUS, 404);
-      commit(MutationTypes.CHANGE_SSR_TITLE, translate(state.i18n.lang, 'not_found'));
     } else if (payload.status === 200) {
       commit(MutationTypes.CHANGE_SSR_STATUS, 200);
     }

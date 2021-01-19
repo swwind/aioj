@@ -1,5 +1,8 @@
 <template>
-  <ui-header />
+  <ui-header title="register" translate>
+    <ui-text text="register" />
+  </ui-header>
+
   <ui-card notitle>
     <ui-input
       type="text"
@@ -38,9 +41,7 @@
 import { defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { translate } from '@/i18n/translate';
 import { MyStore } from '@/store';
-import { MutationTypes } from '@/store/mutation-types';
 import { ActionTypes } from '@/store/action-types';
 
 export default defineComponent({
@@ -52,7 +53,6 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore() as MyStore;
     const redirect = (router.currentRoute.value.query.redirect ?? '/') as string;
-    store.commit(MutationTypes.CHANGE_SSR_TITLE, translate(store.state.i18n.lang, 'register'));
 
     const handleRegister = async () => {
       if (password.value !== reptpass.value) {

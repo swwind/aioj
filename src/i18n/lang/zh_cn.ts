@@ -51,6 +51,7 @@ const zh_cn: InternationalizationLanguage = {
   author: '作者',
   player_number: '玩家数量',
   my_bots: '我的机器人',
+  bot: '机器人',
   all_bots: '所有机器人',
   create_new_problem: '新建题目',
   create_new_region: '新建模块',

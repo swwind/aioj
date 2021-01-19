@@ -88,7 +88,7 @@ export default defineComponent({
 
     const updateWrongCheck = () => {
       wrong.value = props.required && !value.value;
-    }
+    };
     watch(value, (newvalue) => {
       updateWrongCheck();
       ctx.emit('update:modelValue', newvalue);
@@ -96,7 +96,6 @@ export default defineComponent({
     watch(modelValue, (newvalue) => {
       value.value = newvalue;
     });
-
 
     const handleFocus = () => {
       updateWrongCheck();

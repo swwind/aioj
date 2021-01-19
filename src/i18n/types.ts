@@ -51,6 +51,7 @@ export type InternationalizationLanguage = {
   author: string;
   player_number: string;
   my_bots: string;
+  bot: string;
   all_bots: string;
   create_new_problem: string;
   create_new_region: string;
