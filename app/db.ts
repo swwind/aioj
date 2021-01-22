@@ -94,6 +94,8 @@ export function extractBotDetail(bd: BotData): BotDetail {
     author: bd.author,
     pid: bd.pid,
     bid: bd.bid,
+    created: bd.created,
+    updated: bd.updated,
   };
 }
 export function extractRoundDetail(rd: RoundData): RoundDetail {

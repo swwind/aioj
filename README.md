@@ -232,6 +232,9 @@ Content-Type: application/json
     - (query) p: number             --  Problem id
     - (query) u: string             --  Username
     + bots: BotDetail[]
+[x] GET    /b/:bid                      Get bot detail
+    + bot: BotDetail
+
 [x] POST   /s/new                       Create a new round
     - pid: number
     - bids: number[]

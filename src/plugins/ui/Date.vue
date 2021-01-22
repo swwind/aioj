@@ -1,5 +1,5 @@
 <template>
-  <ui-text :text="text" icon="calendar-alt" />
+  <ui-text :text="text" icon="calendar-alt" :row="!!time" />
 </template>
 
 <script lang="ts">

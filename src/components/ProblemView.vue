@@ -37,7 +37,7 @@
     <!-- problem showing page -->
     <ui-card notitle v-if="!editing && !submit">
       <ui-text icon="robot" :text="playerNumbers" row />
-      <ui-text icon="user" :text="data.problem.author" row />
+      <ui-text icon="user" :text="data.problem.author" row :to="`/u/${data.problem.author}`" />
       <ui-content class="margin" :text="data.problem.content" markdown />
     </ui-card>
 
@@ -50,7 +50,7 @@
         <ui-text text="give_your_bot_a_name" />
       </div>
       <ui-input v-model="name" placeholder="bot_name" icon="robot" class="margin" required />
-      <ui-editor v-model="description" class="margin" placeholder="Fooosss" />
+      <ui-editor v-model="description" class="margin" placeholder="bot_description" />
       <div class="margin">
         <ui-text text="submit_your_code_or_upload_a_zip" />
       </div>
@@ -69,14 +69,22 @@
       <h3>Title</h3>
       <ui-input type="text" v-model="title" icon="align-left" placeholder="problem_title" />
       <h3>Description</h3>
-      <ui-editor class="margin" v-model="content"></ui-editor>
+      <ui-editor class="margin" v-model="content" placeholder="problem_description"></ui-editor>
       <h3>Paint Script</h3>
       <ui-code class="margin" v-model="paint" locked />
       <h3>Players</h3>
       <div class="range">
-        <ui-input type="number" v-model="playerMin" class="item" required placeholder="min" />
+        <ui-input type="number" v-model="playerMin" class="item" required placeholder="min_value" />
         <span class="hr"></span>
-        <ui-input type="number" v-model="playerMax" class="item" required placeholder="max (-1 = inf)" />
+        <ui-input type="number" v-model="playerMax" class="item" required placeholder="max_value" />
+      </div>
+      <div class="margin" v-if="data.problem.fid">Now judger: <a :href="`${cdn}/f/${data.problem.fid}`">{{ data.problem.fid }}</a></div>
+      <div class="margin" v-else>No data available.</div>
+      <div>
+        <ui-fileinput class="margin" accept=".zip" v-model="file" />
+        <ui-button icon="upload" type="primary" text @click="handleUploadProblemJudger">
+          <ui-text text="upload" />
+        </ui-button>
       </div>
       <div class="margin">
         <ui-button icon="location-arrow" type="primary" @click="handleUpdateProblem">
@@ -112,6 +120,7 @@ import { ActionTypes } from '@/store/action-types';
 import { confirm } from '@/utils';
 import { computed, defineComponent, ref, toRefs, watch } from 'vue';
 import { useStore } from 'vuex';
+import config from '../../config.json';
 
 export default defineComponent({
   props: {
@@ -203,6 +212,11 @@ export default defineComponent({
       await store.dispatch(ActionTypes.DELETE_PROBLEM, pid);
     };
 
+    const handleUploadProblemJudger = async () => {
+      if (!file.value) return;
+      await store.dispatch(ActionTypes.UPLOAD_PROBLEM_JUDGER, { pid, file: file.value });
+    }
+
     const hasPermission = computed(() => store.state.accounts.username === store.state.data.problem.author || store.state.accounts.admin);
 
     const playerNumbers = computed(() =>
@@ -233,6 +247,8 @@ export default defineComponent({
       handleUpdateProblem,
       handleSubmit,
       handleDeleteProblem,
+      handleUploadProblemJudger,
+      cdn: config.port === 443 ? '//' + config.cdn : '',
       ...toRefs(store.state),
     };
   },

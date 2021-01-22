@@ -1,4 +1,5 @@
 import * as ErrorMessages from 'app/errors';
+import { StringMappingType } from 'typescript';
 
 export type InternationalizationLanguage = {
   home: string;
@@ -71,6 +72,18 @@ export type InternationalizationLanguage = {
   upload: string;
   my_accounts: string;
   help: string;
+  bot_score: string;
+  download: string;
+  start_round: string;
+  goto_problem: string;
+  bot_description: string;
+  problem_description: string;
+  min_value: string;
+  max_value: string;
+  search_result: string;
+  pid: string;
+  apply: string;
+  update_code: string;
 
   confirm_logout: string;
   confirm_delete: string;

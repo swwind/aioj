@@ -1,9 +1,9 @@
 <template>
-  <ui-header title="Search Result" translate>
+  <ui-header title="search_result" translate>
     <template #route1>
       <ui-text text="bot" />
     </template>
-    <ui-text text="Search Result" />
+    <ui-text text="search_result" />
   </ui-header>
 
   <ui-card notitle>
@@ -19,7 +19,7 @@
       <div v-for="bot in data.bots" :key="bot.bid" class="item">
         <ui-text :text="bot.name" row :to="`/b/${bot.bid}`" class="a" />
         <ui-text :text="bot.author" row icon="user" :to="`/u/${bot.author}`" />
-        <ui-text :text="`v${bot.version}`" row icon="code-branch" />
+        <ui-text :text="`${bot.version}`" row icon="code-branch" />
         <ui-date :time="bot.created" />
         <ui-date :time="bot.updated" />
       </div>

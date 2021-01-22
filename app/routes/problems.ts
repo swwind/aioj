@@ -63,10 +63,11 @@ router.put('/p/:pid/file', async (ctx) => {
     await deleteFile(pd.fid);
   }
 
-  const fid = await saveFileWithoutUser(await fs.readFile(file.path));
+  const fid = await saveFileWithoutUser(await fs.readFile(file.path), `p${pid}_judger.zip`);
   await modifyProblemFid(pid, fid);
+  const problem = await getProblemDetail(pid);
 
-  ctx.end(200);
+  ctx.end(200, { problem });
 });
 
 router.put('/p/:pid', async (ctx) => {

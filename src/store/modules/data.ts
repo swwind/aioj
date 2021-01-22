@@ -139,13 +139,22 @@ export type Actions<S = State> = {
     description: string;
     src: string;
     type: string;
-  }>): Promise<void>;
+  }>): Promise<boolean>;
+  [ActionTypes.UPDATE_BOT_ONLY](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    bid: number;
+    name: string;
+    description: string;
+  }>): Promise<boolean>;
   [ActionTypes.UPDATE_BOT_BY_FILE](actx: ArgumentedActionContext<S>, payload: Arguments<{
     bid: number;
     name: string;
     description: string;
     file: File;
-  }>): Promise<void>;
+  }>): Promise<boolean>;
+  [ActionTypes.UPLOAD_PROBLEM_JUDGER](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    pid: number;
+    file: File;
+  }>): Promise<boolean>;
 }
 
 export const createDataModule = (api: API) => {
@@ -502,8 +511,22 @@ export const createDataModule = (api: API) => {
       if (result.status === 200) {
         commit(MutationTypes.FETCH_BOT_DETAIL, result.bot);
         dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+        return true;
       } else {
         dispatch(ActionTypes.HANDLE_ERROR, result);
+        return false;
+      }
+    },
+    async [ActionTypes.UPDATE_BOT_ONLY]({ commit, dispatch }, payload) {
+      const { name, description, bid } = unwarpArguments(payload);
+      const result = await api.updateBotInfomationsOnly(bid, name, description);
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_BOT_DETAIL, result.bot);
+        dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+        return true;
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+        return false;
       }
     },
     async [ActionTypes.UPDATE_BOT_BY_FILE]({ commit, dispatch }, payload) {
@@ -516,10 +539,28 @@ export const createDataModule = (api: API) => {
       if (result.status === 200) {
         commit(MutationTypes.FETCH_BOT_DETAIL, result.bot);
         dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+        return true;
       } else {
         dispatch(ActionTypes.HANDLE_ERROR, result);
+        return false;
       }
     },
+    async [ActionTypes.UPLOAD_PROBLEM_JUDGER]({ commit, dispatch }, payload) {
+      const { pid, file } = unwarpArguments(payload);
+      commit(MutationTypes.UPLOAD_START);
+      const result = await api.uploadProblemJudger(pid, file, (e) => {
+        commit(MutationTypes.UPLOAD_PROGRESS, e.loaded / e.total);
+      });
+      commit(MutationTypes.UPLOAD_END);
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_PROBLEM_DETAIL, result.problem);
+        dispatch(ActionTypes.NOTIFY_UPDATE_SUCCESS);
+        return true;
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+        return false;
+      }
+    }
   };
 
   return {

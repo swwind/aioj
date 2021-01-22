@@ -62,7 +62,7 @@ export async function modifyProblem(pid: number, title: string, content: string,
 }
 
 export async function modifyProblemFid(pid: number, fid: string) {
-  await problems.findOneAndReplace({ pid }, { $set: { fid } });
+  await problems.findOneAndUpdate({ pid }, { $set: { fid } });
 }
 
 export async function deleteProblem(pid: number) {

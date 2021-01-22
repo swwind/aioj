@@ -25,7 +25,7 @@ const helps = [{
 Welcome to [aioj.ac](https://aioj.ac)! We strongly recommand you to read this manual before start using this website.
 `,
     zh_cn: `
-欢迎来到 [aioj.ac](https://aioj.ac)！我们强烈建议您在使用网站前详细地阅读本使用手册。
+欢迎来到 [aioj.ac](https://aioj.ac)！我们墙裂建议您在使用网站前强细地阅读本使用手册。
 `,
   },
 }, {
@@ -41,11 +41,11 @@ In other words, do not upload your secret video or something weird (e.g. NSFW) c
 We support dynamic \`Content-Type\` header and even network stream for videos and audios uploaded to our server, so you can feel free to share your ideas without any limitaions.
 `,
     zh_cn: `
-用户可以将文件上传到本网站上用于学习和交流。但是在上传任何文件到我们的服务器之前，您必须同意我们保留未经您同意而删除您的文件或重新分配文件的权利。我们可以承诺，我们不会对您上传的文件进行任何商业盈利或滥用。
+用户可以将文件上传到本网站上用于学♂习和交♂流。但是在上传任何文件到我们的服务器之前，您必须同♂意我们保留未经您同意而删除您的文件或重新分配文件的权利。我们可以承诺，我们不会对您上传的文件进行任何商业盈利或滥♂用。
 
-换句话说，不要上传你的秘密视频或一些奇怪的（比如 NSFW）内容到我们的服务器上，这可能会导致您被本站封禁。
+换句话说，不要上传你的秘♂密视频或一些奇♂怪的（比如 NSFW）内容到我们的服务器上，这可能会导致您被本站封♂禁。
 
-我们的服务器支持动态的 \`Content-Type\` 头，支持对于视频和音频的网络串流播放，所以您可以在本站自由分享你的想法而不收到任何限制。
+我们的服务器支持动态的 \`Content-Type\` 头，支持对于视频和音频的网络串流播放，所以您可以在本站自♂由地分享您的想♂法而不收到任何限制。
 `,
   },
 }, {
@@ -57,11 +57,15 @@ We support dynamic \`Content-Type\` header and even network stream for videos an
 There is a forum for you to get in touch with other participants.
 
 If you want to insert an image/video/audio in a post inline, you can just copy the code from your uploaded files page.
+
+Some specific markdown code will be regard as video player or other, you don't need to learn it.
 `,
     zh_cn: `
 AIOJ 的论坛可以让您与其他选手亲切地交♂流。
 
 如果你想在帖子中内嵌图片/视频/音频，你只需复制上传文件页面上的代码即可。
+
+某些特定的 markdown 代码会经过特判，用以展示视频等在线功能。
 `,
   },
 }, {
@@ -70,7 +74,7 @@ AIOJ 的论坛可以让您与其他选手亲切地交♂流。
   },
   content: {
     en_us: `
-WIP
+See chinese ver. please...
 `,
     zh_cn: `
 
@@ -78,9 +82,10 @@ WIP
 
 您可以使用以下语言来书写您的 bot:
 
-- JavaScript
 - C++
 - Python
+- JavaScript
+- ...
 
 对于每个 bot，所有所需要的信息将会从 stdin 输入。
 

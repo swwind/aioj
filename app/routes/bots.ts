@@ -1,4 +1,4 @@
-import { createNewBot, getBotDetail, getBotList, modifyBot } from 'app/db/bots';
+import { createNewBot, getBotDetail, getBotList, modifyBot, modifyBotInfo } from 'app/db/bots';
 import { FILE_NOT_FOUND, LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from 'app/errors';
 import { Tools, State } from 'app/types';
 import { getTmpDir } from 'app/utils';
@@ -111,13 +111,13 @@ router.put('/b/:bid', async (ctx) => {
   const { name, description } = ctx.request.body;
 
   const fid = await patchSourceFile(ctx.request);
-  if (!fid) {
-    ctx.end(400, PARAMS_MISSING);
-    return;
+  if (fid) {
+    await deleteFile(bd.fid);
+    await modifyBot(bid, name, description, fid);
+  } else {
+    await modifyBotInfo(bid, name, description);
   }
 
-  await deleteFile(bd.fid);
-  await modifyBot(bid, name, description, fid);
   const bot = await getBotDetail(bid);
 
   ctx.end(200, { bot });

@@ -2,7 +2,7 @@ import { ProblemAbstract, ProblemDetail } from 'app/types';
 import { APICore } from './utils';
 
 export const createProblemAPI = (api: APICore) => {
-  const { makeDELETERequest, makeGETRequest, makePUTRequest, makePOSTRequest } = api;
+  const { makeDELETERequest, makeGETRequest, makePUTRequest, makePOSTRequest, makeMultipartRequest } = api;
 
   return {
     getProblemList() {
@@ -29,5 +29,10 @@ export const createProblemAPI = (api: APICore) => {
         title,
       });
     },
+    uploadProblemJudger(pid: number, file: File, callback: (e: any) => void) {
+      const formdata = new FormData();
+      formdata.append('file', file);
+      return makeMultipartRequest<{ problem: ProblemDetail }>(`/p/${pid}/file`, formdata, callback, 'PUT');
+    }
   };
 };

@@ -47,7 +47,7 @@
       </div>
       <div class="copys">
         <div class="left">
-          Copyright (c) 2020 swwind
+          © 2020-2021 aioj.ac dev team, some rights reserved 
         </div>
         <div class="right">
           <span

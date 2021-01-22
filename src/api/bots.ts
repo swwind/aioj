@@ -42,6 +42,13 @@ export const createBotAPI = (api: APICore) => {
       });
     },
 
+    updateBotInfomationsOnly(bid: number, name: string, description: string) {
+      return makePUTRequest<{ bot: BotDetail }>(`/b/${bid}`, {
+        name,
+        description,
+      });
+    },
+
     updateBotFromFile(bid: number, name: string, description: string, file: File, onProgress: (e: any) => void) {
       const formdata = new FormData();
       formdata.append('name', name);

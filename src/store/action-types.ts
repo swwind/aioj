@@ -46,8 +46,11 @@ export enum ActionTypes {
 
   UPDATE_BOT_BY_CODE = 'update_bot_by_code',
   UPDATE_BOT_BY_FILE = 'update_bot_by_file',
+  UPDATE_BOT_ONLY = 'update_bot_only',
   CREATE_BOT_BY_CODE = 'create_bot_by_code',
   CREATE_BOT_BY_FILE = 'create_bot_by_file',
+
+  UPLOAD_PROBLEM_JUDGER = 'upload_problem_judger',
 
   UNBLOCK_SSR = 'unblock_ssr',
 }

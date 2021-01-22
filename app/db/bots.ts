@@ -26,6 +26,10 @@ export async function modifyBot(bid: number, name: string, description: string, 
   await bots.findOneAndUpdate({ bid }, { $set: { name, description, fid, updated: Date.now() }, $inc: { version: 1 } });
 }
 
+export async function modifyBotInfo(bid: number, name: string, description: string) {
+  await bots.findOneAndUpdate({ bid }, { $set: { name, description, updated: Date.now() }, $inc: { version: 1 } });
+}
+
 export async function getBotDetail(bid: number) {
   const bot = await bots.findOne({ bid });
   return bot && extractBotDetail(bot);
