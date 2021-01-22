@@ -11,7 +11,8 @@ const getNodeURL = () => {
 const getBrowserURL = () => {
   if ('__VUE_HMR_RUNTIME__' in window) {
     // debugging
-    return `http://localhost:${config.port}/api`;
+    // return `http://localhost:${config.port}/api`;
+    return '/api';
   } else {
     // production
     return '/api';

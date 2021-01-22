@@ -36,7 +36,7 @@ async function patchSourceFile(req: Request) {
     });
 
     const buffer = await fs.readFile(path.join(dirname, 'pack.zip'));
-    const fid = await saveFileWithoutUser(buffer);
+    const fid = await saveFileWithoutUser(buffer, 'code.zip');
 
     await fs.rm(dirname, { recursive: true, force: true });
 
@@ -48,7 +48,7 @@ async function patchSourceFile(req: Request) {
   }
   const file = Array.isArray(req.files.file) ? req.files.file[0] : req.files.file;
   const buffer = await fs.readFile(file.path);
-  return await saveFileWithoutUser(buffer);
+  return await saveFileWithoutUser(buffer, file.name);
 }
 
 router.post('/b/:pid', async (ctx) => {
@@ -134,6 +134,10 @@ router.get('/b/list', async (ctx) => {
 router.get('/b/:bid', async (ctx) => {
   const bid = Number(ctx.params.bid);
   const bot = await getBotDetail(bid);
+  if (!bot) {
+    ctx.end(404, FILE_NOT_FOUND);
+    return;
+  }
   ctx.end(200, { bot });
 });
 

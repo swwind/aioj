@@ -8,7 +8,7 @@ export enum ActionTypes {
   FETCH_PROBLEM_DATA = 'fetch_problem_data',
   FETCH_USER_DATA = 'fetch_user_data',
   FETCH_USER_FILES = 'fetch_user_files',
-  FETCH_BOTS_DATA = 'fetch_bots_data',
+  FETCH_BOT_LIST = 'fetch_bot_list',
   FETCH_BOT_DATA = 'fetch_bot_data',
 
   LOGOUT = 'logout',

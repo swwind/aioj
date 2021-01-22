@@ -7,6 +7,7 @@ export async function createNewBot(username: string, name: string, description: 
     throw new Error(SERVER_ERROR);
   }
   const bid = counts.value.maxbid;
+  const time = Date.now();
   await bots.insertOne({
     name,
     fid,
@@ -15,12 +16,14 @@ export async function createNewBot(username: string, name: string, description: 
     description,
     author: username,
     bid,
+    created: time,
+    updated: time,
   });
   return bid;
 }
 
 export async function modifyBot(bid: number, name: string, description: string, fid: string) {
-  await bots.findOneAndUpdate({ bid }, { $set: { name, description, fid }, $inc: { version: 1 } });
+  await bots.findOneAndUpdate({ bid }, { $set: { name, description, fid, updated: Date.now() }, $inc: { version: 1 } });
 }
 
 export async function getBotDetail(bid: number) {
@@ -29,12 +32,12 @@ export async function getBotDetail(bid: number) {
 }
 
 export async function getBotList(pid?: number, username?: string) {
-  const ask: { pid?: number, username?: string } = {};
+  const ask: { pid?: number, author?: string } = {};
   if (pid !== undefined) {
     ask.pid = pid;
   }
   if (username !== undefined) {
-    ask.username = username;
+    ask.author = username;
   }
 
   const bot = await bots.find(ask).toArray();

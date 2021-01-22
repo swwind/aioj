@@ -32,6 +32,19 @@
   font-weight: normal;
   margin-top: 5px;
   margin-bottom: 40px;
+  transform: translateX(10px);
+  opacity: 0;
+
+  animation-name: fadein;
+  animation-fill-mode: forwards;
+  animation-duration: .5s;
+}
+
+@keyframes fadein {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 </style>
@@ -44,15 +57,12 @@ import { defineComponent, toRefs } from 'vue';
 import { useStore } from 'vuex';
 export default defineComponent({
   props: {
-    title: {
-      type: String,
-      required: true,
-    },
+    title: String,
     translate: Boolean,
   },
   setup(props) {
     const store = useStore() as MyStore;
-    if (store.state.ssr.status === 200) {
+    if (store.state.ssr.status === 200 && props.title) {
       store.commit(MutationTypes.CHANGE_SSR_TITLE, props.translate
         ? translate(store.state.i18n.lang, props.title)
         : props.title);

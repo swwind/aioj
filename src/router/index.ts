@@ -10,6 +10,7 @@ import UserView from '@/components/UserView.vue';
 import BotView from '@/components/BotView.vue';
 import Login from '@/components/Login.vue';
 import Register from '@/components/Register.vue';
+import BotList from '@/components/BotList.vue';
 import Problems from '@/components/Problems.vue';
 import ProblemView from '@/components/ProblemView.vue';
 
@@ -58,6 +59,14 @@ const routes: Array<RouteRecordRaw> = [
     component: ProblemView,
     props: (route) => ({
       pid: Number(route.params.pid),
+    }),
+  }, {
+    path: '/b/list',
+    name: 'BotList',
+    component: BotList,
+    props: (route) => ({
+      pid: route.query.p,
+      username: route.query.u,
     }),
   }, {
     path: '/b/:bid',

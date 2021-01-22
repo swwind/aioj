@@ -15,10 +15,10 @@
         <ui-listed-button icon="location-arrow" v-if="accounts.username" :active="submit" @click="handleSubmit">
           <ui-text text="submit"/>
         </ui-listed-button>
-        <ui-listed-button icon="history" v-if="accounts.username" :to="`/bot/list?p=${data.problem.pid}&user=${accounts.username}`">
+        <ui-listed-button icon="history" v-if="accounts.username" :to="`/b/list?p=${data.problem.pid}&u=${accounts.username}`">
           <ui-text text="my_bots"/>
         </ui-listed-button>
-        <ui-listed-button icon="robot" :to="`/bot/list?p=${data.problem.pid}`">
+        <ui-listed-button icon="robot" :to="`/b/list?p=${data.problem.pid}`">
           <ui-text text="all_bots"/>
         </ui-listed-button>
         <ui-listed-button icon="comments" :to="`/r/p${data.problem.pid}`">
@@ -36,21 +36,9 @@
 
     <!-- problem showing page -->
     <ui-card notitle v-if="!editing && !submit">
-      <div class="info">
-        <span class="tag">
-          <ui-text icon="robot" />
-          {{ data.problem.playerMin === data.problem.playerMax
-              ? data.problem.playerMin
-              : data.problem.playerMax === Infinity
-                ? `> ${data.problem.playerMin}`
-                : `${data.problem.playerMin} ~ ${data.problem.playerMax}` }}
-        </span>
-        <span class="tag">
-          <ui-text icon="user" />
-          {{ data.problem.author }}
-        </span>
-      </div>
-      <ui-content :text="data.problem.content" markdown />
+      <ui-text icon="robot" :text="playerNumbers" row />
+      <ui-text icon="user" :text="data.problem.author" row />
+      <ui-content class="margin" :text="data.problem.content" markdown />
     </ui-card>
 
     <!-- submit page -->
@@ -103,14 +91,6 @@
 </template>
 
 <style lang="less" scoped>
-
-.info {
-  margin-bottom: 20px;
-
-  .tag {
-    margin-right: 10px;
-  }
-}
 
 .range {
   display: flex;
@@ -225,10 +205,18 @@ export default defineComponent({
 
     const hasPermission = computed(() => store.state.accounts.username === store.state.data.problem.author || store.state.accounts.admin);
 
+    const playerNumbers = computed(() =>
+      store.state.data.problem.playerMin === store.state.data.problem.playerMax
+        ? String(store.state.data.problem.playerMin)
+        : store.state.data.problem.playerMax === Infinity
+          ? `> ${store.state.data.problem.playerMin}`
+          : `${store.state.data.problem.playerMin} ~ ${store.state.data.problem.playerMax}`)
+
     return {
       editing,
       content,
       title,
+      playerNumbers,
       playerMin,
       playerMax,
       submit,

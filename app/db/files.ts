@@ -31,7 +31,7 @@ export async function saveFile(username: string, mimetype: string, filename: str
   return Result.ok(extractFileDetail(filedata));
 }
 
-export async function saveFileWithoutUser(buffer: Buffer) {
+export async function saveFileWithoutUser(buffer: Buffer, filename: string) {
   const fid = await getNewFileId();
   const filepath = `uploads/${fid}`;
   await fs.writeFile(filepath, buffer);
@@ -39,7 +39,7 @@ export async function saveFileWithoutUser(buffer: Buffer) {
     fid,
     uploader: '',
     size: buffer.length,
-    filename: '',
+    filename,
     filepath,
     mimetype: '',
     date: Date.now(),

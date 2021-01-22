@@ -63,7 +63,7 @@ export type Actions<S = State> = {
   [ActionTypes.FETCH_USER_DATA](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.FETCH_USER_FILES](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
   [ActionTypes.FETCH_BOT_DATA](actx: ArgumentedActionContext<S>, payload: Argument<number>): Promise<void>;
-  [ActionTypes.FETCH_BOTS_DATA](actx: ArgumentedActionContext<S>, payload: Arguments<{
+  [ActionTypes.FETCH_BOT_LIST](actx: ArgumentedActionContext<S>, payload: Arguments<{
     username: string | undefined;
     pid: number | undefined;
   }>): Promise<void>;
@@ -324,7 +324,7 @@ export const createDataModule = (api: API) => {
         dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
     },
-    async [ActionTypes.FETCH_BOTS_DATA]({ commit, dispatch }, payload) {
+    async [ActionTypes.FETCH_BOT_LIST]({ commit, dispatch }, payload) {
       const { username, pid } = unwarpArguments(payload);
       const result = await api.getBotList(pid, username);
       if (result.status === 200) {

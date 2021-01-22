@@ -131,6 +131,8 @@ export type BotDetail = {
   author: string;
   pid: number;
   bid: number;
+  created: number;
+  updated: number;
 }
 
 export type BotData = {

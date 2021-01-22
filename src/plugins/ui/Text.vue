@@ -1,13 +1,21 @@
 <template>
-  <span v-if="!to">
+  <span v-if="!to" class="tag">
     <ui-icon v-if="icon" :name="icon"/>
     {{ row ? text : translate(i18n.lang, text) }}
   </span>
-  <router-link v-else :to="to">
+  <router-link v-else :to="to" class="tag">
     <ui-icon v-if="icon" :name="icon"/>
     {{ row ? text : translate(i18n.lang, text) }}
   </router-link>
 </template>
+
+<style lang="less" scoped>
+
+.tag + .tag {
+  margin-left: 20px;
+}
+
+</style>
 
 <script lang="ts">
 import { translate } from '@/i18n/translate';

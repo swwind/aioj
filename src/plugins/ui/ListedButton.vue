@@ -3,6 +3,10 @@
     <ui-icon :name="icon" class="icon"></ui-icon>
     <slot></slot>
   </router-link>
+  <a v-else-if="href" :href="href" class="button">
+    <ui-icon :name="icon" class="icon"></ui-icon>
+    <slot></slot>
+  </a>
   <div v-else class="button" :class="{ active, danger }">
     <ui-icon :name="icon" class="icon"></ui-icon>
     <slot></slot>
@@ -77,6 +81,7 @@ export default defineComponent({
     active: Boolean,
     danger: Boolean,
     to: String,
+    href: String,
   },
 });
 </script>
