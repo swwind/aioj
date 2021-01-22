@@ -91,7 +91,11 @@ export default defineComponent({
     };
     watch(value, (newvalue) => {
       updateWrongCheck();
-      ctx.emit('update:modelValue', newvalue);
+      if (props.type === 'number') {
+        ctx.emit('update:modelValue', Number(newvalue));
+      } else {
+        ctx.emit('update:modelValue', newvalue);
+      }
     });
     watch(modelValue, (newvalue) => {
       value.value = newvalue;
