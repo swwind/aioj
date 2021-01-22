@@ -11,6 +11,7 @@ function translate(lang: any, str: any, ...pattern: string[]): string {
     }
     return s;
   }
+  /* eslint-disable-next-line no-console */
   console.warn(`missing translate: ${lang}: ${str}`);
   return str;
 }

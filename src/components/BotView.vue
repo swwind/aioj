@@ -122,25 +122,25 @@ export default defineComponent({
       description.value = store.state.data.bot.description;
       updatesource.value = false;
       editing.value = true;
-    }
+    };
     const handleEditSource = () => {
       updatesource.value = true;
-    }
+    };
 
     const handleUpdateInfomationsOnly = async () => {
       await store.dispatch(ActionTypes.UPDATE_BOT_ONLY, {
-        bid,name,description,
+        bid, name, description,
       });
-    }
+    };
     const handleUpdateByCode = async () => {
       await store.dispatch(ActionTypes.UPDATE_BOT_BY_CODE, {
         bid,
         name,
         description,
         src: code.value.code,
-        type: code.value.lang
+        type: code.value.lang,
       });
-    }
+    };
     const handleUpdateByFile = async () => {
       if (!file.value) return;
       await store.dispatch(ActionTypes.UPDATE_BOT_BY_FILE, {
@@ -149,7 +149,7 @@ export default defineComponent({
         description,
         file: file.value,
       });
-    }
+    };
 
     return {
       isMybot,
@@ -159,7 +159,8 @@ export default defineComponent({
       handleEdit,
       name,
       description,
-      file,code,
+      file,
+      code,
       handleUpdateByCode,
       handleEditSource,
       handleUpdateByFile,

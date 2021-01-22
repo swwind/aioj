@@ -47,11 +47,11 @@
 </style>
 
 <script lang="ts">
-import { MyStore } from '@/store'
+import { MyStore } from '@/store';
 import { ActionTypes } from '@/store/action-types';
-import { defineComponent, ref, toRefs, watch } from 'vue'
+import { defineComponent, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex'
+import { useStore } from 'vuex';
 export default defineComponent({
   props: {
     pid: String,
@@ -63,12 +63,12 @@ export default defineComponent({
 
     const update = async (pid: string | undefined, username: string | undefined) => {
       const ppid = !Number(pid) ? undefined : Number(pid);
-      const uuname = username ? username : undefined;
+      const uuname = username || undefined;
       await store.dispatch(ActionTypes.FETCH_BOT_LIST, {
         pid: ppid,
         username: uuname,
       });
-    }
+    };
     await update(props.pid, props.username);
 
     const mypid = ref(props.pid ?? '');
@@ -80,14 +80,14 @@ export default defineComponent({
       if (mypid.value) url.append('p', mypid.value);
       if (myusername.value) url.append('u', myusername.value);
       router.replace({ name: 'BotList', query: { p: mypid.value, u: myusername.value } });
-    }
+    };
 
     return {
       mypid,
       myusername,
       applyFilter,
       ...toRefs(store.state),
-    }
-  }
-})
+    };
+  },
+});
 </script>

@@ -560,7 +560,7 @@ export const createDataModule = (api: API) => {
         dispatch(ActionTypes.HANDLE_ERROR, result);
         return false;
       }
-    }
+    },
   };
 
   return {

@@ -33,6 +33,6 @@ export const createProblemAPI = (api: APICore) => {
       const formdata = new FormData();
       formdata.append('file', file);
       return makeMultipartRequest<{ problem: ProblemDetail }>(`/p/${pid}/file`, formdata, callback, 'PUT');
-    }
+    },
   };
 };

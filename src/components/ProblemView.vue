@@ -215,7 +215,7 @@ export default defineComponent({
     const handleUploadProblemJudger = async () => {
       if (!file.value) return;
       await store.dispatch(ActionTypes.UPLOAD_PROBLEM_JUDGER, { pid, file: file.value });
-    }
+    };
 
     const hasPermission = computed(() => store.state.accounts.username === store.state.data.problem.author || store.state.accounts.admin);
 
@@ -224,7 +224,7 @@ export default defineComponent({
         ? String(store.state.data.problem.playerMin)
         : store.state.data.problem.playerMax === Infinity
           ? `> ${store.state.data.problem.playerMin}`
-          : `${store.state.data.problem.playerMin} ~ ${store.state.data.problem.playerMax}`)
+          : `${store.state.data.problem.playerMin} ~ ${store.state.data.problem.playerMax}`);
 
     return {
       editing,

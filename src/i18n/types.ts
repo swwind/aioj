@@ -1,5 +1,4 @@
 import * as ErrorMessages from 'app/errors';
-import { StringMappingType } from 'typescript';
 
 export type InternationalizationLanguage = {
   home: string;
