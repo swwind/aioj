@@ -1,6 +1,6 @@
-import { APIResponse } from '@/api/utils';
-import { translate } from '@/i18n/translate';
-import { notify } from '@/utils';
+import { APIResponse } from '../api/utils';
+import { translate } from '../i18n/translate';
+import { notify } from '../utils';
 import { Router } from 'vue-router';
 import type { ArgumentedActionContext, RootState } from '.';
 import { ActionTypes } from './action-types';

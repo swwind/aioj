@@ -70,9 +70,9 @@
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
-import { confirm } from '@/utils';
-import { MyStore } from '@/store';
-import { ActionTypes } from '@/store/action-types';
+import { confirm } from '../utils';
+import { MyStore } from '../store';
+import { ActionTypes } from '../store/action-types';
 import { CommentDetail } from 'app/types';
 
 export default defineComponent({
@@ -171,7 +171,7 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 
-@import "@/plugins/ui/styles/vars.less";
+@import "../plugins/ui/styles/vars.less";
 
 .post-title {
   margin-bottom: 10px !important;

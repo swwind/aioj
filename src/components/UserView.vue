@@ -22,7 +22,7 @@
         <ui-text text="admin"/>
       </span>
       <p>Email: {{ data.user.email }}</p>
-      <p>Desc: {{ data.user.desc }}</p>
+      <p>Desc: {{ data.user.description }}</p>
     </ui-card>
     <ui-card v-if="accounts.username === data.user.username || accounts.admin" class="files">
       <template #header>
@@ -90,11 +90,11 @@
 
 <script lang="ts">
 import { computed, defineComponent, toRefs, watch } from 'vue';
-import { toSizeString, confirm, copyToClipboard } from '@/utils';
+import { toSizeString, confirm, copyToClipboard } from '../utils';
 import { useStore } from 'vuex';
 import { FileDetail } from 'app/types';
-import { MyStore } from '@/store';
-import { ActionTypes } from '@/store/action-types';
+import { MyStore } from '../store';
+import { ActionTypes } from '../store/action-types';
 import config from '../../config.json';
 
 export default defineComponent({
@@ -189,7 +189,7 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 
-@import "@/plugins/ui/styles/vars.less";
+@import "../plugins/ui/styles/vars.less";
 
 .star {
   cursor: pointer;

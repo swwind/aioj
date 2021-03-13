@@ -18,13 +18,16 @@
 </style>
 
 <script lang="ts">
-import { translate } from '@/i18n/translate';
-import { MyStore } from '@/store';
+import { translate } from '../../i18n/translate';
+import { MyStore } from '../../store';
 import { defineComponent, toRefs } from 'vue';
 import { useStore } from 'vuex';
 export default defineComponent({
   props: {
-    text: String,
+    text: {
+      type: String,
+      required: true,
+    },
     icon: String,
     to: String,
     row: Boolean,

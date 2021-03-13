@@ -1,14 +1,11 @@
 const path = require('path');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 
-const rootdir = path.dirname(__dirname);
-
 module.exports = {
-  entry: './index.ts',
+  entry: './app/server.ts',
   target: 'node',
   output: {
-    path: path.resolve(rootdir, 'build'),
+    path: path.resolve(__dirname, 'build'),
     filename: '[name].js',
   },
   experiments: {
@@ -16,8 +13,8 @@ module.exports = {
   },
   externals: [
     nodeExternals(),
-    ({ context, request }, callback) => {
-      if (request.endsWith('/build/ssr/js/app.js')) {
+    ({ request }, callback) => {
+      if (request.endsWith('/dist/server/entry-server.js')) {
         return callback(null, 'commonjs ' + request);
       }
 
@@ -28,16 +25,13 @@ module.exports = {
     rules: [{
       test: /\.ts$/,
       loader: 'ts-loader',
-    }, {
-      test: /\.js$/,
-      loader: 'babel-loader',
+      options: {
+        configFile: 'tsconfig.webpack.json'
+      }
     }]
   },
   resolve: {
     extensions: ['.ts', '.js'],
-    plugins: [
-      new TsconfigPathsPlugin({ configFile: path.resolve(rootdir, 'tsconfig.json') })
-    ],
   },
   optimization: {
     minimize: false,

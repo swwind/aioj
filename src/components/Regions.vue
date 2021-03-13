@@ -50,8 +50,8 @@
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
-import { MyStore } from '@/store';
-import { ActionTypes } from '@/store/action-types';
+import { MyStore } from '../store';
+import { ActionTypes } from '../store/action-types';
 
 export default defineComponent({
   async setup() {

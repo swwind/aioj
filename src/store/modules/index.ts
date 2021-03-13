@@ -22,7 +22,7 @@ import {
   Actions as SSRActions,
   createSSRModule,
 } from './ssr';
-import { API } from '@/api';
+import { API } from '../../api';
 
 export const createModules = (api: API) => {
   return {

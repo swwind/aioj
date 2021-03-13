@@ -1,4 +1,4 @@
-import { WSS } from 'app/judger/wss';
+import { WSS } from '../judger/wss';
 import Router from 'koa-router';
 
 type WsTools = {

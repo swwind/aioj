@@ -1,4 +1,5 @@
-import { MongoClient } from 'mongodb';
+import mongodb from 'mongodb';
+const { MongoClient } = mongodb;
 import config from '../config.json';
 import { AuthData, BotData, BotDetail, CommentData, CommentDetail, CounterData, FileData, FileDetail, PostData, PostDetail, ProblemAbstract, ProblemData, ProblemDetail, RegionData, RegionDetail, RoundData, RoundDetail, UserData, UserDetail } from './types';
 

@@ -1,4 +1,4 @@
-import { API } from '@/api';
+import { API } from '../api';
 import { Router } from 'vue-router';
 import { ActionContext, createStore as createVuexStore, Store } from 'vuex';
 import createActions, { RootActions } from './actions';

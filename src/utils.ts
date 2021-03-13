@@ -84,7 +84,7 @@ export function toSizeString(size: number) {
   if (size < 0.9 * (2 ** 20)) return `${(size / (2 ** 10)).toFixed(2)}kB`;
   if (size < 0.9 * (2 ** 30)) return `${(size / (2 ** 20)).toFixed(2)}MB`;
   if (size < 0.9 * (2 ** 40)) return `${(size / (2 ** 30)).toFixed(2)}GB`;
-  return '?TB';
+  return 'Impossible Size';
 }
 
 export function chooseFile() {

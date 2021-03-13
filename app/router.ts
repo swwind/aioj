@@ -11,8 +11,6 @@ import users from './routes/users';
 import bots from './routes/bots';
 import rounds from './routes/rounds';
 import files, { getFileSource } from './routes/files';
-import { renderToHTML, template } from './ssr';
-import { Middleware } from 'koa';
 
 const router = new Router<State, Tools>();
 
@@ -118,42 +116,7 @@ router.use('/api',
   rounds.allowedMethods(),
 );
 
-const supportedLanguages = ['en_us', 'zh_cn'];
-
-function getLanguage(acceptedLanguages: string) {
-  const acpt = acceptedLanguages.split(',')
-    .map((s) => s.split(';')[0])
-    .map((s) => s.toLowerCase())
-    .map((s) => s.replace(/-/g, '_'));
-
-  for (const lang of acpt) {
-    for (const slang of supportedLanguages) {
-      if (slang.startsWith(lang)) {
-        return slang;
-      }
-    }
-  }
-
-  return supportedLanguages[0];
-}
-
-export default router;
-
-export const ssr = (disable: boolean): Middleware => async (ctx) => {
-  // disable ssr
-  if (disable) {
-    ctx.response.status = 200;
-    ctx.set('Content-Type', 'text/html');
-    ctx.response.body = template;
-    return;
-  }
-  const lang = getLanguage(ctx.get('Accept-Language'));
-  const cookie = ctx.get('Cookie');
-  const { code, html } = await renderToHTML(ctx.url, lang, cookie);
-  ctx.response.status = code;
-  ctx.set('Content-Type', 'text/html');
-  ctx.response.body = html;
-};
-
 export const cdnRouter = new Router();
 cdnRouter.get('/f/:fid', getFileSource);
+
+export default router;

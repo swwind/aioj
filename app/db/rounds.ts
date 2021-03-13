@@ -1,7 +1,7 @@
-import { counter, extractRoundDetail, rounds } from 'app/db';
-import { SERVER_ERROR } from 'app/errors';
-import { RoundData } from 'app/types';
-import { Result } from 'app/utils';
+import { counter, extractRoundDetail, rounds } from '../db';
+import { SERVER_ERROR } from '../errors';
+import { RoundData } from '../types';
+import { Result } from '../utils';
 
 export async function startNewRound(pid: number, bids: number[]): Promise<Result<number, string>> {
   const counts = await counter.findOneAndUpdate({ }, { $inc: { maxrid: 1 } });

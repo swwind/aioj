@@ -5,7 +5,9 @@
       v-for="item of menus"
       :key="item.url"
       :class="{ active: item.url === activeUrl }">
-      <router-link :to="item.url" class="link">{{ translate(i18n.lang, item.name) }}</router-link>
+      <router-link :to="item.url" class="link">
+        <ui-text :text="item.name"></ui-text>
+      </router-link>
     </li>
   </ul>
 </template>
@@ -69,9 +71,8 @@
 <script lang="ts">
 import { useRouter } from 'vue-router';
 import { computed, defineComponent, toRefs } from 'vue';
-import { translate } from '@/i18n/translate';
 import { useStore } from 'vuex';
-import { MyStore } from '@/store';
+import { MyStore } from '../../store';
 
 type MenuItem = {
   name: string;
@@ -105,7 +106,6 @@ export default defineComponent({
     return {
       route,
       activeUrl,
-      translate,
       ...toRefs(store.state),
     };
   },

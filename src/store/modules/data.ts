@@ -1,8 +1,8 @@
 import { BotDetail, CommentDetail, FileDetail, PostDetail, ProblemAbstract, ProblemDetail, RegionDetail, UserDetail } from '../../../app/types';
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
-import { API } from '@/api';
-import { Argument, Arguments, chooseFile, unwarpArguments } from '@/utils';
+import { API } from '../../api';
+import { Argument, Arguments, chooseFile, unwarpArguments } from '../../utils';
 import { ArgumentedActionContext } from '..';
 import { unref } from 'vue';
 

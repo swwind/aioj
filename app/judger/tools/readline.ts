@@ -1,10 +1,10 @@
-module.exports = function (stream = process.stdin) {
-  const lines = [];
-  const resolves = [];
+export default function (stream = process.stdin) {
+  const lines: string[] = [];
+  const resolves: Function[] = [];
   function update() {
     while (lines.length && resolves.length) {
       const line = lines.shift();
-      const resolve = resolves.shift();
+      const resolve = resolves.shift() as Function;
       resolve(line);
     }
   }

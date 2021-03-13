@@ -80,7 +80,7 @@
 }
 
 @keyframes fade-up-in {
-  to {
+  100% {
     opacity: 1;
     transform: translate(0, 0);
   }

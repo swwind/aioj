@@ -26,7 +26,7 @@ export const spawn = (command: string, args: string[], log: (str: string) => voi
   const ps = childSpawn(command, args);
 
   return {
-    read: createReader(ps.stdout),
+    read: createReader(ps.stdout as any) as any,
     send(msg) {
       ps.stdin.write(msg + '\n');
     },
