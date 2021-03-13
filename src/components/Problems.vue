@@ -40,8 +40,8 @@
 </style>
 
 <script lang="ts">
-import { MyStore } from '@/store';
-import { ActionTypes } from '@/store/action-types';
+import { MyStore } from '../store';
+import { ActionTypes } from '../store/action-types';
 import { defineComponent, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 export default defineComponent({

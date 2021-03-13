@@ -1,4 +1,4 @@
-import { PostDetail, CommentDetail, RegionDetail, CommentData } from 'app/types';
+import { PostDetail, CommentDetail, RegionDetail, CommentData } from '../types';
 import { comments, posts, regions, extractCommentDetail, extractPostDetail, extractRegionDetail } from '../db';
 import { COMMENT_NOT_EXISTS, POST_NOT_EXISTS, REGION_ALREADY_EXISTS, REGION_NOT_EXISTS } from '../errors';
 import { Result } from '../utils';

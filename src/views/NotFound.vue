@@ -11,8 +11,8 @@
 <script lang="ts">
 import { useStore } from 'vuex';
 import { defineComponent } from 'vue';
-import { MyStore } from '@/store';
-import { MutationTypes } from '@/store/mutation-types';
+import { MyStore } from '../store';
+import { MutationTypes } from '../store/mutation-types';
 
 export default defineComponent({
   setup() {

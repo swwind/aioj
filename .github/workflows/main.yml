@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ vite ]
   pull_request:
-    branches: [ dev ]
+    branches: [ vite ]
 
 jobs:
   build:
@@ -31,6 +31,3 @@ jobs:
         run: |
           ln -sf _config.json config.json
           yarn build
-
-      - name: Lint
-        run: yarn lint

@@ -115,9 +115,9 @@
 </style>
 
 <script lang="ts">
-import { MyStore } from '@/store';
-import { ActionTypes } from '@/store/action-types';
-import { confirm } from '@/utils';
+import { MyStore } from '../store';
+import { ActionTypes } from '../store/action-types';
+import { confirm } from '../utils';
 import { computed, defineComponent, ref, toRefs, watch } from 'vue';
 import { useStore } from 'vuex';
 import config from '../../config.json';

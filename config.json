@@ -1,0 +1,14 @@
+{
+  "mongo": {
+    "url": "mongodb://localhost:27017",
+    "dbname": "attack204_ak_world_final"
+  },
+  "port": 8080,
+  "https": {
+    "hsts": true,
+    "key": "localhost-key.pem",
+    "cert": "localhost.pem"
+  },
+  "host": "https://aioj.ac",
+  "cdn": "cdn.aioj.ac"
+}

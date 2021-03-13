@@ -2,9 +2,9 @@ import { UserDetail } from '../../../app/types';
 import { ActionTypes } from '../action-types';
 import { MutationTypes } from '../mutation-types';
 import { ArgumentedActionContext } from '..';
-import { Argument, Arguments, unwarpArguments } from '@/utils';
+import { Argument, Arguments, unwarpArguments } from '../../utils';
 import { unref } from 'vue';
-import { API } from '@/api';
+import { API } from '../../api';
 
 export type State = {
   username: string;

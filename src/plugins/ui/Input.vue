@@ -65,7 +65,7 @@
 </style>
 
 <script lang="ts">
-import { translate } from '@/i18n/translate';
+import { translate } from '../../i18n/translate';
 import { defineComponent, ref, toRefs, watch } from 'vue';
 import { useStore } from 'vuex';
 export default defineComponent({

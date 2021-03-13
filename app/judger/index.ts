@@ -1,7 +1,7 @@
-import { getBotDetail } from 'app/db/bots';
-import { getProblemDetail } from 'app/db/problems';
-import { getRoundDetail, updateRoundState } from 'app/db/rounds';
-import { getTmpDir } from 'app/utils';
+import { getBotDetail } from '../db/bots';
+import { getProblemDetail } from '../db/problems';
+import { getRoundDetail, updateRoundState } from '../db/rounds';
+import { getTmpDir } from '../utils';
 import { exec } from 'child_process';
 import { run } from './judge';
 import { WSS } from './wss';

@@ -12,9 +12,9 @@
 </template>
 
 <script lang="ts">
-import { translate } from '@/i18n/translate';
-import { MyStore } from '@/store';
-import { MutationTypes } from '@/store/mutation-types';
+import { translate } from '../i18n/translate';
+import { MyStore } from '../store';
+import { MutationTypes } from '../store/mutation-types';
 import { defineComponent, toRefs } from 'vue';
 import { useStore } from 'vuex';
 

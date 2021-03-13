@@ -1,13 +1,13 @@
-import { createNewBot, getBotDetail, getBotList, modifyBot, modifyBotInfo } from 'app/db/bots';
-import { FILE_NOT_FOUND, LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from 'app/errors';
-import { Tools, State } from 'app/types';
-import { getTmpDir } from 'app/utils';
+import { createNewBot, getBotDetail, getBotList, modifyBot, modifyBotInfo } from '../db/bots';
+import { FILE_NOT_FOUND, LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
+import { Tools, State } from '../types';
+import { getTmpDir } from '../utils';
 import { Request } from 'koa';
 import Router from 'koa-router';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { exec } from 'child_process';
-import { deleteFile, saveFileWithoutUser } from 'app/db/files';
+import { deleteFile, saveFileWithoutUser } from '../db/files';
 
 const router = new Router<State, Tools>();
 

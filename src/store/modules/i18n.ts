@@ -1,5 +1,5 @@
-import { API } from '@/api';
-import { languages } from '@/i18n';
+import { API } from '../../api';
+import { languages } from '../../i18n';
 import { MutationTypes } from '../mutation-types';
 
 export type State = {

@@ -1,18 +1,19 @@
-import { RouteRecordRaw } from 'vue-router';
-import Home from '@/views/Home.vue';
-import NotFound from '@/views/NotFound.vue';
-import About from '@/views/About.vue';
-import Help from '@/views/Help.vue';
-import Regions from '@/components/Regions.vue';
-import RegionView from '@/components/RegionView.vue';
-import PostView from '@/components/PostView.vue';
-import UserView from '@/components/UserView.vue';
-import BotView from '@/components/BotView.vue';
-import Login from '@/components/Login.vue';
-import Register from '@/components/Register.vue';
-import BotList from '@/components/BotList.vue';
-import Problems from '@/components/Problems.vue';
-import ProblemView from '@/components/ProblemView.vue';
+import { RouteRecordRaw, createRouter as _createRouter, createMemoryHistory, createWebHistory } from 'vue-router';
+
+import Home from '../views/Home.vue';
+import NotFound from '../views/NotFound.vue';
+import About from '../views/About.vue';
+import Help from '../views/Help.vue';
+import Regions from '../components/Regions.vue';
+import RegionView from '../components/RegionView.vue';
+import PostView from '../components/PostView.vue';
+import UserView from '../components/UserView.vue';
+import BotView from '../components/BotView.vue';
+import Login from '../components/Login.vue';
+import Register from '../components/Register.vue';
+import BotList from '../components/BotList.vue';
+import Problems from '../components/Problems.vue';
+import ProblemView from '../components/ProblemView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -90,4 +91,11 @@ const routes: Array<RouteRecordRaw> = [
   },
 ];
 
-export default routes;
+export function createRouter() {
+  return _createRouter({
+    history: import.meta.env.SSR
+      ? createMemoryHistory()
+      : createWebHistory(),
+    routes,
+  });
+}

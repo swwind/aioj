@@ -1,12 +1,19 @@
-import { createVueApp } from './main.server';
+import { createSSRApp } from 'vue';
+import App from './AsyncApp.vue';
+import { createRouter } from './router';
+import { createStore } from './store';
+import { createAPI } from './api';
 
-const { app, router, store } = createVueApp(false);
+import UIPlugin from './plugins/ui';
 
-if ('__INITIAL_STATE__' in window) {
-  store.replaceState((window as any).__INITIAL_STATE__);
+export function createApp(cookie?: string) {
+  const app = createSSRApp(App);
+  const router = createRouter();
+  const api = createAPI(cookie);
+  const store = createStore(router, api);
+  app.use(UIPlugin);
+  app.use(store);
+  app.use(router);
+
+  return { app, router, store };
 }
-
-router.isReady()
-  .then(() => {
-    app.mount('#app', true);
-  });

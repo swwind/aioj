@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { useStore } from 'vuex';
-import { MyStore } from '@/store';
+import { MyStore } from '../store';
 import { defineComponent, toRefs } from 'vue';
 
 const helps = [{

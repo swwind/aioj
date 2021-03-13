@@ -1,7 +1,7 @@
-import { deleteFile, saveFileWithoutUser } from 'app/db/files';
-import { modifyRegion } from 'app/db/forum';
-import { createNewProblem, deleteProblem, getAllProblems, getProblemAuthor, getProblemDetail, modifyProblem, modifyProblemFid } from 'app/db/problems';
-import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED, PROBLEM_NOT_EXISTS } from 'app/errors';
+import { deleteFile, saveFileWithoutUser } from '../db/files';
+import { modifyRegion } from '../db/forum';
+import { createNewProblem, deleteProblem, getAllProblems, getProblemAuthor, getProblemDetail, modifyProblem, modifyProblemFid } from '../db/problems';
+import { LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED, PROBLEM_NOT_EXISTS } from '../errors';
 import Router from 'koa-router';
 import { State, Tools } from '../types';
 import { promises as fs } from 'fs';

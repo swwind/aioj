@@ -32,7 +32,7 @@
   font-weight: normal;
   margin-top: 5px;
   margin-bottom: 40px;
-  transform: translateX(10px);
+  transform: translateY(10px);
   opacity: 0;
 
   animation-name: fadein;
@@ -41,7 +41,7 @@
 }
 
 @keyframes fadein {
-  to {
+  100% {
     transform: translateY(0);
     opacity: 1;
   }
@@ -50,9 +50,9 @@
 </style>
 
 <script lang="ts">
-import { translate } from '@/i18n/translate';
-import { MyStore } from '@/store';
-import { MutationTypes } from '@/store/mutation-types';
+import { translate } from '../../i18n/translate';
+import { MyStore } from '../../store';
+import { MutationTypes } from '../../store/mutation-types';
 import { defineComponent, toRefs } from 'vue';
 import { useStore } from 'vuex';
 export default defineComponent({

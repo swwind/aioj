@@ -2,7 +2,7 @@ import { extractFileDetail, files } from '../db';
 import { generateRandomBytes, Result } from '../utils';
 import { promises as fs } from 'fs';
 import { FILE_NOT_FOUND } from '../errors';
-import { FileData, FileDetail } from 'app/types';
+import { FileData, FileDetail } from '../types';
 
 async function getNewFileId() {
   let fid = generateRandomBytes(16);

@@ -1,4 +1,4 @@
-import { getUserDetail } from 'app/db/users';
+import { getUserDetail } from '../db/users';
 import Router from 'koa-router';
 import { issueCookie, revoke } from '../db/auth';
 import { registerUser, verifyPassword } from '../db/accouts';

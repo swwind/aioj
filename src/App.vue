@@ -126,8 +126,8 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-@import '@/plugins/ui/styles/colors.less';
-@import '@/plugins/ui/styles/vars.less';
+@import './plugins/ui/styles/colors.less';
+@import './plugins/ui/styles/vars.less';
 @import './confirm.less';
 
 body, html {
@@ -174,7 +174,7 @@ a {
 </style>
 
 <style lang="less" scoped>
-@import '@/plugins/ui/styles/vars.less';
+@import './plugins/ui/styles/vars.less';
 
 .nav {
   flex: 1;

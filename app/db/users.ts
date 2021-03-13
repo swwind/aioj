@@ -1,4 +1,4 @@
-import { UserDetail } from 'app/types';
+import { UserDetail } from '../types';
 import { users, extractUserDetail } from '../db';
 import { USER_NOT_EXISTS } from '../errors';
 import { Result } from '../utils';

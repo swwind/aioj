@@ -1,5 +1,5 @@
-import { SERVER_ERROR } from 'app/errors';
-import { ProblemAbstract, ProblemDetail } from 'app/types';
+import { SERVER_ERROR } from '../errors';
+import { ProblemAbstract, ProblemDetail } from '../types';
 import { counter, extractProblemAbstract, extractProblemDetail, problems } from '../db';
 import { Result } from '../utils';
 import { createRegion } from './forum';

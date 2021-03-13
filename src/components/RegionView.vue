@@ -81,10 +81,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue';
-import { confirm } from '@/utils';
+import { confirm } from '../utils';
 import { useStore } from 'vuex';
-import { MyStore } from '@/store';
-import { ActionTypes } from '@/store/action-types';
+import { MyStore } from '../store';
+import { ActionTypes } from '../store/action-types';
 
 export default defineComponent({
   props: {
@@ -166,7 +166,7 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 
-@import "@/plugins/ui/styles/vars.less";
+@import "../plugins/ui/styles/vars.less";
 
 .desc {
   margin-bottom: 20px;
