@@ -5,3 +5,8 @@
 /build
 /*.local
 /*.log
+/uploads
+/static
+/config.json
+*.log
+*.pem

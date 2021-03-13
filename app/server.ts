@@ -71,7 +71,8 @@ if (config.port === 443) {
 
 app.use(body({ multipart: true }));
 // app.use(serve('dist', { index: false }));
-// app.use(serve('static'));
+app.use(serve('public'));
+app.use(serve('static'));
 
 app.use(router.routes());
 app.use(router.allowedMethods());
