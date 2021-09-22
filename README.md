@@ -3,8 +3,15 @@
 ## Deploy
 
 ```bash
-sudo systemctl start mongodb.service
-yarn build && node .
+git clone https://github.com/swwind/aioj --recurse-submodules
+
+cd aioj/liujdg
+./configure
+make install
+
+cd ..
+yarn build
+yarn serve
 ```
 
 ## Known Issues
