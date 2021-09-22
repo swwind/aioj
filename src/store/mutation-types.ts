@@ -15,6 +15,7 @@ export enum MutationTypes {
   FETCH_FILE_LIST = 'fetch_file_list',
   FETCH_BOT_LIST = 'fetch_bot_list',
   FETCH_BOT_DETAIL = 'fetch_bot_detail',
+  FETCH_ROUND_DETAIL = 'fetch_round_detail',
 
   DELETED_REGION = 'deleted_region',
   DELETED_POST = 'deleted_post',

@@ -4,7 +4,7 @@
       <ui-text to="/r" text="region" />
     </template>
     <template #route2>
-      <ui-text :to="`/r/${data.region.region}`" :text="data.region.title" row />
+      <ui-text :to="`/r/${data.region.region}`" :text="data.region.title" raw />
     </template>
     <ui-text :text="data.post.title" />
   </ui-header>

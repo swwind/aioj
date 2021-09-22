@@ -1,11 +1,11 @@
 <template>
   <span v-if="!to" class="tag">
     <ui-icon v-if="icon" :name="icon"/>
-    {{ row ? text : translate(i18n.lang, text) }}
+    {{ raw ? text : translate(i18n.lang, text) }}
   </span>
   <router-link v-else :to="to" class="tag">
     <ui-icon v-if="icon" :name="icon"/>
-    {{ row ? text : translate(i18n.lang, text) }}
+    {{ raw ? text : translate(i18n.lang, text) }}
   </router-link>
 </template>
 
@@ -30,7 +30,7 @@ export default defineComponent({
     },
     icon: String,
     to: String,
-    row: Boolean,
+    raw: Boolean,
   },
   setup() {
     const store = useStore() as MyStore;

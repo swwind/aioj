@@ -39,6 +39,7 @@ export enum ActionTypes {
   NOTIFY_UPDATE_SUCCESS = 'notify_update_success',
   NOTIFY_COPY_SUCCESS = 'notify_copy_success',
   NOTIFY_COPY_FAILED = 'notify_copy_failed',
+  NOTIFY_CREATE_ROUND_SUCCESS = 'notify_create_round_success',
 
   HANDLE_ERROR = 'handle_error',
   HANDLE_RENDER_ERROR = 'handle_render_error',
@@ -51,6 +52,9 @@ export enum ActionTypes {
   CREATE_BOT_BY_FILE = 'create_bot_by_file',
 
   UPLOAD_PROBLEM_JUDGER = 'upload_problem_judger',
+
+  CREATE_NEW_ROUND = 'create_new_round',
+  FETCH_ROUND_DETAIL = 'fetch_round_detail',
 
   UNBLOCK_SSR = 'unblock_ssr',
 }

@@ -3,7 +3,7 @@
     <template #route1>
       <ui-text text="user" />
     </template>
-    <ui-text :text="data.user.username" row />
+    <ui-text :text="data.user.username" raw />
   </ui-header>
 
   <div v-if="data.user.username" class="userview">

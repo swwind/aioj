@@ -83,6 +83,8 @@ const zh_cn: InternationalizationLanguage = {
   pid: '题目 ID',
   apply: '应用',
   update_code: '更新代码',
+  create_round: '创建战局',
+  select_participants: '选择选手',
 
   confirm_logout: '确认要退出登录吗？',
   confirm_delete: '确认要删除 {} 吗？',

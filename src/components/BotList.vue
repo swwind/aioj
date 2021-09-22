@@ -17,9 +17,9 @@
     <div class="list margin">
       <ui-icon name="cat" text="no_matches" large v-if="!data.bots.length" />
       <div v-for="bot in data.bots" :key="bot.bid" class="item">
-        <ui-text :text="bot.name" row :to="`/b/${bot.bid}`" class="a" />
-        <ui-text :text="bot.author" row icon="user" :to="`/u/${bot.author}`" />
-        <ui-text :text="`${bot.version}`" row icon="code-branch" />
+        <ui-text :text="bot.name" raw :to="`/b/${bot.bid}`" class="a" />
+        <ui-text :text="bot.author" raw icon="user" :to="`/u/${bot.author}`" />
+        <ui-text :text="`${bot.version}`" raw icon="code-branch" />
         <ui-date :time="bot.created" />
         <ui-date :time="bot.updated" />
       </div>

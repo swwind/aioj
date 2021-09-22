@@ -3,7 +3,7 @@
     <template #route1>
       <ui-text text="problems" to="/p" />
     </template>
-    <ui-text :text="data.problem.title" row />
+    <ui-text :text="data.problem.title" raw />
   </ui-header>
 
   <ui-sidebar v-if="ssr.status === 200">
@@ -36,8 +36,8 @@
 
     <!-- problem showing page -->
     <ui-card notitle v-if="!editing && !submit">
-      <ui-text icon="robot" :text="playerNumbers" row />
-      <ui-text icon="user" :text="data.problem.author" row :to="`/u/${data.problem.author}`" />
+      <ui-text icon="robot" :text="playerNumbers" raw />
+      <ui-text icon="user" :text="data.problem.author" raw :to="`/u/${data.problem.author}`" />
       <ui-content class="margin" :text="data.problem.content" markdown />
     </ui-card>
 

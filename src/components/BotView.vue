@@ -3,7 +3,7 @@
     <template #route1>
       <ui-text text="bot" />
     </template>
-    <ui-text :text="data.bot.name" row />
+    <ui-text :text="data.bot.name" raw />
   </ui-header>
 
   <ui-sidebar v-if="ssr.status === 200">
@@ -15,7 +15,7 @@
         <ui-listed-button icon="download" :href="`${cdn}/f/${data.bot.fid}`">
           <ui-text text="download" />
         </ui-listed-button>
-        <ui-listed-button icon="bomb">
+        <ui-listed-button icon="bomb" :to="`/s/create/${data.bot.pid}/${bid}`">
           <ui-text text="start_round" />
         </ui-listed-button>
         <ui-listed-button icon="anchor" :to="`/p/${data.bot.pid}`">
@@ -30,8 +30,8 @@
 
     <!-- viewing page -->
     <ui-card notitle v-if="!editing">
-      <ui-text :text="`${data.bot.version}`" row icon="code-branch" />
-      <ui-text :text="data.bot.author" row icon="user" :to="`/u/${data.bot.author}`" />
+      <ui-text :text="`${data.bot.version}`" raw icon="code-branch" />
+      <ui-text :text="data.bot.author" raw icon="user" :to="`/u/${data.bot.author}`" />
       <ui-date :time="data.bot.created" />
       <ui-date :time="data.bot.updated" />
       <ui-content :text="data.bot.description" markdown class="margin"></ui-content>

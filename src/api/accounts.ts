@@ -1,9 +1,11 @@
 import { UserDetail } from '../../app/types';
-import md5 from 'md5';
+import crypto from 'crypto';
 import { APICore } from './utils';
 
 export function passwordHash(psw: string) {
-  return md5(`attack_ak_world_final_round_${psw}`);
+  return crypto.createHash('md5')
+    .update(`%%% Attack204 AK ICPC World Final ${psw} flag on server is located at /flag`)
+    .digest('hex');
 }
 
 export const createAccountsAPI = (api: APICore) => {

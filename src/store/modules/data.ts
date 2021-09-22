@@ -1,4 +1,4 @@
-import { BotDetail, CommentDetail, FileDetail, PostDetail, ProblemAbstract, ProblemDetail, RegionDetail, UserDetail } from '../../../app/types';
+import { BotDetail, CommentDetail, FileDetail, PostDetail, ProblemAbstract, ProblemDetail, RegionDetail, RoundDetail, UserDetail } from '../../../app/types';
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
 import { API } from '../../api';
@@ -20,6 +20,7 @@ export type State = {
   bots: BotDetail[];
   bot: BotDetail;
   problem: ProblemDetail;
+  round: RoundDetail;
 }
 
 export type Mutations<S = State> = {
@@ -34,6 +35,7 @@ export type Mutations<S = State> = {
   [MutationTypes.FETCH_FILE_LIST](state: S, payload: FileDetail[]): void;
   [MutationTypes.FETCH_BOT_DETAIL](state: S, payload: BotDetail): void;
   [MutationTypes.FETCH_BOT_LIST](state: S, payload: BotDetail[]): void;
+  [MutationTypes.FETCH_ROUND_DETAIL](state: S, payload: RoundDetail): void;
   [MutationTypes.DELETED_REGION](state: S, payload: string): void;
   [MutationTypes.DELETED_POST](state: S, payload: number): void;
   [MutationTypes.DELETED_COMMENT](state: S, payload: number): void;
@@ -155,6 +157,11 @@ export type Actions<S = State> = {
     pid: number;
     file: File;
   }>): Promise<boolean>;
+  [ActionTypes.CREATE_NEW_ROUND](actx: ArgumentedActionContext<S>, payload: Arguments<{
+    pid: number;
+    bids: Array<number>;
+  }>): Promise<number | false>;
+  [ActionTypes.FETCH_ROUND_DETAIL](actx: ArgumentedActionContext<S>, payload: Argument<number>): Promise<void>;
 }
 
 export const createDataModule = (api: API) => {
@@ -172,6 +179,7 @@ export const createDataModule = (api: API) => {
     problem: {} as any,
     bots: [],
     bot: {} as any,
+    round: {} as any,
   });
 
   const mutations: Mutations = {
@@ -207,6 +215,9 @@ export const createDataModule = (api: API) => {
     },
     [MutationTypes.FETCH_BOT_LIST](state, payload) {
       state.bots = payload;
+    },
+    [MutationTypes.FETCH_ROUND_DETAIL](state, payload) {
+      state.round = payload;
     },
     [MutationTypes.DELETED_REGION](state, payload) {
       state.regions = state.regions.filter((s) => s.region !== payload);
@@ -559,6 +570,26 @@ export const createDataModule = (api: API) => {
       } else {
         dispatch(ActionTypes.HANDLE_ERROR, result);
         return false;
+      }
+    },
+    async [ActionTypes.CREATE_NEW_ROUND]({ dispatch }, payload) {
+      const { pid, bids } = unwarpArguments(payload);
+      const result = await api.createNewRound(pid, bids);
+      if (result.status === 200) {
+        dispatch(ActionTypes.NOTIFY_CREATE_ROUND_SUCCESS);
+        return result.rid;
+      } else {
+        dispatch(ActionTypes.HANDLE_ERROR, result);
+        return false;
+      }
+    },
+    async [ActionTypes.FETCH_ROUND_DETAIL]({ commit, dispatch }, payload) {
+      const rid = unref(payload);
+      const result = await api.getRoundDetail(rid);
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_ROUND_DETAIL, result.round);
+      } else {
+        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
     },
   };

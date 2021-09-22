@@ -5,6 +5,7 @@ import { createFilesAPI } from './files';
 import { createAPICore } from './utils';
 import { createProblemAPI } from './problems';
 import { createBotAPI } from './bots';
+import { createRoundAPI } from './round';
 
 export const createAPI = (cookie?: string) => {
   const apicore = createAPICore(cookie);
@@ -16,6 +17,7 @@ export const createAPI = (cookie?: string) => {
     ...createFilesAPI(apicore),
     ...createProblemAPI(apicore),
     ...createBotAPI(apicore),
+    ...createRoundAPI(apicore),
     ...apicore,
   };
 };

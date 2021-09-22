@@ -15,6 +15,7 @@ type Actions<S = RootState> = {
   [ActionTypes.NOTIFY_UPDATE_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.NOTIFY_COPY_FAILED](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.NOTIFY_COPY_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
+  [ActionTypes.NOTIFY_CREATE_ROUND_SUCCESS](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.ROUTER_PUSH](actx: ArgumentedActionContext<S>, payload: string): Promise<void>;
 }
 
@@ -51,6 +52,9 @@ const createActions = (router: Router): Actions => ({
   },
   async [ActionTypes.NOTIFY_COPY_FAILED]({ state }) {
     notify('success', translate(state.i18n.lang, 'copy_fail'));
+  },
+  async [ActionTypes.NOTIFY_CREATE_ROUND_SUCCESS]({ state }) {
+    notify('success', translate(state.i18n.lang, 'create_round_success'));
   },
 });
 

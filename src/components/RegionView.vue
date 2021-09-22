@@ -3,7 +3,7 @@
     <template #route1>
       <ui-text text="region" to="/r" />
     </template>
-    <ui-text :text="data.region.title" row />
+    <ui-text :text="data.region.title" raw />
   </ui-header>
 
   <div v-if="ssr.status === 200">
