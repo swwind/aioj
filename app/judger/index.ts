@@ -3,7 +3,7 @@ import { getProblemDetail } from '../db/problems';
 import { getRoundDetail, updateRoundState } from '../db/rounds';
 import { judge } from './judge';
 
-export async function prepareToJudge(rid: number) {
+export async function prepareAndJudge(rid: number) {
   const round_detail = await getRoundDetail(rid);
   if (!round_detail) {
     await updateRoundState(rid, 'finish', 'error: Round not found');
@@ -40,7 +40,12 @@ export async function prepareToJudge(rid: number) {
 
   await updateRoundState(rid, 'judging', '');
 
-  await judge(judger_fid, bot_fids);
+  const result = await judge(judger_fid, bot_fids);
 
-  await updateRoundState(rid, 'finish', log);
+  if (result.success) {
+    await updateRoundState(rid, 'finish', JSON.stringify(result));
+  } else {
+    await updateRoundState(rid, 'error', result.error);
+  }
+
 };

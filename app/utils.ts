@@ -1,5 +1,8 @@
 import crypto from 'crypto';
-import { promises as fs } from 'fs';
+
+export function generateRandomBytes(length: number): string {
+  return crypto.randomBytes(length).toString('hex');
+}
 
 export class Result<T, R> {
   ok: boolean;

@@ -7,9 +7,9 @@ git clone https://github.com/swwind/aioj --recurse-submodules
 
 cd aioj/liujdg
 ./configure
-make install
+cd build && make install
 
-cd ..
+cd ../..
 yarn build
 yarn serve
 ```

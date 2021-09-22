@@ -117,7 +117,7 @@ export type RoundDetail = {
   pid: number;
   bids: number[];
   rid: number;
-  status: 'pending' | 'finish' | 'judging';
+  status: 'pending' | 'finish' | 'judging' | 'error';
 }
 
 export type RoundData = {

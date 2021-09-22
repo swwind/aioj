@@ -16,6 +16,7 @@ export const REGION_NOT_EXISTS = 'region_not_exists';
 export const POST_NOT_EXISTS = 'post_not_exists';
 export const COMMENT_NOT_EXISTS = 'comment_not_exists';
 export const PROBLEM_NOT_EXISTS = 'problem_not_exists';
+export const ROUND_NOT_EXISTS = 'round_not_exists';
 export const FILE_NOT_FOUND = 'file_not_found';
 
 export const INTERNAL_SERVER_ERROR = 'internal_server_error';

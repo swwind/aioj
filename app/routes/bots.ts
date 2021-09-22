@@ -1,26 +1,67 @@
 import { createNewBot, getBotDetail, getBotList, modifyBot, modifyBotInfo } from '../db/bots';
 import { FILE_NOT_FOUND, LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
 import { Tools, State } from '../types';
-import { getTmpDir } from '../utils';
 import { Request } from 'koa';
 import Router from 'koa-router';
 import path from 'path';
+import os from 'os';
 import { promises as fs } from 'fs';
 import { exec } from 'child_process';
 import { deleteFile, saveFileWithoutUser } from '../db/files';
 
 const router = new Router<State, Tools>();
 
+const recieveLanguage = ['cpp', 'c', 'js', 'ts', 'py2', 'py3'];
+
+function getSettings(type: string, filename: string): string {
+  if (type === 'cpp') {
+    return JSON.stringify({
+      build: `g++ ${filename} -o main -O2 -DONLINE_JUDGE`,
+      run: './main',
+    });
+  }
+  if (type === 'c') {
+    return JSON.stringify({
+      build: `gcc ${filename} -o main -DONLINE_JUDGE`,
+      run: './main',
+    });
+  }
+  if (type === 'js') {
+    return JSON.stringify({
+      build: '',
+      run: `node ${filename}`,
+    });
+  }
+  if (type === 'ts') {
+    return JSON.stringify({
+      build: '',
+      run: `deno ${filename}`,
+    });
+  }
+  if (type === 'py2') {
+    return JSON.stringify({
+      build: '',
+      run: `python2 ${filename}`,
+    });
+  }
+  if (type === 'py3') {
+    return JSON.stringify({
+      build: '',
+      run: `python3 ${filename}`,
+    });
+  }
+  throw new Error('unknown language');
+}
+
 async function patchSourceFile(req: Request) {
   const src = req.body.src;
   const type = req.body.type;
-  if (src && type) {
-    const dirname = await getTmpDir();
+
+  if (src && type && recieveLanguage.indexOf(type) > -1) {
+    const dirname = await fs.mkdtemp(path.join(os.tmpdir(), 'aioj-bot'));
     const filename = `main.${type}`;
     await fs.writeFile(path.join(dirname, filename), src);
-    await fs.writeFile(path.join(dirname, 'settings.json'), JSON.stringify({
-      main: filename,
-    }));
+    await fs.writeFile(path.join(dirname, 'settings.json'), getSettings(type, filename));
 
     await new Promise<void>((resolve, reject) => {
       exec(`zip -j "${

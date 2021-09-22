@@ -128,27 +128,36 @@ export default defineComponent({
     };
 
     const handleUpdateInfomationsOnly = async () => {
-      await store.dispatch(ActionTypes.UPDATE_BOT_ONLY, {
+      const success = await store.dispatch(ActionTypes.UPDATE_BOT_ONLY, {
         bid, name, description,
       });
+      if (success) {
+        editing.value = false;
+      }
     };
     const handleUpdateByCode = async () => {
-      await store.dispatch(ActionTypes.UPDATE_BOT_BY_CODE, {
+      const success = await store.dispatch(ActionTypes.UPDATE_BOT_BY_CODE, {
         bid,
         name,
         description,
         src: code.value.code,
         type: code.value.lang,
       });
+      if (success) {
+        editing.value = false;
+      }
     };
     const handleUpdateByFile = async () => {
       if (!file.value) return;
-      await store.dispatch(ActionTypes.UPDATE_BOT_BY_FILE, {
+      const success = await store.dispatch(ActionTypes.UPDATE_BOT_BY_FILE, {
         bid,
         name,
         description,
         file: file.value,
       });
+      if (success) {
+        editing.value = false;
+      }
     };
 
     return {

@@ -1,6 +1,6 @@
-import { startNewRound } from '../db/rounds';
-import { PARAMS_MISSING } from '../errors';
-import { prepareToJudge } from '../judger/index';
+import { getRoundDetail, startNewRound } from '../db/rounds';
+import { PARAMS_MISSING, ROUND_NOT_EXISTS } from '../errors';
+import { prepareAndJudge } from '../judger/index';
 import { Tools, State } from '../types';
 import Router from 'koa-router';
 
@@ -23,9 +23,19 @@ router.post('/s/new', async (ctx) => {
     return;
   }
 
-  prepareToJudge(rid.result());
+  prepareAndJudge(rid.result());
 
   ctx.end(200, { rid: rid.result() });
+});
+
+router.get('/s/:rid', async (ctx) => {
+  const rid = Number(ctx.params.rid);
+  const result = await getRoundDetail(rid);
+  if (!result) {
+    ctx.end(404, ROUND_NOT_EXISTS);
+    return;
+  }
+  ctx.end(200, { round: result });
 });
 
 export default router;

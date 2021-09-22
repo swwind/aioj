@@ -60,7 +60,7 @@ router.use('/', async (ctx, next) => {
         const type = keys[key][0];
         if (!type) return false;
         const data = ctx.request.body[key];
-        if (Array.isArray(data)) {
+        if (!Array.isArray(data)) {
           return false;
         }
         const all = (data as any[]).reduce<boolean>((data, now) => {
