@@ -91,30 +91,11 @@ import SSRManifest from '../dist/client/ssr-manifest.json';
 
 const manifest = isProd ? SSRManifest : {}
 
-const supportedLanguages = ['en_us', 'zh_cn'];
-
-function getLanguage(acceptedLanguages: string) {
-  const acpt = acceptedLanguages.split(',')
-    .map((s) => s.split(';')[0])
-    .map((s) => s.toLowerCase())
-    .map((s) => s.replace(/-/g, '_'));
-
-  for (const lang of acpt) {
-    for (const slang of supportedLanguages) {
-      if (slang.startsWith(lang)) {
-        return slang;
-      }
-    }
-  }
-
-  return supportedLanguages[0];
-}
-
 app.use(async (ctx) => {
   try {
     const url = ctx.req.url || '/'
 
-    let template, render: (url: string, lang: string, manifest: Record<string, string[]>, cookie?: string) => Promise<string[]>;
+    let template, render: (url: string, manifest: Record<string, string[]>, cookie?: string) => Promise<string[]>;
     if (!isProd) {
       // always read fresh template in dev
       template = await fs.readFile('index.html', 'utf-8');
@@ -124,10 +105,9 @@ app.use(async (ctx) => {
       template = indexProd
       render = SSRRender
     }
-    const lang = getLanguage(ctx.get('Accept-Language'));
     const cookie = ctx.get('Cookie');
 
-    const [appHtml, preloadLinks, metadata, initialState] = await render(url, lang, manifest, cookie)
+    const [appHtml, preloadLinks, metadata, initialState] = await render(url, manifest, cookie)
 
     const html = template
       .replace(`<!-- preload-links -->`, isProd ? metadata + initialState + preloadLinks : preloadLinks)
