@@ -69,6 +69,7 @@ export type Actions<S = State> = {
     username: string | undefined;
     pid: number | undefined;
   }>): Promise<void>;
+  [ActionTypes.FETCH_BOTS_DATA](actx: ArgumentedActionContext<S>, payload: Argument<Array<number>>): Promise<void>;
   [ActionTypes.DELETE_FILE](actx: ArgumentedActionContext<S>, file: FileDetail): Promise<void>;
   [ActionTypes.UPLOAD_FILE](actx: ArgumentedActionContext<S>): Promise<void>;
   [ActionTypes.DELETE_REGION](actx: ArgumentedActionContext<S>, payload: Argument<string>): Promise<void>;
@@ -340,6 +341,15 @@ export const createDataModule = (api: API) => {
       const result = await api.getBotDetail(bid);
       if (result.status === 200) {
         commit(MutationTypes.FETCH_BOT_DETAIL, result.bot);
+      } else {
+        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
+      }
+    },
+    async [ActionTypes.FETCH_BOTS_DATA]({ commit, dispatch }, payload) {
+      const bids = unref(payload);
+      const result = await api.getBotsDetail(bids);
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_BOT_LIST, result.bots);
       } else {
         dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }

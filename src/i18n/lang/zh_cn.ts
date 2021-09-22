@@ -85,6 +85,9 @@ const zh_cn: InternationalizationLanguage = {
   update_code: '更新代码',
   create_round: '创建战局',
   select_participants: '选择选手',
+  check_round: '查看战局',
+  participants: '选手',
+  create_round_success: '成功创建了战局',
 
   confirm_logout: '确认要退出登录吗？',
   confirm_delete: '确认要删除 {} 吗？',

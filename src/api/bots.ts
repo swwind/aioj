@@ -12,6 +12,10 @@ export const createBotAPI = (api: APICore) => {
       return makeGETRequest<{ bots: BotDetail[] }>(`/b/list?${url.toString()}`);
     },
 
+    getBotsDetail(bids: number[]) {
+      return makeGETRequest<{ bots: BotDetail[] }>(`/b/many?bids=${bids.join(',')}`);
+    },
+
     getBotDetail(bid: number) {
       return makeGETRequest<{ bot: BotDetail }>(`/b/${bid}`);
     },

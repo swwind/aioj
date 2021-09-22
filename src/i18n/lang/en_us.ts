@@ -85,6 +85,9 @@ const en_us: InternationalizationLanguage = {
   update_code: 'Update Code',
   create_round: 'Create Round',
   select_participants: 'Select Participants',
+  check_round: 'Check Round',
+  participants: 'Participants',
+  create_round_success: 'Successfully created round',
 
   confirm_logout: 'Are you sure you want to logout?',
   confirm_delete: 'Are you sure you want to delete {}?',

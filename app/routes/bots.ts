@@ -1,4 +1,4 @@
-import { createNewBot, getBotDetail, getBotList, modifyBot, modifyBotInfo } from '../db/bots';
+import { createNewBot, getBotDetail, getBotList, getBotsDetail, modifyBot, modifyBotInfo } from '../db/bots';
 import { FILE_NOT_FOUND, LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
 import { Tools, State } from '../types';
 import { Request } from 'koa';
@@ -169,6 +169,22 @@ router.get('/b/list', async (ctx) => {
   const username = typeof ctx.query.u !== 'undefined' ? String(ctx.query.u) : undefined;
 
   const bots = await getBotList(pid, username);
+  ctx.end(200, { bots });
+});
+
+router.get('/b/many', async (ctx) => {
+  const bids = typeof ctx.query.bids !== 'undefined'
+    ? ctx.query.bids.toString().split(',').map(Number).filter(x => !isNaN(x))
+    : [];
+  if (!bids.length) {
+    ctx.end(400, PARAMS_MISSING);
+    return;
+  }
+  const bots = await getBotsDetail(bids);
+  if (!bots) {
+    ctx.end(404, FILE_NOT_FOUND);
+    return;
+  }
   ctx.end(200, { bots });
 });
 

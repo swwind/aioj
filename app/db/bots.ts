@@ -30,6 +30,11 @@ export async function modifyBotInfo(bid: number, name: string, description: stri
   await bots.findOneAndUpdate({ bid }, { $set: { name, description, updated: Date.now() }, $inc: { version: 1 } });
 }
 
+export async function getBotsDetail(bids: number[]) {
+  const result = await bots.find({ bid: { $in: bids } }).toArray();
+  return result.map((bot) => extractBotDetail(bot));
+}
+
 export async function getBotDetail(bid: number) {
   const bot = await bots.findOne({ bid });
   return bot && extractBotDetail(bot);

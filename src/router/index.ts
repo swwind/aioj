@@ -15,6 +15,7 @@ import BotList from '../components/BotList.vue';
 import Problems from '../components/Problems.vue';
 import ProblemView from '../components/ProblemView.vue';
 import RoundCreate from '../components/RoundCreate.vue';
+import RoundView from '../components/RoundView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -84,6 +85,13 @@ const routes: Array<RouteRecordRaw> = [
     props: (route) => ({
       pid: Number(route.params.pid),
       bid: route.params.bid ? Number(route.params.bid) : undefined,
+    }),
+  }, {
+    path: '/s/:rid',
+    name: 'RoundView',
+    component: RoundView,
+    props: (route) => ({
+      rid: Number(route.params.rid),
     }),
   }, {
     path: '/login',
