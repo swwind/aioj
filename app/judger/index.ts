@@ -1,85 +1,46 @@
 import { getBotDetail } from '../db/bots';
 import { getProblemDetail } from '../db/problems';
 import { getRoundDetail, updateRoundState } from '../db/rounds';
-import { getTmpDir } from '../utils';
-import { exec } from 'child_process';
-import { run } from './judge';
-import { WSS } from './wss';
+import { judge } from './judge';
 
-const unzip = async (fid: string) => {
-  const zip = `uploads/${fid}`;
-  const dirname = await getTmpDir();
-  return new Promise<string>((resolve, reject) => {
-    exec(`unzip "${zip}" -d "${dirname}"`, (err) => {
-      if (err) reject(err);
-      else resolve(dirname);
-    });
-  });
-};
-
-export type Judger = (rid: number, jfid: string, bfid: string[], log: (data: string) => void) => Promise<void>;
-
-let judger: Judger;
-
-export const createJudger = (wss: WSS) => {
-  judger = async (rid, jfid, bfid, log) => {
-    const judgerpath = await unzip(jfid);
-    const botspath = await Promise.all(bfid.map((bot) => unzip(bot)));
-    await run(judgerpath, botspath, (data) => {
-      log(data);
-      wss.emit(rid, data);
-    });
-    wss.clear(rid);
-  };
-};
-
-export const addToJudgerQueue = async (rid: number) => {
-  const rd = await getRoundDetail(rid);
-  if (!rd) {
+export async function prepareToJudge(rid: number) {
+  const round_detail = await getRoundDetail(rid);
+  if (!round_detail) {
     await updateRoundState(rid, 'finish', 'error: Round not found');
     return;
   }
 
-  const pid = rd.pid;
-  const pd = await getProblemDetail(pid);
-  if (!pd) {
+  const problem_detail = await getProblemDetail(round_detail.pid);
+  if (!problem_detail) {
     await updateRoundState(rid, 'finish', 'error: Problem not found');
     return;
   }
 
-  const jfid = pd.fid;
-  if (!jfid) {
-    await updateRoundState(rid, 'finish', 'error: Problem not have a judger');
+  const judger_fid = problem_detail.fid;
+  if (!judger_fid) {
+    await updateRoundState(rid, 'finish', 'error: Problem does not have a judger');
     return;
   }
 
-  const bfids: string[] = [];
-  for (const bid of rd.bids) {
-    const bd = await getBotDetail(bid);
-    if (!bd) {
+  const bot_fids: string[] = [];
+  for (const bid of round_detail.bids) {
+    const bot_detail = await getBotDetail(bid);
+    if (!bot_detail) {
       await updateRoundState(rid, 'finish', `error: bot ${bid} not found`);
       return;
     }
 
-    if (!bd.fid) {
+    if (!bot_detail.fid) {
       await updateRoundState(rid, 'finish', `error: bot ${bid} invalid`);
       return;
     }
 
-    bfids.push(bd.fid);
+    bot_fids.push(bot_detail.fid);
   }
 
-  if (!judger) {
-    await updateRoundState(rid, 'finish', 'error: judger failed initialization');
-    return;
-  }
-
-  let log = '';
   await updateRoundState(rid, 'judging', '');
 
-  await judger(rid, jfid, bfids, (str) => {
-    log += str + '\n';
-  });
+  await judge(judger_fid, bot_fids);
 
   await updateRoundState(rid, 'finish', log);
 };

@@ -9,8 +9,8 @@ import c2k from 'koa-connect';
 import { createServer, ViteDevServer } from 'vite';
 import websocketify from 'koa-websocket';
 import { promises as fs } from 'fs';
-import { createWSS } from './judger/wss';
-import { createWsRouter } from './routes/ws';
+// import { createWSS } from './judger/wss';
+// import { createWsRouter } from './routes/ws';
 
 // @ts-ignore
 import { render as SSRRender } from '../dist/server/entry-server.js';
@@ -77,11 +77,11 @@ app.use(serve('static'));
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-const wss = createWSS();
-const wsrouter = createWsRouter(wss);
+// const wss = createWSS();
+// const wsrouter = createWsRouter(wss);
 
-app.ws.use(wsrouter.routes() as any);
-app.ws.use(wsrouter.allowedMethods() as any);
+// app.ws.use(wsrouter.routes() as any);
+// app.ws.use(wsrouter.allowedMethods() as any);
 
 // SSR start =================
 

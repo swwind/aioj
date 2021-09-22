@@ -1,21 +1,24 @@
-import { WSS } from '../judger/wss';
-import Router from 'koa-router';
+// WS is temporarily disabled
 
-type WsTools = {
-  websocket: WebSocket;
-}
 
-export const createWsRouter = (wss: WSS) => {
-  const router = new Router<{}, WsTools>();
+// import { WSS } from '../judger/wss';
+// import Router from 'koa-router';
 
-  router.all('/round/:rid', (ctx) => {
-    const rid = Number(ctx.params.rid);
+// type WsTools = {
+//   websocket: WebSocket;
+// }
 
-    wss.register(rid, ctx.websocket);
-    ctx.websocket.onclose = () => {
-      wss.unregister(rid, ctx.websocket);
-    };
-  });
+// export const createWsRouter = (wss: WSS) => {
+//   const router = new Router<{}, WsTools>();
 
-  return router;
-};
+//   router.all('/round/:rid', (ctx) => {
+//     const rid = Number(ctx.params.rid);
+
+//     wss.register(rid, ctx.websocket);
+//     ctx.websocket.onclose = () => {
+//       wss.unregister(rid, ctx.websocket);
+//     };
+//   });
+
+//   return router;
+// };

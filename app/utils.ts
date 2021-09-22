@@ -26,24 +26,3 @@ export class Result<T, R> {
     return this.data as R;
   }
 }
-
-export const neq = <T> (x: T) => (y: T) => x !== y;
-export const generateRandomBytes = (n: number) => {
-  return crypto.randomBytes(n).toString('hex');
-};
-
-export const getTmpDir = async () => {
-  while (true) {
-    const dm = generateRandomBytes(8);
-    const dirname = `/tmp/--aioj-judger-${dm}`;
-    try {
-      await fs.access(dirname);
-      // exists
-      continue;
-    } catch (e) {
-      // not exists
-      await fs.mkdir(dirname);
-      return dirname;
-    }
-  }
-};

@@ -1,6 +1,6 @@
 import { startNewRound } from '../db/rounds';
 import { PARAMS_MISSING } from '../errors';
-import { addToJudgerQueue } from '../judger/index';
+import { prepareToJudge } from '../judger/index';
 import { Tools, State } from '../types';
 import Router from 'koa-router';
 
@@ -23,7 +23,7 @@ router.post('/s/new', async (ctx) => {
     return;
   }
 
-  addToJudgerQueue(rid.result());
+  prepareToJudge(rid.result());
 
   ctx.end(200, { rid: rid.result() });
 });
