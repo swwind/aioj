@@ -1,11 +1,9 @@
 import { UserDetail } from '../../app/types';
-import crypto from 'crypto';
+import md5 from 'blueimp-md5';
 import { APICore } from './utils';
 
 export function passwordHash(psw: string) {
-  return crypto.createHash('md5')
-    .update(`%%% Attack204 AK ICPC World Final ${psw} flag on server is located at /flag`)
-    .digest('hex');
+  return md5(`%%% Attack204 AK ICPC World Final ${psw} flag on server is located at /flag`);
 }
 
 export const createAccountsAPI = (api: APICore) => {

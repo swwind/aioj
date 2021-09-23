@@ -26,16 +26,16 @@
     padding: 10px 0 10px 10px;
     white-space: pre-wrap;
     font-family: monospace;
-    font-size: 1.25rem;
-    line-height: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.25rem;
     text-align: right;
     user-select: none;
   }
 
   .text {
     flex: 9;
-    font-size: 1.25rem;
-    line-height: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.25rem;
     background-color: @card-background-color;
     color: @font-color;
     outline: none;
@@ -45,7 +45,6 @@
     resize: none;
     overflow-y: hidden;
     overflow-x: auto;
-    white-space: nowrap;
   }
 }
 
