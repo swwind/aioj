@@ -8,7 +8,7 @@
     <div v-if="data.round.status === 'error'" class="error">
       <pre><code>{{ data.round.log }}</code></pre>
     </div>
-    <div v-if="data.round.status === 'finish'" class="canvas">
+    <div :class="{ hidden: data.round.status !== 'finish' }" class="canvas">
       <canvas ref="canvas"></canvas>
 
       <div class="details">
@@ -57,6 +57,14 @@
 
   pre {
     overflow-x: auto;
+  }
+}
+
+.canvas {
+  margin: 20px 0;
+
+  &.hidden {
+    display: none;
   }
 }
 
@@ -140,17 +148,40 @@ export default defineComponent({
         logs.value = JSON.parse(store.state.data.round.log);
       }
     }
+    const mounted = ref(false);
+    const painted = ref(false);
+    const updatePainting = () => {
+      if (!mounted.value || painted.value || !canvas.value) return;
+      if (store.state.data.round.status === 'finish' && store.state.data.problem.paint) {
+        painted.value = true;
+        try {
+          (0, eval)(store.state.data.problem.paint);
+          (window as any).__paint_script__(canvas.value, logs.value.judger_log);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
 
-    watch(() => store.state.data.round, updateJudgeLogs);
+    const refresh = async () => {
+      if (!painted.value) {
+        await store.dispatch(ActionTypes.FETCH_ROUND_DETAIL, rid);
+        if (store.state.data.round.status === 'pending' || store.state.data.round.status === 'judging') {
+          setTimeout(refresh, 1000);
+        }
+      }
+    }
 
     const canvas = ref(null as HTMLCanvasElement | null);
 
+    watch(() => store.state.data.round, updateJudgeLogs);
+    watch(() => [store.state.data.round, store.state.data.problem], updatePainting);
+
     onMounted(() => {
-      try {
-        (0, eval)(store.state.data.problem.paint);
-        (window as any).__paint_script__(canvas.value, logs.value.judger_log);
-      } catch (e) {
-        console.error(e);
+      mounted.value = true;
+      updatePainting();
+      if (store.state.data.round.status === 'pending' || store.state.data.round.status === 'judging') {
+        setTimeout(refresh, 1000);
       }
     });
 

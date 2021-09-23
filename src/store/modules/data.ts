@@ -1,4 +1,4 @@
-import { BotDetail, CommentDetail, FileDetail, PostDetail, ProblemAbstract, ProblemDetail, RegionDetail, RoundDetail, UserDetail } from '../../../app/types';
+import { BotDetail, BotRecentRoundDetail, CommentDetail, FileDetail, PostDetail, ProblemAbstract, ProblemDetail, RegionDetail, RoundDetail, UserDetail } from '../../../app/types';
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
 import { API } from '../../api';
@@ -21,6 +21,7 @@ export type State = {
   bot: BotDetail;
   problem: ProblemDetail;
   round: RoundDetail;
+  bot_rounds: BotRecentRoundDetail[];
 }
 
 export type Mutations<S = State> = {
@@ -36,6 +37,7 @@ export type Mutations<S = State> = {
   [MutationTypes.FETCH_BOT_DETAIL](state: S, payload: BotDetail): void;
   [MutationTypes.FETCH_BOT_LIST](state: S, payload: BotDetail[]): void;
   [MutationTypes.FETCH_ROUND_DETAIL](state: S, payload: RoundDetail): void;
+  [MutationTypes.FETCH_BOT_RECENT_ROUNDS](state: S, payload: BotRecentRoundDetail[]): void;
   [MutationTypes.DELETED_REGION](state: S, payload: string): void;
   [MutationTypes.DELETED_POST](state: S, payload: number): void;
   [MutationTypes.DELETED_COMMENT](state: S, payload: number): void;
@@ -163,6 +165,7 @@ export type Actions<S = State> = {
     bids: Array<number>;
   }>): Promise<number | false>;
   [ActionTypes.FETCH_ROUND_DETAIL](actx: ArgumentedActionContext<S>, payload: Argument<number>): Promise<void>;
+  [ActionTypes.FETCH_BOT_RECENT_ROUNDS](actx: ArgumentedActionContext<S>, payload: Argument<number>): Promise<void>;
 }
 
 export const createDataModule = (api: API) => {
@@ -181,6 +184,7 @@ export const createDataModule = (api: API) => {
     bots: [],
     bot: {} as any,
     round: {} as any,
+    bot_rounds: [],
   });
 
   const mutations: Mutations = {
@@ -219,6 +223,9 @@ export const createDataModule = (api: API) => {
     },
     [MutationTypes.FETCH_ROUND_DETAIL](state, payload) {
       state.round = payload;
+    },
+    [MutationTypes.FETCH_BOT_RECENT_ROUNDS](state, payload) {
+      state.bot_rounds = payload;
     },
     [MutationTypes.DELETED_REGION](state, payload) {
       state.regions = state.regions.filter((s) => s.region !== payload);
@@ -602,6 +609,15 @@ export const createDataModule = (api: API) => {
         dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
       }
     },
+    async [ActionTypes.FETCH_BOT_RECENT_ROUNDS]({ commit, dispatch }, payload) {
+      const bid = unref(payload);
+      const result = await api.getBotRecentRounds(bid);
+      if (result.status === 200) {
+        commit(MutationTypes.FETCH_BOT_RECENT_ROUNDS, result.bot_rounds);
+      } else {
+        dispatch(ActionTypes.HANDLE_RENDER_ERROR, result);
+      }
+    }
   };
 
   return {

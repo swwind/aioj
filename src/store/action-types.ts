@@ -11,6 +11,7 @@ export enum ActionTypes {
   FETCH_BOT_LIST = 'fetch_bot_list',
   FETCH_BOT_DATA = 'fetch_bot_data',
   FETCH_BOTS_DATA = 'fetch_bots_data',
+  FETCH_BOT_RECENT_ROUNDS = 'fetch_bot_recent_rounds',
 
   LOGOUT = 'logout',
   LOGIN = 'login',

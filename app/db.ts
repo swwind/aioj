@@ -1,7 +1,7 @@
 import mongodb from 'mongodb';
 const { MongoClient } = mongodb;
 import config from '../config.json';
-import { AuthData, BotData, BotDetail, CommentData, CommentDetail, CounterData, FileData, FileDetail, PostData, PostDetail, ProblemAbstract, ProblemData, ProblemDetail, RegionData, RegionDetail, RoundData, RoundDetail, UserData, UserDetail } from './types';
+import { AuthData, BotData, BotDetail, BotRecentRoundData, CommentData, CommentDetail, CounterData, FileData, FileDetail, PostData, PostDetail, ProblemAbstract, ProblemData, ProblemDetail, RegionData, RegionDetail, RoundData, RoundDetail, UserData, UserDetail } from './types';
 
 const client = new MongoClient(config.mongo.url, { useUnifiedTopology: true });
 await client.connect();
@@ -17,6 +17,7 @@ export const files = db.collection<FileData>('file');
 export const auths = db.collection<AuthData>('auth');
 export const bots = db.collection<BotData>('bots');
 export const rounds = db.collection<RoundData>('rounds');
+export const bot_rounds = db.collection<BotRecentRoundData>('bot_rounds');
 
 // initialize db
 if (!await counter.findOne({ })) {
@@ -107,4 +108,13 @@ export function extractRoundDetail(rd: RoundData): RoundDetail {
     rid: rd.rid,
     status: rd.status,
   };
+}
+
+export function extractBotRecentRoundData(brr: BotRecentRoundData): BotRecentRoundData {
+  return {
+    bid: brr.bid,
+    rid: brr.rid,
+    pid: brr.pid,
+    is_winner: brr.is_winner,
+  }
 }

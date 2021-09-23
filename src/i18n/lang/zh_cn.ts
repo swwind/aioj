@@ -88,6 +88,9 @@ const zh_cn: InternationalizationLanguage = {
   check_round: '查看战局',
   participants: '选手',
   create_round_success: '成功创建了战局',
+  winner: '赢家',
+  loser: '输家',
+  recent_rounds: '最近参与的战局',
 
   confirm_logout: '确认要退出登录吗？',
   confirm_delete: '确认要删除 {} 吗？',

@@ -1,4 +1,5 @@
 import { BotDetail } from 'app/types';
+import { BotRecentRoundDetail } from '../../app/types';
 import { APICore } from './utils';
 
 export const createBotAPI = (api: APICore) => {
@@ -12,8 +13,16 @@ export const createBotAPI = (api: APICore) => {
       return makeGETRequest<{ bots: BotDetail[] }>(`/b/list?${url.toString()}`);
     },
 
-    getBotsDetail(bids: number[]) {
-      return makeGETRequest<{ bots: BotDetail[] }>(`/b/many?bids=${bids.join(',')}`);
+    async getBotsDetail(bids: number[]) {
+      const result = await makeGETRequest<{ bots: BotDetail[] }>(`/b/many?bids=${bids.join(',')}`);
+      if (result.status === 200) {
+        const map = new Map<number, BotDetail>();
+        for (const bot of result.bots) {
+          map.set(bot.bid, bot);
+        }
+        result.bots = bids.map((bid) => map.get(bid));
+      }
+      return result;
     },
 
     getBotDetail(bid: number) {
@@ -60,5 +69,9 @@ export const createBotAPI = (api: APICore) => {
       formdata.append('file', file);
       return makeMultipartRequest<{ bot: BotDetail }>(`/b/${bid}`, formdata, onProgress, 'PUT');
     },
+
+    getBotRecentRounds(bid: number) {
+      return makeGETRequest<{ bot_rounds: BotRecentRoundDetail[] }>(`/b/recent/${bid}`);
+    }
   };
 };

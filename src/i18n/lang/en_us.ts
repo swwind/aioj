@@ -88,6 +88,9 @@ const en_us: InternationalizationLanguage = {
   check_round: 'Check Round',
   participants: 'Participants',
   create_round_success: 'Successfully created round',
+  winner: 'Winner',
+  loser: 'Loser',
+  recent_rounds: 'Recent paticipated rounds',
 
   confirm_logout: 'Are you sure you want to logout?',
   confirm_delete: 'Are you sure you want to delete {}?',

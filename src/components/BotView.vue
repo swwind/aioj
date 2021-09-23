@@ -72,15 +72,54 @@
     <!-- score page -->
     <ui-card>
       <template #header>
-        <ui-text text="bot_score" />
+        <ui-text text="recent_rounds" />
       </template>
-      TODO
+      <div class="bot-round">
+        <router-link
+          class="round"
+          v-for="round in data.bot_rounds"
+          :key="round.rid"
+          :to="`/s/${round.rid}`">
+          <div>
+            <ui-text :text="`${round.problem.title}#${round.rid}`" raw />
+          </div>
+          <div>
+            <ui-text
+              :text="round.is_winner ? 'winner' : 'loser'"
+              :class="{ winner: round.is_winner, loser: !round.is_winner }"
+            />
+          </div>
+        </router-link>
+      </div>
     </ui-card>
   </ui-sidebar>
 </template>
 
 <style lang="less" scoped>
+.round {
+  display: inline-block;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  padding: 10px 20px;
+  user-select: none;
+  cursor: pointer;
+  background-color: var(--background-color);
+  color: var(--font-color);
+  text-decoration: none;
 
+  .winner, .loser {
+    font-size: .8em;
+  }
+
+  .winner {
+    color: chartreuse;
+  }
+
+  .loser {
+    color: crimson;
+  }
+}
 </style>
 
 <script lang="ts">
@@ -103,6 +142,7 @@ export default defineComponent({
 
     const preload = async () => {
       await store.dispatch(ActionTypes.FETCH_BOT_DATA, bid);
+      await store.dispatch(ActionTypes.FETCH_BOT_RECENT_ROUNDS, bid);
     };
     watch(bid, preload);
     await preload();

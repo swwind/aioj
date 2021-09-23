@@ -55,6 +55,7 @@
     padding: 0.5em 1em;
     cursor: pointer;
     margin-right: 20px;
+    margin-bottom: 20px;
     text-align: center;
     transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
     user-select: none;

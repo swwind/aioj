@@ -1,4 +1,4 @@
-import { getBotDetail } from '../db/bots';
+import { getBotDetail, insertBotRecentRoundData } from '../db/bots';
 import { getProblemDetail } from '../db/problems';
 import { getRoundDetail, updateRoundState } from '../db/rounds';
 import { judge } from './judge';
@@ -44,6 +44,9 @@ export async function prepareAndJudge(rid: number) {
 
   if (result.success) {
     await updateRoundState(rid, 'finish', JSON.stringify(result));
+    for (let i = 0; i < round_detail.bids.length; ++ i) {
+      await insertBotRecentRoundData(round_detail.bids[i], round_detail.pid, rid, result.result.players[i].isWinner);
+    }
   } else {
     await updateRoundState(rid, 'error', result.error);
   }

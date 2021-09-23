@@ -137,3 +137,15 @@ export type BotDetail = {
 
 export type BotData = {
 } & BotDetail;
+
+export type BotRecentRoundData = {
+  bid: number,
+  pid: number,
+  rid: number,
+  is_winner: boolean,
+};
+
+export type BotRecentRoundDetail = {
+  problem: ProblemDetail,
+  round: RoundDetail,
+} & BotRecentRoundData;

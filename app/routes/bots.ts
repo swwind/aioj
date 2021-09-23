@@ -1,4 +1,4 @@
-import { createNewBot, getBotDetail, getBotList, getBotsDetail, modifyBot, modifyBotInfo } from '../db/bots';
+import { createNewBot, getBotDetail, getBotList, getBotRecentRoundDetail, getBotsDetail, modifyBot, modifyBotInfo } from '../db/bots';
 import { FILE_NOT_FOUND, LOGIN_REQUIRE, PARAMS_MISSING, PERMISSION_DENIED } from '../errors';
 import { Tools, State } from '../types';
 import { Request } from 'koa';
@@ -186,6 +186,16 @@ router.get('/b/many', async (ctx) => {
     return;
   }
   ctx.end(200, { bots });
+});
+
+router.get('/b/recent/:bid', async (ctx) => {
+  const bid = Number(ctx.params.bid);
+  const bot_rounds = await getBotRecentRoundDetail(bid);
+  if (!bot_rounds) {
+    ctx.end(404, FILE_NOT_FOUND);
+    return;
+  }
+  ctx.end(200, { bot_rounds });
 });
 
 router.get('/b/:bid', async (ctx) => {

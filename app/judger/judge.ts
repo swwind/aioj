@@ -54,6 +54,7 @@ interface IJudgeResult {
   },
   player_logs: string[],
   judger_log: string,
+  random: Array<number>,
 }
 
 export async function judge(judger_fid: string, bot_fids: string[]): Promise<IJudgeResult> {
@@ -109,11 +110,15 @@ export async function judge(judger_fid: string, bot_fids: string[]): Promise<IJu
     const result: IJudgeResult['result'] = JSON.parse(await fs.readFile(path.join(logdir, 'result.json'), 'utf-8'));
     const judger_logs = (await fs.readFile(path.join(logdir, 'judger_log.txt'), 'utf-8')).split('\n');
     const player_logs = new Array(players_number + 1);
+    for (let i = 0; i <= players_number; ++ i) {
+      player_logs[i] = await fs.readFile(path.join(logdir, `${i}.txt`), 'utf-8');
+    }
+    const random = new Array(players_number + 1);
+    random[0] = 0;
     for (let i = 0; i < players_number; ++ i) {
       const { player_realid, random_id } = JSON.parse(judger_logs[i]);
-      player_logs[player_realid] = await fs.readFile(path.join(logdir, `${random_id}.txt`), 'utf-8');
+      random[player_realid] = random_id;
     }
-    player_logs[0] = await fs.readFile(path.join(logdir, '0.txt'), 'utf-8');
 
     return {
       success: true,
@@ -121,6 +126,7 @@ export async function judge(judger_fid: string, bot_fids: string[]): Promise<IJu
       result,
       player_logs,
       judger_log: judger_logs.slice(players_number).join('\n'),
+      random,
     }
 
   } catch (e) {
@@ -134,6 +140,7 @@ export async function judge(judger_fid: string, bot_fids: string[]): Promise<IJu
       },
       judger_log: '',
       player_logs: [],
+      random: [],
     }
 
   } finally {

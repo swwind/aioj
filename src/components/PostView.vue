@@ -6,7 +6,7 @@
     <template #route2>
       <ui-text :to="`/r/${data.region.region}`" :text="data.region.title" raw />
     </template>
-    <ui-text :text="data.post.title" />
+    <ui-text :text="data.post.title" raw />
   </ui-header>
   <div v-if="ssr.status === 200">
     <ui-card
