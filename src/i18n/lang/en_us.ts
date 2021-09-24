@@ -91,6 +91,9 @@ const en_us: InternationalizationLanguage = {
   winner: 'Winner',
   loser: 'Loser',
   recent_rounds: 'Recent paticipated rounds',
+  eula: 'EULA',
+  welcome: 'Welcome',
+  user_and_files: 'User and files',
 
   confirm_logout: 'Are you sure you want to logout?',
   confirm_delete: 'Are you sure you want to delete {}?',

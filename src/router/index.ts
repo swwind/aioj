@@ -3,7 +3,7 @@ import { RouteRecordRaw, createRouter as _createRouter, createMemoryHistory, cre
 import Home from '../views/Home.vue';
 import NotFound from '../views/NotFound.vue';
 import About from '../views/About.vue';
-import Help from '../views/Help.vue';
+import Eula from '../views/Eula.vue';
 import Regions from '../components/Regions.vue';
 import RegionView from '../components/RegionView.vue';
 import PostView from '../components/PostView.vue';
@@ -27,9 +27,9 @@ const routes: Array<RouteRecordRaw> = [
     name: 'About',
     component: About,
   }, {
-    path: '/help',
-    name: 'Help',
-    component: Help,
+    path: '/eula',
+    name: 'Eula',
+    component: Eula,
   }, {
     path: '/r',
     name: 'Forum',

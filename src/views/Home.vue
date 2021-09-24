@@ -5,9 +5,9 @@
 
   <ui-card>
     <template #header>
-      {{ accounts.username ? `Hello ${accounts.username}` : 'Welcome to AIOJ!' }}
+      {{ accounts.username ? `Good morning ${accounts.username}!` : 'Welcome to AIOJ!' }}
     </template>
-    <p>Read the document <a href="/about">here</a>, this website is still WIP.</p>
+    <p>Read <router-link to="/about">about</router-link> and <router-link to="/eula">eula</router-link> page first. This website is almost finished.</p>
   </ui-card>
 </template>
 

@@ -82,9 +82,6 @@ export default defineComponent({
       name: 'home',
       url: '/',
     }, {
-      name: 'help',
-      url: '/help',
-    }, {
       name: 'problems',
       url: '/p',
     }, {

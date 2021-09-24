@@ -91,6 +91,9 @@ const zh_cn: InternationalizationLanguage = {
   winner: '赢家',
   loser: '输家',
   recent_rounds: '最近参与的战局',
+  eula: '最终用户协议',
+  welcome: '欢迎',
+  user_and_files: '用户和文件',
 
   confirm_logout: '确认要退出登录吗？',
   confirm_delete: '确认要删除 {} 吗？',
