@@ -248,7 +248,7 @@ export default defineComponent({
       handleSubmit,
       handleDeleteProblem,
       handleUploadProblemJudger,
-      cdn: config.port === 443 ? '//' + config.cdn : '',
+      cdn: config.env === 'production' ? '//' + config.cdn : '',
       ...toRefs(store.state),
     };
   },

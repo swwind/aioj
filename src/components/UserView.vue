@@ -179,7 +179,7 @@ export default defineComponent({
       handleDeleteFile,
       handleToggleFriend,
       ...toRefs(store.state),
-      cdn: config.port === 443 ? '//' + config.cdn : '',
+      cdn: config.env === 'production' ? '//' + config.cdn : '',
     };
   },
 });

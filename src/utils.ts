@@ -129,7 +129,7 @@ marked.use((md) => {
       if (matchres) {
         const type = matchres[1];
         const fid = matchres[2];
-        const src = `${config.port === 443 ? `//${config.cdn}` : ''}/f/${fid}`;
+        const src = `${config.env === 'production' ? `//${config.cdn}` : ''}/f/${fid}`;
         if (type === 'video') {
           return `<video controls src="${src}"></video>`;
         } else if (type === 'audio') {
